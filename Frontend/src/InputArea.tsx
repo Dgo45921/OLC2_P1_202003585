@@ -13,11 +13,11 @@ function InputArea() {
         setOutputText(text);
     };
     const [tabs, setTabs] = useState([
-        { language: "java", code: "" },
+        { language: "swift", code: "" },
     ]);
     const [currentTabIndex, setCurrentTabIndex] = useState(0);
     const handleTabAdd = () => {
-        setTabs([...tabs, { language: "java", code: "" }]);
+        setTabs([...tabs, { language: "swift", code: "" }]);
     }
 
     const handleTabRemove = (index: number) => {
@@ -41,13 +41,17 @@ function InputArea() {
         const url = URL.createObjectURL(blob);
         const link = document.createElement('a');
         link.href = url;
-        link.download = 'codigo.tw';
+        link.download = 'codigo.swift';
         document.body.appendChild(link);
         link.click();
         document.body.removeChild(link);
     };
 
     const handleLogCode = async () => {
+
+
+
+        
         const currentTab = tabs[currentTabIndex];
         console.log(currentTab.code);
         updateOutputText('')
@@ -103,7 +107,7 @@ function InputArea() {
                 <TabList className="tab-list">
                     {tabs.map((tab, index) => (
                         <Tab key={index} className="tab">
-                            {"tw("}{index + 1}{")"}
+                            {"swift("}{index + 1}{")"}
                             <button
                                 onClick={() => handleTabRemove(index)}
                                 className="remove-tab-btn"

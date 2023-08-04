@@ -91,7 +91,7 @@ function NavBarPrincipal() {
 
     return (
         <ReactBootstrap.Navbar bg="dark" variant="dark" style={{marginBottom: 10}}>
-            <ReactBootstrap.Navbar.Brand style={{marginLeft: 50}}>TypeWise</ReactBootstrap.Navbar.Brand>
+            <ReactBootstrap.Navbar.Brand style={{marginLeft: 50}}>T - Swift</ReactBootstrap.Navbar.Brand>
             <ReactBootstrap.Nav className="mr-auto">
                 <ReactBootstrap.NavDropdown title="Reportes" id="reportes-dropdown">
                     <ReactBootstrap.NavDropdown.Item onClick={errorReport}>Reporte de errores</ReactBootstrap.NavDropdown.Item>
