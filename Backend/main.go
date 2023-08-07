@@ -2,20 +2,29 @@ package main
 
 import (
 	"PY1/controllers"
-	"fmt"
 	"github.com/gorilla/mux"
+	"github.com/rs/cors"
 	"log"
 	"net/http"
 )
 
 func main() {
-	fmt.Println("Hello mundo")
 	router := mux.NewRouter().StrictSlash(true)
 	parserRoutes(router)
-	log.Fatal(http.ListenAndServe(":3000", router))
+
+	// CORS HANDLER
+	corsHandler := cors.New(cors.Options{
+		AllowedOrigins: []string{"*"}, // origins
+		AllowedMethods: []string{"GET", "POST", "OPTIONS", "PUT", "DELETE"},
+		AllowedHeaders: []string{"Content-Type", "Access-Control-Allow-Headers", "Authorization", "X-Requested-With"},
+	})
+
+	// Envolver el enrutador con el manejador CORS
+	handler := corsHandler.Handler(router)
+
+	log.Fatal(http.ListenAndServe(":5000", handler))
 }
 
 func parserRoutes(router *mux.Router) {
-	router.HandleFunc("/", controllers.IndexRoute).Methods("GET")
-
+	router.HandleFunc("/interpreter/parse", controllers.Parse).Methods("POST")
 }
