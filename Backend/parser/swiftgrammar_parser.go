@@ -44,10 +44,11 @@ func swiftgrammarParserInit() {
 		"')'", "'{'", "'}'",
 	}
 	staticData.SymbolicNames = []string{
-		"", "INT", "FLOAT", "BOOL", "TRU", "FAL", "PRINT", "IF", "ELSE", "WHILE",
-		"NUMBER", "STRING", "ID", "DIF", "IG_IG", "NOT", "OR", "AND", "IG",
-		"MAY_IG", "MEN_IG", "MAYOR", "MENOR", "MUL", "DIV", "ADD", "SUB", "PARIZQ",
-		"PARDER", "LLAVEIZQ", "LLAVEDER", "WHITESPACE", "COMMENT", "LINE_COMMENT",
+		"", "RINT", "RFLOAT", "RBOOL", "RTRUE", "RFALSE", "RPRINT", "RIF", "RELSE",
+		"RWHILE", "NUMBER", "STRING", "ID", "DIF", "IG_IG", "NOT", "OR", "AND",
+		"IG", "MAY_IG", "MEN_IG", "MAYOR", "MENOR", "MUL", "DIV", "ADD", "SUB",
+		"PARIZQ", "PARDER", "LLAVEIZQ", "LLAVEDER", "WHITESPACE", "COMMENT",
+		"LINE_COMMENT",
 	}
 	staticData.RuleNames = []string{
 		"s", "block", "instruction", "printstmt", "ifstmt", "expr",
@@ -134,15 +135,15 @@ func NewSwiftGrammarParser(input antlr.TokenStream) *SwiftGrammarParser {
 // SwiftGrammarParser tokens.
 const (
 	SwiftGrammarParserEOF          = antlr.TokenEOF
-	SwiftGrammarParserINT          = 1
-	SwiftGrammarParserFLOAT        = 2
-	SwiftGrammarParserBOOL         = 3
-	SwiftGrammarParserTRU          = 4
-	SwiftGrammarParserFAL          = 5
-	SwiftGrammarParserPRINT        = 6
-	SwiftGrammarParserIF           = 7
-	SwiftGrammarParserELSE         = 8
-	SwiftGrammarParserWHILE        = 9
+	SwiftGrammarParserRINT         = 1
+	SwiftGrammarParserRFLOAT       = 2
+	SwiftGrammarParserRBOOL        = 3
+	SwiftGrammarParserRTRUE        = 4
+	SwiftGrammarParserRFALSE       = 5
+	SwiftGrammarParserRPRINT       = 6
+	SwiftGrammarParserRIF          = 7
+	SwiftGrammarParserRELSE        = 8
+	SwiftGrammarParserRWHILE       = 9
 	SwiftGrammarParserNUMBER       = 10
 	SwiftGrammarParserSTRING       = 11
 	SwiftGrammarParserID           = 12
@@ -481,7 +482,7 @@ func (p *SwiftGrammarParser) Block() (localctx IBlockContext) {
 	}
 	_la = p.GetTokenStream().LA(1)
 
-	for ok := true; ok; ok = _la == SwiftGrammarParserPRINT || _la == SwiftGrammarParserIF {
+	for ok := true; ok; ok = _la == SwiftGrammarParserRPRINT || _la == SwiftGrammarParserRIF {
 		{
 			p.SetState(16)
 
@@ -648,7 +649,7 @@ func (p *SwiftGrammarParser) Instruction() (localctx IInstructionContext) {
 	}
 
 	switch p.GetTokenStream().LA(1) {
-	case SwiftGrammarParserPRINT:
+	case SwiftGrammarParserRPRINT:
 		p.EnterOuterAlt(localctx, 1)
 		{
 			p.SetState(23)
@@ -659,7 +660,7 @@ func (p *SwiftGrammarParser) Instruction() (localctx IInstructionContext) {
 		}
 		localctx.(*InstructionContext).inst = localctx.(*InstructionContext).Get_printstmt().GetPrnt()
 
-	case SwiftGrammarParserIF:
+	case SwiftGrammarParserRIF:
 		p.EnterOuterAlt(localctx, 2)
 		{
 			p.SetState(26)
@@ -691,11 +692,11 @@ type IPrintstmtContext interface {
 	// GetParser returns the parser.
 	GetParser() antlr.Parser
 
-	// Get_PRINT returns the _PRINT token.
-	Get_PRINT() antlr.Token
+	// Get_RPRINT returns the _RPRINT token.
+	Get_RPRINT() antlr.Token
 
-	// Set_PRINT sets the _PRINT token.
-	Set_PRINT(antlr.Token)
+	// Set_RPRINT sets the _RPRINT token.
+	Set_RPRINT(antlr.Token)
 
 	// Get_expr returns the _expr rule contexts.
 	Get_expr() IExprContext
@@ -710,7 +711,7 @@ type IPrintstmtContext interface {
 	SetPrnt(interfaces.Instruction)
 
 	// Getter signatures
-	PRINT() antlr.TerminalNode
+	RPRINT() antlr.TerminalNode
 	PARIZQ() antlr.TerminalNode
 	Expr() IExprContext
 	PARDER() antlr.TerminalNode
@@ -721,10 +722,10 @@ type IPrintstmtContext interface {
 
 type PrintstmtContext struct {
 	antlr.BaseParserRuleContext
-	parser antlr.Parser
-	prnt   interfaces.Instruction
-	_PRINT antlr.Token
-	_expr  IExprContext
+	parser  antlr.Parser
+	prnt    interfaces.Instruction
+	_RPRINT antlr.Token
+	_expr   IExprContext
 }
 
 func NewEmptyPrintstmtContext() *PrintstmtContext {
@@ -754,9 +755,9 @@ func NewPrintstmtContext(parser antlr.Parser, parent antlr.ParserRuleContext, in
 
 func (s *PrintstmtContext) GetParser() antlr.Parser { return s.parser }
 
-func (s *PrintstmtContext) Get_PRINT() antlr.Token { return s._PRINT }
+func (s *PrintstmtContext) Get_RPRINT() antlr.Token { return s._RPRINT }
 
-func (s *PrintstmtContext) Set_PRINT(v antlr.Token) { s._PRINT = v }
+func (s *PrintstmtContext) Set_RPRINT(v antlr.Token) { s._RPRINT = v }
 
 func (s *PrintstmtContext) Get_expr() IExprContext { return s._expr }
 
@@ -766,8 +767,8 @@ func (s *PrintstmtContext) GetPrnt() interfaces.Instruction { return s.prnt }
 
 func (s *PrintstmtContext) SetPrnt(v interfaces.Instruction) { s.prnt = v }
 
-func (s *PrintstmtContext) PRINT() antlr.TerminalNode {
-	return s.GetToken(SwiftGrammarParserPRINT, 0)
+func (s *PrintstmtContext) RPRINT() antlr.TerminalNode {
+	return s.GetToken(SwiftGrammarParserRPRINT, 0)
 }
 
 func (s *PrintstmtContext) PARIZQ() antlr.TerminalNode {
@@ -821,9 +822,9 @@ func (p *SwiftGrammarParser) Printstmt() (localctx IPrintstmtContext) {
 	{
 		p.SetState(31)
 
-		var _m = p.Match(SwiftGrammarParserPRINT)
+		var _m = p.Match(SwiftGrammarParserRPRINT)
 
-		localctx.(*PrintstmtContext)._PRINT = _m
+		localctx.(*PrintstmtContext)._RPRINT = _m
 		if p.HasError() {
 			// Recognition error - abort rule
 			goto errorExit
@@ -853,16 +854,16 @@ func (p *SwiftGrammarParser) Printstmt() (localctx IPrintstmtContext) {
 		}
 	}
 	localctx.(*PrintstmtContext).prnt = instructions.NewPrint((func() int {
-		if localctx.(*PrintstmtContext).Get_PRINT() == nil {
+		if localctx.(*PrintstmtContext).Get_RPRINT() == nil {
 			return 0
 		} else {
-			return localctx.(*PrintstmtContext).Get_PRINT().GetLine()
+			return localctx.(*PrintstmtContext).Get_RPRINT().GetLine()
 		}
 	}()), (func() int {
-		if localctx.(*PrintstmtContext).Get_PRINT() == nil {
+		if localctx.(*PrintstmtContext).Get_RPRINT() == nil {
 			return 0
 		} else {
-			return localctx.(*PrintstmtContext).Get_PRINT().GetColumn()
+			return localctx.(*PrintstmtContext).Get_RPRINT().GetColumn()
 		}
 	}()), localctx.(*PrintstmtContext).Get_expr().GetE())
 
@@ -887,7 +888,7 @@ type IIfstmtContext interface {
 	GetParser() antlr.Parser
 
 	// Getter signatures
-	IF() antlr.TerminalNode
+	RIF() antlr.TerminalNode
 	PARIZQ() antlr.TerminalNode
 	Expr() IExprContext
 	PARDER() antlr.TerminalNode
@@ -931,8 +932,8 @@ func NewIfstmtContext(parser antlr.Parser, parent antlr.ParserRuleContext, invok
 
 func (s *IfstmtContext) GetParser() antlr.Parser { return s.parser }
 
-func (s *IfstmtContext) IF() antlr.TerminalNode {
-	return s.GetToken(SwiftGrammarParserIF, 0)
+func (s *IfstmtContext) RIF() antlr.TerminalNode {
+	return s.GetToken(SwiftGrammarParserRIF, 0)
 }
 
 func (s *IfstmtContext) PARIZQ() antlr.TerminalNode {
@@ -1009,7 +1010,7 @@ func (p *SwiftGrammarParser) Ifstmt() (localctx IIfstmtContext) {
 	p.EnterOuterAlt(localctx, 1)
 	{
 		p.SetState(37)
-		p.Match(SwiftGrammarParserIF)
+		p.Match(SwiftGrammarParserRIF)
 		if p.HasError() {
 			// Recognition error - abort rule
 			goto errorExit
@@ -1082,11 +1083,11 @@ type IExprContext interface {
 	// Get_STRING returns the _STRING token.
 	Get_STRING() antlr.Token
 
-	// Get_TRU returns the _TRU token.
-	Get_TRU() antlr.Token
+	// Get_RTRUE returns the _RTRUE token.
+	Get_RTRUE() antlr.Token
 
-	// Get_FAL returns the _FAL token.
-	Get_FAL() antlr.Token
+	// Get_RFALSE returns the _RFALSE token.
+	Get_RFALSE() antlr.Token
 
 	// GetOp returns the op token.
 	GetOp() antlr.Token
@@ -1097,11 +1098,11 @@ type IExprContext interface {
 	// Set_STRING sets the _STRING token.
 	Set_STRING(antlr.Token)
 
-	// Set_TRU sets the _TRU token.
-	Set_TRU(antlr.Token)
+	// Set_RTRUE sets the _RTRUE token.
+	Set_RTRUE(antlr.Token)
 
-	// Set_FAL sets the _FAL token.
-	Set_FAL(antlr.Token)
+	// Set_RFALSE sets the _RFALSE token.
+	Set_RFALSE(antlr.Token)
 
 	// SetOp sets the op token.
 	SetOp(antlr.Token)
@@ -1137,8 +1138,8 @@ type IExprContext interface {
 	PARDER() antlr.TerminalNode
 	NUMBER() antlr.TerminalNode
 	STRING() antlr.TerminalNode
-	TRU() antlr.TerminalNode
-	FAL() antlr.TerminalNode
+	RTRUE() antlr.TerminalNode
+	RFALSE() antlr.TerminalNode
 	MUL() antlr.TerminalNode
 	DIV() antlr.TerminalNode
 	ADD() antlr.TerminalNode
@@ -1164,8 +1165,8 @@ type ExprContext struct {
 	_expr   IExprContext
 	_NUMBER antlr.Token
 	_STRING antlr.Token
-	_TRU    antlr.Token
-	_FAL    antlr.Token
+	_RTRUE  antlr.Token
+	_RFALSE antlr.Token
 	op      antlr.Token
 	right   IExprContext
 }
@@ -1201,9 +1202,9 @@ func (s *ExprContext) Get_NUMBER() antlr.Token { return s._NUMBER }
 
 func (s *ExprContext) Get_STRING() antlr.Token { return s._STRING }
 
-func (s *ExprContext) Get_TRU() antlr.Token { return s._TRU }
+func (s *ExprContext) Get_RTRUE() antlr.Token { return s._RTRUE }
 
-func (s *ExprContext) Get_FAL() antlr.Token { return s._FAL }
+func (s *ExprContext) Get_RFALSE() antlr.Token { return s._RFALSE }
 
 func (s *ExprContext) GetOp() antlr.Token { return s.op }
 
@@ -1211,9 +1212,9 @@ func (s *ExprContext) Set_NUMBER(v antlr.Token) { s._NUMBER = v }
 
 func (s *ExprContext) Set_STRING(v antlr.Token) { s._STRING = v }
 
-func (s *ExprContext) Set_TRU(v antlr.Token) { s._TRU = v }
+func (s *ExprContext) Set_RTRUE(v antlr.Token) { s._RTRUE = v }
 
-func (s *ExprContext) Set_FAL(v antlr.Token) { s._FAL = v }
+func (s *ExprContext) Set_RFALSE(v antlr.Token) { s._RFALSE = v }
 
 func (s *ExprContext) SetOp(v antlr.Token) { s.op = v }
 
@@ -1290,12 +1291,12 @@ func (s *ExprContext) STRING() antlr.TerminalNode {
 	return s.GetToken(SwiftGrammarParserSTRING, 0)
 }
 
-func (s *ExprContext) TRU() antlr.TerminalNode {
-	return s.GetToken(SwiftGrammarParserTRU, 0)
+func (s *ExprContext) RTRUE() antlr.TerminalNode {
+	return s.GetToken(SwiftGrammarParserRTRUE, 0)
 }
 
-func (s *ExprContext) FAL() antlr.TerminalNode {
-	return s.GetToken(SwiftGrammarParserFAL, 0)
+func (s *ExprContext) RFALSE() antlr.TerminalNode {
+	return s.GetToken(SwiftGrammarParserRFALSE, 0)
 }
 
 func (s *ExprContext) MUL() antlr.TerminalNode {
@@ -1520,55 +1521,55 @@ func (p *SwiftGrammarParser) expr(_p int) (localctx IExprContext) {
 			}
 		}()), str[1:len(str)-1], environment.STRING)
 
-	case SwiftGrammarParserTRU:
+	case SwiftGrammarParserRTRUE:
 		{
 			p.SetState(55)
 
-			var _m = p.Match(SwiftGrammarParserTRU)
+			var _m = p.Match(SwiftGrammarParserRTRUE)
 
-			localctx.(*ExprContext)._TRU = _m
+			localctx.(*ExprContext)._RTRUE = _m
 			if p.HasError() {
 				// Recognition error - abort rule
 				goto errorExit
 			}
 		}
 		localctx.(*ExprContext).e = expressions.NewPrimitive((func() int {
-			if localctx.(*ExprContext).Get_TRU() == nil {
+			if localctx.(*ExprContext).Get_RTRUE() == nil {
 				return 0
 			} else {
-				return localctx.(*ExprContext).Get_TRU().GetLine()
+				return localctx.(*ExprContext).Get_RTRUE().GetLine()
 			}
 		}()), (func() int {
-			if localctx.(*ExprContext).Get_TRU() == nil {
+			if localctx.(*ExprContext).Get_RTRUE() == nil {
 				return 0
 			} else {
-				return localctx.(*ExprContext).Get_TRU().GetColumn()
+				return localctx.(*ExprContext).Get_RTRUE().GetColumn()
 			}
 		}()), true, environment.BOOLEAN)
 
-	case SwiftGrammarParserFAL:
+	case SwiftGrammarParserRFALSE:
 		{
 			p.SetState(57)
 
-			var _m = p.Match(SwiftGrammarParserFAL)
+			var _m = p.Match(SwiftGrammarParserRFALSE)
 
-			localctx.(*ExprContext)._FAL = _m
+			localctx.(*ExprContext)._RFALSE = _m
 			if p.HasError() {
 				// Recognition error - abort rule
 				goto errorExit
 			}
 		}
 		localctx.(*ExprContext).e = expressions.NewPrimitive((func() int {
-			if localctx.(*ExprContext).Get_FAL() == nil {
+			if localctx.(*ExprContext).Get_RFALSE() == nil {
 				return 0
 			} else {
-				return localctx.(*ExprContext).Get_FAL().GetLine()
+				return localctx.(*ExprContext).Get_RFALSE().GetLine()
 			}
 		}()), (func() int {
-			if localctx.(*ExprContext).Get_FAL() == nil {
+			if localctx.(*ExprContext).Get_RFALSE() == nil {
 				return 0
 			} else {
-				return localctx.(*ExprContext).Get_FAL().GetColumn()
+				return localctx.(*ExprContext).Get_RFALSE().GetColumn()
 			}
 		}()), false, environment.BOOLEAN)
 

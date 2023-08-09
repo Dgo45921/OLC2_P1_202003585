@@ -16,11 +16,11 @@ func NewPrimitive(lin int, col int, valor interface{}, tipo environment.TipoExpr
 	return exp
 }
 
-func (p Primitive) Ejecutar(ast *environment.AST, env interface{}) environment.Symbol {
+func (p Primitive) Execute(ast *environment.AST, env interface{}) environment.Symbol {
 	return environment.Symbol{
 		Lin:   p.Lin,
 		Col:   p.Col,
-		Tipo:  p.Tipo,
-		Valor: p.Valor,
+		Type:  p.Tipo,
+		Value: p.Valor,
 	}
 }

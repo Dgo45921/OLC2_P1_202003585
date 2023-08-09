@@ -16,9 +16,9 @@ func NewPrint(lin int, col int, val interface{}) Print {
 	return Print{lin, col, val}
 }
 
-func (p Print) Ejecutar(ast *environment.AST, env interface{}) interface{} {
-	valueToPrint := p.Value.(interfaces.Expression).Ejecutar(ast, env)
-	consoleOut := fmt.Sprintf("%v", valueToPrint.Valor)
+func (p Print) Execute(ast *environment.AST, env interface{}) interface{} {
+	valueToPrint := p.Value.(interfaces.Expression).Execute(ast, env)
+	consoleOut := fmt.Sprintf("%v", valueToPrint.Value)
 	ast.SetPrint(consoleOut + "\n")
 	return nil
 }

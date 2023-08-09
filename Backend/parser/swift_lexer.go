@@ -49,17 +49,18 @@ func swiftlexerLexerInit() {
 		"')'", "'{'", "'}'",
 	}
 	staticData.SymbolicNames = []string{
-		"", "INT", "FLOAT", "BOOL", "TRU", "FAL", "PRINT", "IF", "ELSE", "WHILE",
-		"NUMBER", "STRING", "ID", "DIF", "IG_IG", "NOT", "OR", "AND", "IG",
-		"MAY_IG", "MEN_IG", "MAYOR", "MENOR", "MUL", "DIV", "ADD", "SUB", "PARIZQ",
-		"PARDER", "LLAVEIZQ", "LLAVEDER", "WHITESPACE", "COMMENT", "LINE_COMMENT",
+		"", "RINT", "RFLOAT", "RBOOL", "RTRUE", "RFALSE", "RPRINT", "RIF", "RELSE",
+		"RWHILE", "NUMBER", "STRING", "ID", "DIF", "IG_IG", "NOT", "OR", "AND",
+		"IG", "MAY_IG", "MEN_IG", "MAYOR", "MENOR", "MUL", "DIV", "ADD", "SUB",
+		"PARIZQ", "PARDER", "LLAVEIZQ", "LLAVEDER", "WHITESPACE", "COMMENT",
+		"LINE_COMMENT",
 	}
 	staticData.RuleNames = []string{
-		"INT", "FLOAT", "BOOL", "TRU", "FAL", "PRINT", "IF", "ELSE", "WHILE",
-		"NUMBER", "STRING", "ID", "DIF", "IG_IG", "NOT", "OR", "AND", "IG",
-		"MAY_IG", "MEN_IG", "MAYOR", "MENOR", "MUL", "DIV", "ADD", "SUB", "PARIZQ",
-		"PARDER", "LLAVEIZQ", "LLAVEDER", "WHITESPACE", "COMMENT", "LINE_COMMENT",
-		"ESC_SEQ",
+		"RINT", "RFLOAT", "RBOOL", "RTRUE", "RFALSE", "RPRINT", "RIF", "RELSE",
+		"RWHILE", "NUMBER", "STRING", "ID", "DIF", "IG_IG", "NOT", "OR", "AND",
+		"IG", "MAY_IG", "MEN_IG", "MAYOR", "MENOR", "MUL", "DIV", "ADD", "SUB",
+		"PARIZQ", "PARDER", "LLAVEIZQ", "LLAVEDER", "WHITESPACE", "COMMENT",
+		"LINE_COMMENT", "ESC_SEQ",
 	}
 	staticData.PredictionContextCache = antlr.NewPredictionContextCache()
 	staticData.serializedATN = []int32{
@@ -200,15 +201,15 @@ func NewSwiftLexer(input antlr.CharStream) *SwiftLexer {
 
 // SwiftLexer tokens.
 const (
-	SwiftLexerINT          = 1
-	SwiftLexerFLOAT        = 2
-	SwiftLexerBOOL         = 3
-	SwiftLexerTRU          = 4
-	SwiftLexerFAL          = 5
-	SwiftLexerPRINT        = 6
-	SwiftLexerIF           = 7
-	SwiftLexerELSE         = 8
-	SwiftLexerWHILE        = 9
+	SwiftLexerRINT         = 1
+	SwiftLexerRFLOAT       = 2
+	SwiftLexerRBOOL        = 3
+	SwiftLexerRTRUE        = 4
+	SwiftLexerRFALSE       = 5
+	SwiftLexerRPRINT       = 6
+	SwiftLexerRIF          = 7
+	SwiftLexerRELSE        = 8
+	SwiftLexerRWHILE       = 9
 	SwiftLexerNUMBER       = 10
 	SwiftLexerSTRING       = 11
 	SwiftLexerID           = 12

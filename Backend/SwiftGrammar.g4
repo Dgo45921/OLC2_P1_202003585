@@ -41,11 +41,11 @@ instruction returns [interfaces.Instruction inst]
 ;
 
 printstmt returns [interfaces.Instruction prnt]
-: PRINT PARIZQ expr PARDER { $prnt = instructions.NewPrint($PRINT.line,$PRINT.pos,$expr.e)}
+: RPRINT PARIZQ expr PARDER { $prnt = instructions.NewPrint($RPRINT.line,$RPRINT.pos,$expr.e)}
 ;
 
 ifstmt  
-: IF PARIZQ expr PARDER LLAVEIZQ block LLAVEDER
+: RIF PARIZQ expr PARDER LLAVEIZQ block LLAVEDER
 ;
 
 expr returns [interfaces.Expression e]
@@ -78,32 +78,6 @@ expr returns [interfaces.Expression e]
         str := $STRING.text
         $e = expressions.NewPrimitive($STRING.line, $STRING.pos, str[1:len(str)-1],environment.STRING)
     }                        
-| TRU { $e = expressions.NewPrimitive($TRU.line, $TRU.pos, true, environment.BOOLEAN) }
-| FAL { $e = expressions.NewPrimitive($FAL.line, $FAL.pos, false, environment.BOOLEAN) }
+| RTRUE { $e = expressions.NewPrimitive($RTRUE.line, $RTRUE.pos, true, environment.BOOLEAN) }
+| RFALSE { $e = expressions.NewPrimitive($RFALSE.line, $RFALSE.pos, false, environment.BOOLEAN) }
 ;
-
-/* primitive [interfaces.Expression p]  
-: NUMBER                             
-    {
-        if (strings.Contains($NUMBER.text,".")){
-            num,err := strconv.ParseFloat($NUMBER.text, 64);
-            if err!= nil{
-                fmt.Println(err)
-            }
-            $p = expressions.NewPrimitive($NUMBER.line,$NUMBER.pos,num,environment.FLOAT)
-        }else{
-            num,err := strconv.Atoi($NUMBER.text)
-            if err!= nil{
-                fmt.Println(err)
-            }
-            $p = expressions.NewPrimitive($NUMBER.line,$NUMBER.pos,num,environment.INTEGER)
-        }
-    }
-| STRING
-    {
-        str := $STRING.text
-        $p = expressions.NewPrimitive($STRING.line, $STRING.pos,str[1:len(str)-1],environment.STR)
-    }                        
-| TRU { $p = expressions.NewPrimitive($TRU.line, $TRU.pos,true,environment.BOOLEAN) }
-| FAL { $p = expressions.NewPrimitive($FAL.line, $FAL.pos,false,environment.BOOLEAN) }
-; */

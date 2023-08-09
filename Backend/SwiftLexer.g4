@@ -2,17 +2,17 @@ lexer grammar SwiftLexer;
 
 // --------------- Tokens
 // types
-INT: 'int';
-FLOAT: 'float';
-BOOL: 'bool';
+RINT: 'int';
+RFLOAT: 'float';
+RBOOL: 'bool';
 
 // reserved words
-TRU: 'true';
-FAL: 'false';
-PRINT: 'print';
-IF: 'if';
-ELSE: 'else';
-WHILE: 'while';
+RTRUE: 'true';
+RFALSE: 'false';
+RPRINT: 'print';
+RIF: 'if';
+RELSE: 'else';
+RWHILE: 'while';
 
 // primitives
 NUMBER : [0-9]+ ('.'[0-9]+)?;

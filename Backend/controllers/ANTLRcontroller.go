@@ -40,7 +40,7 @@ func Parse(w http.ResponseWriter, r *http.Request) {
 	fmt.Println(newCode.Code)
 	// TODO antlr parser here
 	//Entrada
-	code := newCode.Code
+	var code string = newCode.Code
 	//Leyendo entrada
 	input := antlr.NewInputStream(code)
 	lexer := parser.NewSwiftLexer(input)
@@ -57,10 +57,9 @@ func Parse(w http.ResponseWriter, r *http.Request) {
 	var Ast environment.AST
 	//ejecución
 	for _, inst := range Code {
-		inst.(interfaces.Instruction).Ejecutar(&Ast, nil)
+		inst.(interfaces.Instruction).Execute(&Ast, nil)
 	}
 	fmt.Println(Ast.GetPrint())
-
 	// TODO just setting a response
 	consoleResponse.Console = Ast.GetPrint()
 	json.NewEncoder(w).Encode(consoleResponse)
@@ -68,4 +67,8 @@ func Parse(w http.ResponseWriter, r *http.Request) {
 
 func NewTreeShapeListener() *TreeShapeListener {
 	return new(TreeShapeListener)
+}
+
+func (this *TreeShapeListener) ExitS(ctx *parser.SContext) {
+	this.Code = ctx.GetCode()
 }
