@@ -125,8 +125,13 @@ function InputArea() {
                             theme={"vs-dark"}
                             language={tab.language}
                             value={tab.code || ''}
+                            options={{
+                                fontSize: 25, // Adjust the font size as needed
+                                // Other editor options here
+                            }}
                             onChange={(value) => handleCodeChange(value, index)}
                         />
+
                     </TabPanel>
                 ))}
             </Tabs>

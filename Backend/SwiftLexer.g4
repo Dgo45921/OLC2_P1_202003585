@@ -39,6 +39,8 @@ PARIZQ:         '(';
 PARDER:         ')';
 LLAVEIZQ:       '{';
 LLAVEDER:       '}';
+PTOCOMA:        ';';
+MODULE:         '%' ;
 
 // skip
 WHITESPACE: [ \\\r\n\t]+ -> skip;
