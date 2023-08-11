@@ -1,4 +1,4 @@
-grammar SwiftGrammar; 
+grammar SwiftGrammar;
 // import SwiftLexer; 
 
 options {
@@ -57,12 +57,17 @@ argument returns [interface{} e]
 // INSTRUCTIONS
 instruction returns [interfaces.Instruction inst]
 : printstmt PTOCOMA?  { $inst = $printstmt.prnt}
+| vardec PTOCOMA?  { $inst = $vardec.newdec}
 | ifstmt { }
 ;
 
 // STATEMENTS----------------------------------------------------------------------------------------------
 printstmt returns [interfaces.Instruction prnt]
 : RPRINT PARIZQ arguments PARDER { $prnt = instructions.NewPrint($RPRINT.line,$RPRINT.pos,$arguments.args)}
+;
+
+vardec returns [interfaces.Instruction newdec]
+: RVAR ID DOSPTOS typpe=(RINT|RFLOAT|RBOOL|RSTRING|RCHARACTER) IG ex=expr { $newdec = instructions.NewVarDec($RVAR.line,$RVAR.pos,$ID.text,$typpe.text, $ex.e)}
 ;
 
 ifstmt  
@@ -80,8 +85,7 @@ expr returns [interfaces.Expression e]
 | left=expr op=(IG_IG|DIF) right=expr { $e = expressions.NewRelationalOperation($left.start.GetLine(), $left.start.GetColumn(), $left.e, $op.text, $right.e) }
 | left=expr op=AND right=expr { $e = expressions.NewBooleanOperation($left.start.GetLine(), $left.start.GetColumn(), $left.e, $op.text, $right.e) }
 | left=expr op=OR right=expr { $e = expressions.NewBooleanOperation($left.start.GetLine(), $left.start.GetColumn(), $left.e, $op.text, $right.e) }
-
-| ID
+| ID                        { $e = expressions.NewVariableAccess($ID.text) }
 | NUMBER
     {
         if (strings.Contains($NUMBER.text,".")){

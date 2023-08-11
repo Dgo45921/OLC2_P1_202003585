@@ -25,6 +25,9 @@ type SwiftGrammarListener interface {
 	// EnterPrintstmt is called when entering the printstmt production.
 	EnterPrintstmt(c *PrintstmtContext)
 
+	// EnterVardec is called when entering the vardec production.
+	EnterVardec(c *VardecContext)
+
 	// EnterIfstmt is called when entering the ifstmt production.
 	EnterIfstmt(c *IfstmtContext)
 
@@ -48,6 +51,9 @@ type SwiftGrammarListener interface {
 
 	// ExitPrintstmt is called when exiting the printstmt production.
 	ExitPrintstmt(c *PrintstmtContext)
+
+	// ExitVardec is called when exiting the vardec production.
+	ExitVardec(c *VardecContext)
 
 	// ExitIfstmt is called when exiting the ifstmt production.
 	ExitIfstmt(c *IfstmtContext)

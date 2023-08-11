@@ -5,4 +5,5 @@ type Symbol struct {
 	Col   int
 	Type  TipoExpresion
 	Value interface{}
+	ID string
 }

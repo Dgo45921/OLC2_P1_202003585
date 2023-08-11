@@ -24,8 +24,6 @@ func (p Print) Execute(ast *environment.AST, env interface{}) interface{} {
 		if expr, ok := val.(interfaces.Expression); ok {
 			valueToPrint := expr.Execute(ast, env).Value
 			printedValues = append(printedValues, fmt.Sprintf("%v", valueToPrint))
-		} else {
-			// Handle non-expression values as needed
 		}
 	}
 

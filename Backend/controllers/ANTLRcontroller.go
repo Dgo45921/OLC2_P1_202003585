@@ -55,12 +55,14 @@ func Parse(w http.ResponseWriter, r *http.Request) {
 	Code := listener.Code
 	//create ast
 	var Ast environment.AST
+	// creating env
+	var newEnv = environment.NewEnvironment(nil)
 	//ejecución
 	for _, inst := range Code {
-		inst.(interfaces.Instruction).Execute(&Ast, nil)
+		inst.(interfaces.Instruction).Execute(&Ast, newEnv)
 	}
 	fmt.Println(Ast.GetPrint())
-	// TODO just setting a response
+
 	consoleResponse.Console = Ast.GetPrint()
 	json.NewEncoder(w).Encode(consoleResponse)
 }
