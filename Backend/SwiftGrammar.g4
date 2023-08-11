@@ -35,19 +35,41 @@ block returns [[]interface{} blk]
     }
 ;
 
+
+arguments returns [[]interface{} args]
+@init {
+    $args = []interface{}{}
+
+}
+    :argument COMA arguments  { $args = append($args, $argument.e)
+                                       for _, arg := range $arguments.args {
+                                           $args = append($args, arg)
+                                       }
+                                 }
+    |argument { $args = append( $args , $argument.e) }
+    | {}
+    ;
+
+argument returns [interface{} e]
+    : expr { $e = $expr.e; }
+    ;
+
+// INSTRUCTIONS
 instruction returns [interfaces.Instruction inst]
 : printstmt PTOCOMA?  { $inst = $printstmt.prnt}
 | ifstmt { }
 ;
 
+// STATEMENTS----------------------------------------------------------------------------------------------
 printstmt returns [interfaces.Instruction prnt]
-: RPRINT PARIZQ expr PARDER { $prnt = instructions.NewPrint($RPRINT.line,$RPRINT.pos,$expr.e)}
+: RPRINT PARIZQ arguments PARDER { $prnt = instructions.NewPrint($RPRINT.line,$RPRINT.pos,$arguments.args)}
 ;
 
 ifstmt  
 : RIF PARIZQ expr PARDER LLAVEIZQ block LLAVEDER
 ;
 
+// EXPRESSIONS -----------------------------------------------------------------
 expr returns [interfaces.Expression e]
 :
  PARIZQ expr PARDER { $e = $expr.e }

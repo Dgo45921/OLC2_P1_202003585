@@ -41,6 +41,7 @@ LLAVEIZQ:       '{';
 LLAVEDER:       '}';
 PTOCOMA:        ';';
 MODULE:         '%' ;
+COMA:           ',' ;
 
 // skip
 WHITESPACE: [ \\\r\n\t]+ -> skip;

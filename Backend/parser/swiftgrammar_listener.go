@@ -13,6 +13,12 @@ type SwiftGrammarListener interface {
 	// EnterBlock is called when entering the block production.
 	EnterBlock(c *BlockContext)
 
+	// EnterArguments is called when entering the arguments production.
+	EnterArguments(c *ArgumentsContext)
+
+	// EnterArgument is called when entering the argument production.
+	EnterArgument(c *ArgumentContext)
+
 	// EnterInstruction is called when entering the instruction production.
 	EnterInstruction(c *InstructionContext)
 
@@ -30,6 +36,12 @@ type SwiftGrammarListener interface {
 
 	// ExitBlock is called when exiting the block production.
 	ExitBlock(c *BlockContext)
+
+	// ExitArguments is called when exiting the arguments production.
+	ExitArguments(c *ArgumentsContext)
+
+	// ExitArgument is called when exiting the argument production.
+	ExitArgument(c *ArgumentContext)
 
 	// ExitInstruction is called when exiting the instruction production.
 	ExitInstruction(c *InstructionContext)
