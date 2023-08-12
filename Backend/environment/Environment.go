@@ -24,6 +24,10 @@ func (env Environment) SaveVariable(id string, value Symbol) {
 	env.SymbolTable[id] = value
 }
 
+func (env Environment) UpdateVariable(id string, value Symbol) {
+	env.SymbolTable[id] = value
+}
+
 func (env Environment) FindVar(id string) Symbol {
 	var envTemporal = env
 	for {

@@ -16,6 +16,7 @@ RIF: 'if';
 RELSE: 'else';
 RWHILE: 'while';
 RVAR: 'var';
+RLET: 'let';
 
 // primitives
 NUMBER : [0-9]+ ('.'[0-9]+)?;

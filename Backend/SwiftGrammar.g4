@@ -58,6 +58,8 @@ argument returns [interface{} e]
 instruction returns [interfaces.Instruction inst]
 : printstmt PTOCOMA?  { $inst = $printstmt.prnt}
 | vardec PTOCOMA?  { $inst = $vardec.newdec}
+| constdec PTOCOMA? {$inst = $constdec.newconst}
+| asignation PTOCOMA? {$inst = $asignation.newasignation}
 | ifstmt { }
 ;
 
@@ -70,6 +72,15 @@ vardec returns [interfaces.Instruction newdec]
 : RVAR ID DOSPTOS typpe=(RINT|RFLOAT|RBOOL|RSTRING|RCHARACTER) IG ex=expr { $newdec = instructions.NewVarDec($RVAR.line,$RVAR.pos,$ID.text,$typpe.text, $ex.e)}
 | RVAR ID IG ex=expr                                                      { $newdec = instructions.NewVarDec($RVAR.line,$RVAR.pos,$ID.text, nil, $ex.e)}
 | RVAR ID DOSPTOS typpe=(RINT|RFLOAT|RBOOL|RSTRING|RCHARACTER) QM         { $newdec = instructions.NewVarDec($RVAR.line,$RVAR.pos,$ID.text, $typpe.text, nil)}
+;
+
+constdec returns [interfaces.Instruction newconst]
+: RLET ID DOSPTOS typpe=(RINT|RFLOAT|RBOOL|RSTRING|RCHARACTER) IG ex=expr { $newconst = instructions.NewConstDec($RLET.line,$RLET.pos,$ID.text,$typpe.text, $ex.e)}
+| RLET ID IG ex=expr                                                      { $newconst = instructions.NewConstDec($RLET.line,$RLET.pos,$ID.text, nil, $ex.e)}
+;
+
+asignation returns [interfaces.Instruction newasignation]
+: ID IG ex=expr{ $newasignation = instructions.NewAsignation($ID.line,$ID.pos,$ID.text, $ex.e)}
 ;
 
 ifstmt  

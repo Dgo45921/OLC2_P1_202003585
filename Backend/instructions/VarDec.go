@@ -3,7 +3,7 @@ package instructions
 import (
 	"PY1/environment"
 	"PY1/interfaces"
-	"fmt"
+
 )
 
 type VarDec struct {
@@ -48,15 +48,28 @@ func (p VarDec) Execute(ast *environment.AST, env interface{}) interface{} {
 		} else if p.Type == "Character" && value.Type == environment.CHAR {
 			env.(environment.Environment).SaveVariable(p.Id, value)
 			return nil
-		} else if p.Type == "Float" && value.Type == environment.FLOAT {
-			env.(environment.Environment).SaveVariable(p.Id, value)
-			return nil
+		} else if p.Type == "Float" {
+			if value.Type == environment.FLOAT {
+				env.(environment.Environment).SaveVariable(p.Id, value)
+				return nil
+
+			} else if value.Type == environment.INTEGER {
+				if _, ok := value.Value.(int); ok {
+					value.Value = float64(value.Value.(int))
+					value.Type = environment.FLOAT
+					env.(environment.Environment).SaveVariable(p.Id, value)
+					return nil
+
+				}
+
+			}
+
 		} else if p.Type == "Bool" && value.Type == environment.BOOLEAN {
 			env.(environment.Environment).SaveVariable(p.Id, value)
 			return nil
 		}
 	} else if p.Expression == nil {
-		fmt.Println("a")
+
 		var value = environment.Symbol{Lin: 0, Col: 0, Type: environment.NULL, Value: nil}
 
 		if p.Type == "String" {

@@ -62,6 +62,18 @@ func (s *BaseSwiftGrammarListener) EnterVardec(ctx *VardecContext) {}
 // ExitVardec is called when production vardec is exited.
 func (s *BaseSwiftGrammarListener) ExitVardec(ctx *VardecContext) {}
 
+// EnterConstdec is called when production constdec is entered.
+func (s *BaseSwiftGrammarListener) EnterConstdec(ctx *ConstdecContext) {}
+
+// ExitConstdec is called when production constdec is exited.
+func (s *BaseSwiftGrammarListener) ExitConstdec(ctx *ConstdecContext) {}
+
+// EnterAsignation is called when production asignation is entered.
+func (s *BaseSwiftGrammarListener) EnterAsignation(ctx *AsignationContext) {}
+
+// ExitAsignation is called when production asignation is exited.
+func (s *BaseSwiftGrammarListener) ExitAsignation(ctx *AsignationContext) {}
+
 // EnterIfstmt is called when production ifstmt is entered.
 func (s *BaseSwiftGrammarListener) EnterIfstmt(ctx *IfstmtContext) {}
 

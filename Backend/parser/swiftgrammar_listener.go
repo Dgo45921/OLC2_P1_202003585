@@ -28,6 +28,12 @@ type SwiftGrammarListener interface {
 	// EnterVardec is called when entering the vardec production.
 	EnterVardec(c *VardecContext)
 
+	// EnterConstdec is called when entering the constdec production.
+	EnterConstdec(c *ConstdecContext)
+
+	// EnterAsignation is called when entering the asignation production.
+	EnterAsignation(c *AsignationContext)
+
 	// EnterIfstmt is called when entering the ifstmt production.
 	EnterIfstmt(c *IfstmtContext)
 
@@ -54,6 +60,12 @@ type SwiftGrammarListener interface {
 
 	// ExitVardec is called when exiting the vardec production.
 	ExitVardec(c *VardecContext)
+
+	// ExitConstdec is called when exiting the constdec production.
+	ExitConstdec(c *ConstdecContext)
+
+	// ExitAsignation is called when exiting the asignation production.
+	ExitAsignation(c *AsignationContext)
 
 	// ExitIfstmt is called when exiting the ifstmt production.
 	ExitIfstmt(c *IfstmtContext)
