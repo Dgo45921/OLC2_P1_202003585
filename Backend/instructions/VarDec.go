@@ -3,6 +3,7 @@ package instructions
 import (
 	"PY1/environment"
 	"PY1/interfaces"
+	"fmt"
 )
 
 type VarDec struct {
@@ -10,10 +11,10 @@ type VarDec struct {
 	Col        int
 	Id         string
 	Type       interface{}
-	Expression interfaces.Expression
+	Expression interface{}
 }
 
-func NewVarDec(lin int, col int, id string, tyype interface{}, val interfaces.Expression) VarDec {
+func NewVarDec(lin int, col int, id string, tyype interface{}, val interface{}) VarDec {
 	NewVarDeclaration := VarDec{lin, col, id, tyype, val}
 	return NewVarDeclaration
 }
@@ -22,9 +23,65 @@ func (p VarDec) Execute(ast *environment.AST, env interface{}) interface{} {
 	if env == nil {
 		return nil
 	}
+	if p.Type == nil {
 
-	var value = p.Expression.Execute(ast, env)
-	env.(environment.Environment).SaveVariable(p.Id, value)
+		if _, ok := p.Expression.(interfaces.Expression); ok {
+			expression := p.Expression.(interfaces.Expression)
+			value := expression.Execute(ast, env)
+			env.(environment.Environment).SaveVariable(p.Id, value)
+			return nil
+
+		}
+	}
+
+	if _, ok := p.Expression.(interfaces.Expression); ok {
+
+		expression := p.Expression.(interfaces.Expression)
+		value := expression.Execute(ast, env)
+
+		if p.Type == "String" && value.Type == environment.STRING {
+			env.(environment.Environment).SaveVariable(p.Id, value)
+			return nil
+		} else if p.Type == "Int" && value.Type == environment.INTEGER {
+			env.(environment.Environment).SaveVariable(p.Id, value)
+			return nil
+		} else if p.Type == "Character" && value.Type == environment.CHAR {
+			env.(environment.Environment).SaveVariable(p.Id, value)
+			return nil
+		} else if p.Type == "Float" && value.Type == environment.FLOAT {
+			env.(environment.Environment).SaveVariable(p.Id, value)
+			return nil
+		} else if p.Type == "Bool" && value.Type == environment.BOOLEAN {
+			env.(environment.Environment).SaveVariable(p.Id, value)
+			return nil
+		}
+	} else if p.Expression == nil {
+		fmt.Println("a")
+		var value = environment.Symbol{Lin: 0, Col: 0, Type: environment.NULL, Value: nil}
+
+		if p.Type == "String" {
+			value = environment.Symbol{Lin: 0, Col: 0, Type: environment.STRING, Value: nil}
+			env.(environment.Environment).SaveVariable(p.Id, value)
+			return nil
+		} else if p.Type == "Int" {
+			value = environment.Symbol{Lin: 0, Col: 0, Type: environment.INTEGER, Value: nil}
+			env.(environment.Environment).SaveVariable(p.Id, value)
+			return nil
+		} else if p.Type == "Character" {
+			value = environment.Symbol{Lin: 0, Col: 0, Type: environment.CHAR, Value: nil}
+			env.(environment.Environment).SaveVariable(p.Id, value)
+			return nil
+		} else if p.Type == "Float" {
+			value = environment.Symbol{Lin: 0, Col: 0, Type: environment.FLOAT, Value: nil}
+			env.(environment.Environment).SaveVariable(p.Id, value)
+			return nil
+		} else if p.Type == "Bool" {
+			value = environment.Symbol{Lin: 0, Col: 0, Type: environment.BOOLEAN, Value: nil}
+			env.(environment.Environment).SaveVariable(p.Id, value)
+			return nil
+		}
+
+	}
 
 	return nil
 }

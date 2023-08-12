@@ -46,6 +46,7 @@ PTOCOMA:        ';';
 DOSPTOS:        ':';
 MODULE:         '%' ;
 COMA:           ',' ;
+QM:             '?' ;
 
 // skip
 WHITESPACE: [ \\\r\n\t]+ -> skip;

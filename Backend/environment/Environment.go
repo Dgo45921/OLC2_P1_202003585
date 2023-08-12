@@ -5,8 +5,8 @@ import (
 )
 
 type Environment struct {
-	Prev         interface{}
-	SymbolTable  map[string]Symbol
+	Prev        interface{}
+	SymbolTable map[string]Symbol
 }
 
 func NewEnvironment(prev interface{}) Environment {
@@ -25,13 +25,17 @@ func (env Environment) SaveVariable(id string, value Symbol) {
 }
 
 func (env Environment) FindVar(id string) Symbol {
-	tempEnvironment := env
-	for tempEnvironment.Prev != nil {
-		if variable, ok := tempEnvironment.SymbolTable[id]; ok {
-			return variable
+	var envTemporal = env
+	for {
+		if foundVar, ok := envTemporal.SymbolTable[id]; ok {
+			return foundVar
 		}
-		tempEnvironment = tempEnvironment.Prev.(Environment)
+		if envTemporal.Prev != nil {
+			envTemporal = envTemporal.Prev.(Environment)
+			continue
+		}
+		return Symbol{Lin: 0, Col: 0, Type: NULL, Value: nil}
+
 	}
 
-	return Symbol{Lin: 0, Col: 0, Type: NULL, Value: nil, ID: id}
 }
