@@ -39,7 +39,6 @@ block returns [[]interface{} blk]
 arguments returns [[]interface{} args]
 @init {
     $args = []interface{}{}
-
 }
     :argument COMA arguments  { $args = append($args, $argument.e)
                                        for _, arg := range $arguments.args {
@@ -62,7 +61,18 @@ instruction returns [interfaces.Instruction inst]
 | asignation PTOCOMA? {$inst = $asignation.newasignation}
 | unarysum PTOCOMA?  {$inst = $unarysum.newunarysum}
 | unarysub PTOCOMA?  {$inst = $unarysub.newunarysub}
-| ifstmt { }
+| ifstmt {$inst = $ifstmt.newif}
+;
+//--------------------------
+ifstmt returns [interfaces.Instruction newif]
+: RIF PARIZQ ex=expr PARDER LLAVEIZQ b=block LLAVEDER elseifstatement
+    {$newif = instructions.NewIf($RIF.line, $RIF.pos, $ex.e, $b.blk, $elseifstatement.newelse)}
+;
+
+elseifstatement returns [[] interface{} newelse]
+: RELSE ifstmt                {$newelse = append($newelse, $ifstmt.newif)}
+| RELSE LLAVEIZQ b=block  LLAVEDER             {$newelse = append($newelse, $b.blk)}
+|                             {}
 ;
 
 // STATEMENTS----------------------------------------------------------------------------------------------
@@ -85,9 +95,8 @@ asignation returns [interfaces.Instruction newasignation]
 : ID IG ex=expr { $newasignation = instructions.NewAsignation($ID.line,$ID.pos,$ID.text, $ex.e)}
 ;
 
-ifstmt  
-: RIF PARIZQ expr PARDER LLAVEIZQ block LLAVEDER
-;
+
+
 
 unarysum returns [interfaces.Instruction newunarysum]
 :ID UNARYPLUS ex=expr { $newunarysum = instructions.NewUnarySum($ID.line,$ID.pos,$ID.text, "+=", $ex.e)}

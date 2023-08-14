@@ -22,6 +22,12 @@ type SwiftGrammarListener interface {
 	// EnterInstruction is called when entering the instruction production.
 	EnterInstruction(c *InstructionContext)
 
+	// EnterIfstmt is called when entering the ifstmt production.
+	EnterIfstmt(c *IfstmtContext)
+
+	// EnterElseifstatement is called when entering the elseifstatement production.
+	EnterElseifstatement(c *ElseifstatementContext)
+
 	// EnterPrintstmt is called when entering the printstmt production.
 	EnterPrintstmt(c *PrintstmtContext)
 
@@ -33,9 +39,6 @@ type SwiftGrammarListener interface {
 
 	// EnterAsignation is called when entering the asignation production.
 	EnterAsignation(c *AsignationContext)
-
-	// EnterIfstmt is called when entering the ifstmt production.
-	EnterIfstmt(c *IfstmtContext)
 
 	// EnterUnarysum is called when entering the unarysum production.
 	EnterUnarysum(c *UnarysumContext)
@@ -61,6 +64,12 @@ type SwiftGrammarListener interface {
 	// ExitInstruction is called when exiting the instruction production.
 	ExitInstruction(c *InstructionContext)
 
+	// ExitIfstmt is called when exiting the ifstmt production.
+	ExitIfstmt(c *IfstmtContext)
+
+	// ExitElseifstatement is called when exiting the elseifstatement production.
+	ExitElseifstatement(c *ElseifstatementContext)
+
 	// ExitPrintstmt is called when exiting the printstmt production.
 	ExitPrintstmt(c *PrintstmtContext)
 
@@ -72,9 +81,6 @@ type SwiftGrammarListener interface {
 
 	// ExitAsignation is called when exiting the asignation production.
 	ExitAsignation(c *AsignationContext)
-
-	// ExitIfstmt is called when exiting the ifstmt production.
-	ExitIfstmt(c *IfstmtContext)
 
 	// ExitUnarysum is called when exiting the unarysum production.
 	ExitUnarysum(c *UnarysumContext)

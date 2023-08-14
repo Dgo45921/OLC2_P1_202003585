@@ -50,6 +50,18 @@ func (s *BaseSwiftGrammarListener) EnterInstruction(ctx *InstructionContext) {}
 // ExitInstruction is called when production instruction is exited.
 func (s *BaseSwiftGrammarListener) ExitInstruction(ctx *InstructionContext) {}
 
+// EnterIfstmt is called when production ifstmt is entered.
+func (s *BaseSwiftGrammarListener) EnterIfstmt(ctx *IfstmtContext) {}
+
+// ExitIfstmt is called when production ifstmt is exited.
+func (s *BaseSwiftGrammarListener) ExitIfstmt(ctx *IfstmtContext) {}
+
+// EnterElseifstatement is called when production elseifstatement is entered.
+func (s *BaseSwiftGrammarListener) EnterElseifstatement(ctx *ElseifstatementContext) {}
+
+// ExitElseifstatement is called when production elseifstatement is exited.
+func (s *BaseSwiftGrammarListener) ExitElseifstatement(ctx *ElseifstatementContext) {}
+
 // EnterPrintstmt is called when production printstmt is entered.
 func (s *BaseSwiftGrammarListener) EnterPrintstmt(ctx *PrintstmtContext) {}
 
@@ -73,12 +85,6 @@ func (s *BaseSwiftGrammarListener) EnterAsignation(ctx *AsignationContext) {}
 
 // ExitAsignation is called when production asignation is exited.
 func (s *BaseSwiftGrammarListener) ExitAsignation(ctx *AsignationContext) {}
-
-// EnterIfstmt is called when production ifstmt is entered.
-func (s *BaseSwiftGrammarListener) EnterIfstmt(ctx *IfstmtContext) {}
-
-// ExitIfstmt is called when production ifstmt is exited.
-func (s *BaseSwiftGrammarListener) ExitIfstmt(ctx *IfstmtContext) {}
 
 // EnterUnarysum is called when production unarysum is entered.
 func (s *BaseSwiftGrammarListener) EnterUnarysum(ctx *UnarysumContext) {}
