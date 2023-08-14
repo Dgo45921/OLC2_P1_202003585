@@ -80,6 +80,18 @@ func (s *BaseSwiftGrammarListener) EnterIfstmt(ctx *IfstmtContext) {}
 // ExitIfstmt is called when production ifstmt is exited.
 func (s *BaseSwiftGrammarListener) ExitIfstmt(ctx *IfstmtContext) {}
 
+// EnterUnarysum is called when production unarysum is entered.
+func (s *BaseSwiftGrammarListener) EnterUnarysum(ctx *UnarysumContext) {}
+
+// ExitUnarysum is called when production unarysum is exited.
+func (s *BaseSwiftGrammarListener) ExitUnarysum(ctx *UnarysumContext) {}
+
+// EnterUnarysub is called when production unarysub is entered.
+func (s *BaseSwiftGrammarListener) EnterUnarysub(ctx *UnarysubContext) {}
+
+// ExitUnarysub is called when production unarysub is exited.
+func (s *BaseSwiftGrammarListener) ExitUnarysub(ctx *UnarysubContext) {}
+
 // EnterExpr is called when production expr is entered.
 func (s *BaseSwiftGrammarListener) EnterExpr(ctx *ExprContext) {}
 

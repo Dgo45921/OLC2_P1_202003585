@@ -60,6 +60,8 @@ instruction returns [interfaces.Instruction inst]
 | vardec PTOCOMA?  { $inst = $vardec.newdec}
 | constdec PTOCOMA? {$inst = $constdec.newconst}
 | asignation PTOCOMA? {$inst = $asignation.newasignation}
+| unarysum PTOCOMA?  {$inst = $unarysum.newunarysum}
+| unarysub PTOCOMA?  {$inst = $unarysub.newunarysub}
 | ifstmt { }
 ;
 
@@ -80,11 +82,19 @@ constdec returns [interfaces.Instruction newconst]
 ;
 
 asignation returns [interfaces.Instruction newasignation]
-: ID IG ex=expr{ $newasignation = instructions.NewAsignation($ID.line,$ID.pos,$ID.text, $ex.e)}
+: ID IG ex=expr { $newasignation = instructions.NewAsignation($ID.line,$ID.pos,$ID.text, $ex.e)}
 ;
 
 ifstmt  
 : RIF PARIZQ expr PARDER LLAVEIZQ block LLAVEDER
+;
+
+unarysum returns [interfaces.Instruction newunarysum]
+:ID UNARYPLUS ex=expr { $newunarysum = instructions.NewUnarySum($ID.line,$ID.pos,$ID.text, "+=", $ex.e)}
+;
+
+unarysub returns [interfaces.Instruction newunarysub]
+:ID UNARYMINUS ex=expr { $newunarysub = instructions.NewUnarySum($ID.line,$ID.pos,$ID.text, "-=", $ex.e)}
 ;
 
 // EXPRESSIONS -----------------------------------------------------------------
@@ -118,13 +128,22 @@ expr returns [interfaces.Expression e]
 | STRING
     {
         str := $STRING.text
+        var chari = str[1:len(str)-1]
+        chari = strings.ReplaceAll(chari, "\\n","\n")
+        chari = strings.ReplaceAll(chari, "\\r","\r")
+        chari = strings.ReplaceAll(chari, "\\t","\t")
+        chari = strings.ReplaceAll(chari, "\\\\","\\")
+        chari = strings.ReplaceAll(chari, "\\\"","\"")
         if (len(str) == 3){
-            $e = expressions.NewPrimitive($STRING.line, $STRING.pos, str[1:len(str)-1],environment.CHAR)
+
+            $e = expressions.NewPrimitive($STRING.line, $STRING.pos, chari,environment.CHAR)
         } else{
-            $e = expressions.NewPrimitive($STRING.line, $STRING.pos, str[1:len(str)-1],environment.STRING)
+
+            $e = expressions.NewPrimitive($STRING.line, $STRING.pos, chari,environment.STRING)
         }
 
     }                        
 | RTRUE { $e = expressions.NewPrimitive($RTRUE.line, $RTRUE.pos, true, environment.BOOLEAN) }
 | RFALSE { $e = expressions.NewPrimitive($RFALSE.line, $RFALSE.pos, false, environment.BOOLEAN) }
+| RNIL  { $e = expressions.NewPrimitive($RFALSE.line, $RFALSE.pos, nil, environment.NULL) }
 ;

@@ -17,14 +17,18 @@ RELSE: 'else';
 RWHILE: 'while';
 RVAR: 'var';
 RLET: 'let';
+RNIL: 'nil';
 
 // primitives
 NUMBER : [0-9]+ ('.'[0-9]+)?;
-STRING: '"'~["]*'"';
+STRING: '"' ('\\' ('\\' | '"' | 'r'| 't'| 'n') | ~('\\' | '"'))* '"';
+
 ID: ([a-zA-Z_])[a-zA-Z0-9_]*;
 
 // symbols
 
+UNARYPLUS:      '+=';
+UNARYMINUS:     '-=';
 DIF:            '!=';
 IG_IG:          '==';
 NOT:            '!';

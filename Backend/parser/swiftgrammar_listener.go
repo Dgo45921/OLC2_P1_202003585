@@ -37,6 +37,12 @@ type SwiftGrammarListener interface {
 	// EnterIfstmt is called when entering the ifstmt production.
 	EnterIfstmt(c *IfstmtContext)
 
+	// EnterUnarysum is called when entering the unarysum production.
+	EnterUnarysum(c *UnarysumContext)
+
+	// EnterUnarysub is called when entering the unarysub production.
+	EnterUnarysub(c *UnarysubContext)
+
 	// EnterExpr is called when entering the expr production.
 	EnterExpr(c *ExprContext)
 
@@ -69,6 +75,12 @@ type SwiftGrammarListener interface {
 
 	// ExitIfstmt is called when exiting the ifstmt production.
 	ExitIfstmt(c *IfstmtContext)
+
+	// ExitUnarysum is called when exiting the unarysum production.
+	ExitUnarysum(c *UnarysumContext)
+
+	// ExitUnarysub is called when exiting the unarysub production.
+	ExitUnarysub(c *UnarysubContext)
 
 	// ExitExpr is called when exiting the expr production.
 	ExitExpr(c *ExprContext)
