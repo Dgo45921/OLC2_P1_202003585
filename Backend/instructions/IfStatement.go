@@ -18,28 +18,29 @@ func NewIf(lin int, col int, condition interfaces.Expression, trueb []interface{
 }
 
 func (p If) Execute(ast *environment.AST, env interface{}) interface{} {
-	var newEnv = environment.NewEnvironment(env)
-	var expResult = p.Condition.Execute(ast, newEnv)
+
+	var expResult = p.Condition.Execute(ast, env)
 	if expResult.Type != environment.BOOLEAN {
 		ast.SetPrint("Error: La expresion dentro del if debe ser booleana")
 		return nil
 	}
 
 	if expResult.Value.(bool) == true {
+		var newEnv = environment.NewEnvironment(env)
 		for _, inst := range p.TrueBlock {
 			inst.(interfaces.Instruction).Execute(ast, newEnv)
 		}
 	} else {
-		// Check if FalseBlock contains instructions
 		if len(p.FalseBlock) > 0 {
-			// Assuming the first element of FalseBlock is an array
 			if nestedArray, isArray := p.FalseBlock[0].([]interface{}); isArray {
+				var newEnv = environment.NewEnvironment(env)
 				for _, inst := range nestedArray {
 					if instruction, isInstruction := inst.(interfaces.Instruction); isInstruction {
 						instruction.Execute(ast, newEnv)
 					}
 				}
 			} else {
+				var newEnv = environment.NewEnvironment(env)
 				for _, inst := range p.FalseBlock {
 					inst.(interfaces.Instruction).Execute(ast, newEnv)
 				}

@@ -3,7 +3,6 @@ package instructions
 import (
 	"PY1/environment"
 	"PY1/interfaces"
-
 )
 
 type VarDec struct {
@@ -38,6 +37,22 @@ func (p VarDec) Execute(ast *environment.AST, env interface{}) interface{} {
 
 		expression := p.Expression.(interfaces.Expression)
 		value := expression.Execute(ast, env)
+		if value.Type == environment.NULL {
+			if p.Type == "String" {
+				value.Type = environment.STRING
+			} else if p.Type == "Int" {
+				value.Type = environment.INTEGER
+			} else if p.Type == "Float" {
+				value.Type = environment.FLOAT
+			} else if p.Type == "Bool" {
+				value.Type = environment.BOOLEAN
+			} else if p.Type == "Character" {
+				value.Type = environment.CHAR
+			}
+
+			env.(environment.Environment).SaveVariable(p.Id, value)
+			return nil
+		}
 
 		if p.Type == "String" && value.Type == environment.STRING {
 			env.(environment.Environment).SaveVariable(p.Id, value)

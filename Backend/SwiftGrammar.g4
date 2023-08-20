@@ -65,7 +65,7 @@ instruction returns [interfaces.Instruction inst]
 ;
 //--------------------------
 ifstmt returns [interfaces.Instruction newif]
-: RIF PARIZQ ex=expr PARDER LLAVEIZQ b=block LLAVEDER elseifstatement
+: RIF  ex=expr  LLAVEIZQ b=block LLAVEDER elseifstatement
     {$newif = instructions.NewIf($RIF.line, $RIF.pos, $ex.e, $b.blk, $elseifstatement.newelse)}
 ;
 

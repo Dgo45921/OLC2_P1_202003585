@@ -25,6 +25,19 @@ func (p Asignation) Execute(ast *environment.AST, env interface{}) interface{} {
 	if !foundVar.Const {
 		value := p.Expression.Execute(ast, env)
 
+		if value.Type == environment.NULL {
+			foundVar.Value = nil
+			env.(environment.Environment).UpdateVariable(p.Id, foundVar)
+			return nil
+
+		}
+
+		if foundVar.Type == environment.NULL {
+			foundVar.Type = value.Type
+			env.(environment.Environment).UpdateVariable(p.Id, foundVar)
+			return nil
+		}
+
 		if value.Type == foundVar.Type {
 			foundVar.Value = value.Value
 			env.(environment.Environment).UpdateVariable(p.Id, foundVar)
