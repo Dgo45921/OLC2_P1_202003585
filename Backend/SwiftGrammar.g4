@@ -62,6 +62,7 @@ instruction returns [interfaces.Instruction inst]
 | unarysum PTOCOMA?  {$inst = $unarysum.newunarysum}
 | unarysub PTOCOMA?  {$inst = $unarysub.newunarysub}
 | ifstmt {$inst = $ifstmt.newif}
+| while_statement {$inst = $while_statement.newwhile}
 ;
 //--------------------------
 ifstmt returns [interfaces.Instruction newif]
@@ -80,6 +81,9 @@ printstmt returns [interfaces.Instruction prnt]
 : RPRINT PARIZQ arguments PARDER { $prnt = instructions.NewPrint($RPRINT.line,$RPRINT.pos,$arguments.args)}
 ;
 
+while_statement returns [interfaces.Instruction newwhile]
+: RWHILE expr LLAVEIZQ b=block LLAVEDER { $newwhile = instructions.NewWhile($RWHILE.line,$RWHILE.pos,$expr.e, $b.blk)}
+;
 vardec returns [interfaces.Instruction newdec]
 : RVAR ID DOSPTOS typpe=(RINT|RFLOAT|RBOOL|RSTRING|RCHARACTER) IG ex=expr { $newdec = instructions.NewVarDec($RVAR.line,$RVAR.pos,$ID.text,$typpe.text, $ex.e)}
 | RVAR ID IG ex=expr                                                      { $newdec = instructions.NewVarDec($RVAR.line,$RVAR.pos,$ID.text, nil, $ex.e)}
