@@ -7,12 +7,14 @@ import (
 type Environment struct {
 	Prev        interface{}
 	SymbolTable map[string]Symbol
+	Scope       EnvType
 }
 
-func NewEnvironment(prev interface{}) Environment {
+func NewEnvironment(prev interface{}, scope EnvType) Environment {
 	return Environment{
 		Prev:        prev,
 		SymbolTable: make(map[string]Symbol),
+		Scope:       scope,
 	}
 }
 
@@ -42,4 +44,19 @@ func (env Environment) FindVar(id string) Symbol {
 
 	}
 
+}
+
+func (env Environment) InsideLoop() bool {
+	var tmpEnv = env
+	for {
+		if tmpEnv.Scope == WHILE || tmpEnv.Scope == FOR {
+			return true
+		}
+		if tmpEnv.Prev == nil {
+			break
+		} else {
+			tmpEnv = tmpEnv.Prev.(Environment)
+		}
+	}
+	return false
 }

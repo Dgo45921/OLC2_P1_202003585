@@ -50,6 +50,12 @@ func (s *BaseSwiftGrammarListener) EnterInstruction(ctx *InstructionContext) {}
 // ExitInstruction is called when production instruction is exited.
 func (s *BaseSwiftGrammarListener) ExitInstruction(ctx *InstructionContext) {}
 
+// EnterBreakstatement is called when production breakstatement is entered.
+func (s *BaseSwiftGrammarListener) EnterBreakstatement(ctx *BreakstatementContext) {}
+
+// ExitBreakstatement is called when production breakstatement is exited.
+func (s *BaseSwiftGrammarListener) ExitBreakstatement(ctx *BreakstatementContext) {}
+
 // EnterIfstmt is called when production ifstmt is entered.
 func (s *BaseSwiftGrammarListener) EnterIfstmt(ctx *IfstmtContext) {}
 

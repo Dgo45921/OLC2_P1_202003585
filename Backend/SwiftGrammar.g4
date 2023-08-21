@@ -61,10 +61,22 @@ instruction returns [interfaces.Instruction inst]
 | asignation PTOCOMA? {$inst = $asignation.newasignation}
 | unarysum PTOCOMA?  {$inst = $unarysum.newunarysum}
 | unarysub PTOCOMA?  {$inst = $unarysub.newunarysub}
+| breakstatement PTOCOMA? {$inst = $breakstatement.newbreak}
+| continuestatement PTOCOMA? {$inst = $continuestatement.newcontinue}
 | ifstmt {$inst = $ifstmt.newif}
 | while_statement {$inst = $while_statement.newwhile}
 ;
 //--------------------------
+breakstatement returns [interfaces.Instruction newbreak]
+: RBREAK    {$newbreak = instructions.NewBreak($RBREAK.line, $RBREAK.pos)}
+
+;
+
+continuestatement returns [interfaces.Instruction newcontinue]
+: RCONTINUE    {$newcontinue = instructions.NewBreak($RCONTINUE.line, $RCONTINUE.pos)}
+
+;
+
 ifstmt returns [interfaces.Instruction newif]
 : RIF  ex=expr  LLAVEIZQ b=block LLAVEDER elseifstatement
     {$newif = instructions.NewIf($RIF.line, $RIF.pos, $ex.e, $b.blk, $elseifstatement.newelse)}

@@ -63,7 +63,7 @@ func (o RelationalOperation) Execute(ast *environment.AST, env interface{}) envi
 				r2 := fmt.Sprintf("%v", op2.Value)
 				return environment.Symbol{Lin: o.Lin, Col: o.Col, Type: environment.BOOLEAN, Value: r1 > r2}
 			} else {
-				ast.SetError("ERROR: No es posible comparar <")
+				ast.SetError("ERROR: No es posible comparar >")
 			}
 		}
 	case "<=":
@@ -82,7 +82,7 @@ func (o RelationalOperation) Execute(ast *environment.AST, env interface{}) envi
 				r2 := fmt.Sprintf("%v", op2.Value)
 				return environment.Symbol{Lin: o.Lin, Col: o.Col, Type: environment.BOOLEAN, Value: r1 <= r2}
 			} else {
-				ast.SetError("ERROR: No es posible comparar <")
+				ast.SetError("ERROR: No es posible comparar <=")
 			}
 		}
 	case ">=":
@@ -101,7 +101,7 @@ func (o RelationalOperation) Execute(ast *environment.AST, env interface{}) envi
 				r2 := fmt.Sprintf("%v", op2.Value)
 				return environment.Symbol{Lin: o.Lin, Col: o.Col, Type: environment.BOOLEAN, Value: r1 >= r2}
 			} else {
-				ast.SetError("ERROR: No es posible comparar <")
+				ast.SetError("ERROR: No es posible comparar >=")
 			}
 		}
 	case "==":
@@ -120,7 +120,7 @@ func (o RelationalOperation) Execute(ast *environment.AST, env interface{}) envi
 				r2 := fmt.Sprintf("%v", op2.Value)
 				return environment.Symbol{Lin: o.Lin, Col: o.Col, Type: environment.BOOLEAN, Value: r1 == r2}
 			} else {
-				ast.SetError("ERROR: No es posible comparar <")
+				ast.SetError("ERROR: No es posible comparar ==")
 			}
 		}
 
@@ -140,7 +140,7 @@ func (o RelationalOperation) Execute(ast *environment.AST, env interface{}) envi
 				r2 := fmt.Sprintf("%v", op2.Value)
 				return environment.Symbol{Lin: o.Lin, Col: o.Col, Type: environment.BOOLEAN, Value: r1 != r2}
 			} else {
-				ast.SetError("ERROR: No es posible comparar <")
+				ast.SetError("ERROR: No es posible comparar !=")
 			}
 		}
 

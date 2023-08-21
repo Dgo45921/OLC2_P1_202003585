@@ -26,23 +26,47 @@ func (p If) Execute(ast *environment.AST, env interface{}) interface{} {
 	}
 
 	if expResult.Value.(bool) == true {
-		var newEnv = environment.NewEnvironment(env)
+		var newEnv = environment.NewEnvironment(env, environment.IF)
 		for _, inst := range p.TrueBlock {
-			inst.(interfaces.Instruction).Execute(ast, newEnv)
+			var response = inst.(interfaces.Instruction).Execute(ast, newEnv)
+			if response != nil {
+				if _, isBreak := response.(Break); isBreak {
+					return response
+				} else if _, isContinue := response.(Continue); isContinue {
+					return response
+				}
+			}
 		}
 	} else {
 		if len(p.FalseBlock) > 0 {
 			if nestedArray, isArray := p.FalseBlock[0].([]interface{}); isArray {
-				var newEnv = environment.NewEnvironment(env)
+				var newEnv = environment.NewEnvironment(env, environment.ELSEIF)
 				for _, inst := range nestedArray {
 					if instruction, isInstruction := inst.(interfaces.Instruction); isInstruction {
+
+						var response = inst.(interfaces.Instruction).Execute(ast, newEnv)
+						if response != nil {
+							if _, isBreak := response.(Break); isBreak {
+								return response
+							} else if _, isContinue := response.(Continue); isContinue {
+								return response
+							}
+						}
+
 						instruction.Execute(ast, newEnv)
 					}
 				}
 			} else {
-				var newEnv = environment.NewEnvironment(env)
+				var newEnv = environment.NewEnvironment(env, environment.ElSE)
 				for _, inst := range p.FalseBlock {
-					inst.(interfaces.Instruction).Execute(ast, newEnv)
+					var response = inst.(interfaces.Instruction).Execute(ast, newEnv)
+					if response != nil {
+						if _, isBreak := response.(Break); isBreak {
+							return response
+						} else if _, isContinue := response.(Continue); isContinue {
+							return response
+						}
+					}
 				}
 			}
 		}

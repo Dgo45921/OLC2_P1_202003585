@@ -17,16 +17,26 @@ func NewWhile(lin int, col int, condition interfaces.Expression, insBlock []inte
 }
 
 func (p While) Execute(ast *environment.AST, env interface{}) interface{} {
-	var newEnv = environment.NewEnvironment(env)
+	var newEnv = environment.NewEnvironment(env, environment.WHILE)
 
 	var conditionResult = p.Condition.Execute(ast, newEnv)
 	if conditionResult.Type != environment.BOOLEAN {
 		ast.SetPrint("La condicion debe de ser booleana!")
 	} else {
 		contador := 0
+	outerLoop:
 		for conditionResult.Value == true && contador < 5000 {
 			for _, inst := range p.insBlock {
-				inst.(interfaces.Instruction).Execute(ast, newEnv)
+
+				var response = inst.(interfaces.Instruction).Execute(ast, newEnv)
+				if response != nil{
+					if _, isBreak := response.(Break); isBreak {
+						return nil
+					} else if _, isContinue := response.(Continue); isContinue {
+						continue outerLoop
+					}
+				}
+
 			}
 			conditionResult = p.Condition.Execute(ast, newEnv)
 			contador++

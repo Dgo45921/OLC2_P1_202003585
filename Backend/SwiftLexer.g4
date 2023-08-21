@@ -18,6 +18,8 @@ RWHILE: 'while';
 RVAR: 'var';
 RLET: 'let';
 RNIL: 'nil';
+RBREAK: 'break';
+RCONTINUE:'continue';
 
 // primitives
 NUMBER : [0-9]+ ('.'[0-9]+)?;

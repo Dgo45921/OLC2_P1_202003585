@@ -56,7 +56,7 @@ func Parse(w http.ResponseWriter, r *http.Request) {
 	//create ast
 	var Ast environment.AST
 	// creating env
-	var newEnv = environment.NewEnvironment(nil)
+	var newEnv = environment.NewEnvironment(nil, environment.GLOBAL)
 	//ejecución
 	for _, inst := range Code {
 		inst.(interfaces.Instruction).Execute(&Ast, newEnv)
