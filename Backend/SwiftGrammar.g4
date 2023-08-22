@@ -103,13 +103,23 @@ continuestatement returns [interfaces.Instruction newcontinue]
 ;
 
 ifstmt returns [interfaces.Instruction newif]
-: RIF  ex=expr  LLAVEIZQ b=block LLAVEDER elseifstatement
-    {$newif = instructions.NewIf($RIF.line, $RIF.pos, $ex.e, $b.blk, $elseifstatement.newelse)}
+: RIF  ex=expr  LLAVEIZQ b=block LLAVEDER  {$newif = instructions.NewIf($RIF.line, $RIF.pos, $ex.e, $b.blk, nil, nil)}
+| RIF  ex=expr  LLAVEIZQ b=block LLAVEDER elsestament  {$newif = instructions.NewIf($RIF.line, $RIF.pos, $ex.e, $b.blk, nil, $elsestament.newelse)}
+| RIF  ex=expr  LLAVEIZQ b=block LLAVEDER elseifstatement {$newif = instructions.NewIf($RIF.line, $RIF.pos, $ex.e, $b.blk, $elseifstatement.newelif, nil)}
+| RIF  ex=expr  LLAVEIZQ b=block LLAVEDER elseifstatement elsestament {$newif = instructions.NewIf($RIF.line, $RIF.pos, $ex.e, $b.blk, $elseifstatement.newelif, $elsestament.newelse)}
+
 ;
 
-elseifstatement returns [[] interface{} newelse]
-: RELSE ifstmt                {$newelse = append($newelse, $ifstmt.newif)}
-| RELSE LLAVEIZQ b=block  LLAVEDER             {$newelse = append($newelse, $b.blk)}
+elseifstatement returns [[] interface{} newelif]
+: RELSE RIF  ex=expr  LLAVEIZQ b=block LLAVEDER                {
+                            newIF := instructions.NewIf($RIF.line, $RIF.pos, $ex.e, $b.blk, nil, nil)
+                            $newelif = append($newelif, newIF)
+}
+|                             {}
+;
+
+elsestament returns [[] interface{} newelse]
+: RELSE LLAVEIZQ b=block  LLAVEDER             {$newelse =  $b.blk}
 |                             {}
 ;
 

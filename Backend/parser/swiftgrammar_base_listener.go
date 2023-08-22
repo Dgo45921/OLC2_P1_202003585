@@ -98,6 +98,12 @@ func (s *BaseSwiftGrammarListener) EnterElseifstatement(ctx *ElseifstatementCont
 // ExitElseifstatement is called when production elseifstatement is exited.
 func (s *BaseSwiftGrammarListener) ExitElseifstatement(ctx *ElseifstatementContext) {}
 
+// EnterElsestament is called when production elsestament is entered.
+func (s *BaseSwiftGrammarListener) EnterElsestament(ctx *ElsestamentContext) {}
+
+// ExitElsestament is called when production elsestament is exited.
+func (s *BaseSwiftGrammarListener) ExitElsestament(ctx *ElsestamentContext) {}
+
 // EnterPrintstmt is called when production printstmt is entered.
 func (s *BaseSwiftGrammarListener) EnterPrintstmt(ctx *PrintstmtContext) {}
 

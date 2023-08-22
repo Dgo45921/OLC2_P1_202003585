@@ -46,6 +46,9 @@ type SwiftGrammarListener interface {
 	// EnterElseifstatement is called when entering the elseifstatement production.
 	EnterElseifstatement(c *ElseifstatementContext)
 
+	// EnterElsestament is called when entering the elsestament production.
+	EnterElsestament(c *ElsestamentContext)
+
 	// EnterPrintstmt is called when entering the printstmt production.
 	EnterPrintstmt(c *PrintstmtContext)
 
@@ -108,6 +111,9 @@ type SwiftGrammarListener interface {
 
 	// ExitElseifstatement is called when exiting the elseifstatement production.
 	ExitElseifstatement(c *ElseifstatementContext)
+
+	// ExitElsestament is called when exiting the elsestament production.
+	ExitElsestament(c *ElsestamentContext)
 
 	// ExitPrintstmt is called when exiting the printstmt production.
 	ExitPrintstmt(c *PrintstmtContext)
