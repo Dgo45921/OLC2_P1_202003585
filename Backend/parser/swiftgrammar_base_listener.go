@@ -50,11 +50,23 @@ func (s *BaseSwiftGrammarListener) EnterInstruction(ctx *InstructionContext) {}
 // ExitInstruction is called when production instruction is exited.
 func (s *BaseSwiftGrammarListener) ExitInstruction(ctx *InstructionContext) {}
 
+// EnterVecdec is called when production vecdec is entered.
+func (s *BaseSwiftGrammarListener) EnterVecdec(ctx *VecdecContext) {}
+
+// ExitVecdec is called when production vecdec is exited.
+func (s *BaseSwiftGrammarListener) ExitVecdec(ctx *VecdecContext) {}
+
 // EnterBreakstatement is called when production breakstatement is entered.
 func (s *BaseSwiftGrammarListener) EnterBreakstatement(ctx *BreakstatementContext) {}
 
 // ExitBreakstatement is called when production breakstatement is exited.
 func (s *BaseSwiftGrammarListener) ExitBreakstatement(ctx *BreakstatementContext) {}
+
+// EnterContinuestatement is called when production continuestatement is entered.
+func (s *BaseSwiftGrammarListener) EnterContinuestatement(ctx *ContinuestatementContext) {}
+
+// ExitContinuestatement is called when production continuestatement is exited.
+func (s *BaseSwiftGrammarListener) ExitContinuestatement(ctx *ContinuestatementContext) {}
 
 // EnterIfstmt is called when production ifstmt is entered.
 func (s *BaseSwiftGrammarListener) EnterIfstmt(ctx *IfstmtContext) {}

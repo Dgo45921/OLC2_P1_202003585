@@ -22,8 +22,14 @@ type SwiftGrammarListener interface {
 	// EnterInstruction is called when entering the instruction production.
 	EnterInstruction(c *InstructionContext)
 
+	// EnterVecdec is called when entering the vecdec production.
+	EnterVecdec(c *VecdecContext)
+
 	// EnterBreakstatement is called when entering the breakstatement production.
 	EnterBreakstatement(c *BreakstatementContext)
+
+	// EnterContinuestatement is called when entering the continuestatement production.
+	EnterContinuestatement(c *ContinuestatementContext)
 
 	// EnterIfstmt is called when entering the ifstmt production.
 	EnterIfstmt(c *IfstmtContext)
@@ -70,8 +76,14 @@ type SwiftGrammarListener interface {
 	// ExitInstruction is called when exiting the instruction production.
 	ExitInstruction(c *InstructionContext)
 
+	// ExitVecdec is called when exiting the vecdec production.
+	ExitVecdec(c *VecdecContext)
+
 	// ExitBreakstatement is called when exiting the breakstatement production.
 	ExitBreakstatement(c *BreakstatementContext)
+
+	// ExitContinuestatement is called when exiting the continuestatement production.
+	ExitContinuestatement(c *ContinuestatementContext)
 
 	// ExitIfstmt is called when exiting the ifstmt production.
 	ExitIfstmt(c *IfstmtContext)

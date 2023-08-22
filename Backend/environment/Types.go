@@ -8,5 +8,11 @@ const (
 	STRING                       //2
 	CHAR                         //2
 	BOOLEAN                      //3
-	NULL                         //4
+	VECTOR
+	VECTOR_INT                       //4
+	VECTOR_FLOAT
+	VECTOR_CHAR
+	VECTOR_STRING
+	VECTOR_BOOLEAN
+	NULL                         //5
 )

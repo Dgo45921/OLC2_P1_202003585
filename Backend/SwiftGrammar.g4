@@ -58,6 +58,7 @@ instruction returns [interfaces.Instruction inst]
 : printstmt PTOCOMA?  { $inst = $printstmt.prnt}
 | vardec PTOCOMA?  { $inst = $vardec.newdec}
 | constdec PTOCOMA? {$inst = $constdec.newconst}
+| vecdec PTOCOMA? {$inst = $vecdec.newvecdec}
 | asignation PTOCOMA? {$inst = $asignation.newasignation}
 | unarysum PTOCOMA?  {$inst = $unarysum.newunarysum}
 | unarysub PTOCOMA?  {$inst = $unarysub.newunarysub}
@@ -67,13 +68,20 @@ instruction returns [interfaces.Instruction inst]
 | while_statement {$inst = $while_statement.newwhile}
 ;
 //--------------------------
+
+vecdec returns [interfaces.Instruction newvecdec]
+: RVAR ID DOSPTOS OBRA typpe=(RINT|RFLOAT|RBOOL|RSTRING|RCHARACTER) CBRA IG OBRA expr CBRA {$newvecdec = instructions.NewVecDec($RVAR.line, $RVAR.pos, $ID.text, $typpe.text, nil, $expr.e )}
+| RVAR ID DOSPTOS OBRA typpe=(RINT|RFLOAT|RBOOL|RSTRING|RCHARACTER) CBRA IG OBRA typpe2=(RINT|RFLOAT|RBOOL|RSTRING|RCHARACTER) CBRA OBRA CBRA {$newvecdec = instructions.NewVecDec($RVAR.line, $RVAR.pos, $ID.text, $typpe.text, $typpe2.text, nil )}
+| RVAR firstid=ID DOSPTOS  OBRA typpe=(RINT|RFLOAT|RBOOL|RSTRING|RCHARACTER) CBRA IG expr {$newvecdec = instructions.NewVecDec($RVAR.line, $RVAR.pos, $firstid.text, $typpe.text, nil,$expr.e )}
+;
+
 breakstatement returns [interfaces.Instruction newbreak]
 : RBREAK    {$newbreak = instructions.NewBreak($RBREAK.line, $RBREAK.pos)}
 
 ;
 
 continuestatement returns [interfaces.Instruction newcontinue]
-: RCONTINUE    {$newcontinue = instructions.NewBreak($RCONTINUE.line, $RCONTINUE.pos)}
+: RCONTINUE    {$newcontinue = instructions.NewContinue($RCONTINUE.line, $RCONTINUE.pos)}
 
 ;
 
@@ -133,6 +141,7 @@ expr returns [interfaces.Expression e]
 | left=expr op=(IG_IG|DIF) right=expr { $e = expressions.NewRelationalOperation($left.start.GetLine(), $left.start.GetColumn(), $left.e, $op.text, $right.e) }
 | left=expr op=AND right=expr { $e = expressions.NewBooleanOperation($left.start.GetLine(), $left.start.GetColumn(), $left.e, $op.text, $right.e) }
 | left=expr op=OR right=expr { $e = expressions.NewBooleanOperation($left.start.GetLine(), $left.start.GetColumn(), $left.e, $op.text, $right.e) }
+| OBRA arguments CBRA {$e = expressions.NewVector($OBRA.line, $OBRA.pos, $arguments.args) }
 | ID                        { $e = expressions.NewVariableAccess($ID.text) }
 | NUMBER
     {

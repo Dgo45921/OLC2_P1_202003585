@@ -2,17 +2,16 @@ package instructions
 
 import (
 	"PY1/environment"
-	"PY1/interfaces"
+
 )
 
 type Continue struct {
 	Lin        int
 	Col        int
-	Expression interfaces.Expression
 }
 
-func NewContinue(lin int, col int, exp interfaces.Expression) Continue {
-	breakInstr := Continue{lin, col, exp}
+func NewContinue(lin int, col int) Continue {
+	breakInstr := Continue{lin, col}
 	return breakInstr
 }
 

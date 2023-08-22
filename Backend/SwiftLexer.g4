@@ -49,6 +49,8 @@ PARIZQ:         '(';
 PARDER:         ')';
 LLAVEIZQ:       '{';
 LLAVEDER:       '}';
+OBRA:           '[';
+CBRA:           ']';
 PTOCOMA:        ';';
 DOSPTOS:        ':';
 MODULE:         '%' ;

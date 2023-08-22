@@ -1,9 +1,5 @@
 package environment
 
-import (
-	"fmt"
-)
-
 type Environment struct {
 	Prev        interface{}
 	SymbolTable map[string]Symbol
@@ -19,15 +15,24 @@ func NewEnvironment(prev interface{}, scope EnvType) Environment {
 }
 
 func (env Environment) SaveVariable(id string, value Symbol) {
-	if _, ok := env.SymbolTable[id]; ok {
-		fmt.Printf("Variable %s already exists\n", id)
-		return
-	}
 	env.SymbolTable[id] = value
 }
 
 func (env Environment) UpdateVariable(id string, value Symbol) {
-	env.SymbolTable[id] = value
+	var envTemporal = env
+	for {
+		if _, ok := envTemporal.SymbolTable[id]; ok {
+			envTemporal.SymbolTable[id] = value
+			break
+		}
+		if envTemporal.Prev != nil {
+			envTemporal = envTemporal.Prev.(Environment)
+			continue
+		}
+		break
+
+	}
+
 }
 
 func (env Environment) FindVar(id string) Symbol {

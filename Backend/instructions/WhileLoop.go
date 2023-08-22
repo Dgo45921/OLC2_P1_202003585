@@ -24,16 +24,16 @@ func (p While) Execute(ast *environment.AST, env interface{}) interface{} {
 		ast.SetPrint("La condicion debe de ser booleana!")
 	} else {
 		contador := 0
-	outerLoop:
+	outerloop:
 		for conditionResult.Value == true && contador < 5000 {
 			for _, inst := range p.insBlock {
 
 				var response = inst.(interfaces.Instruction).Execute(ast, newEnv)
-				if response != nil{
+				if response != nil {
 					if _, isBreak := response.(Break); isBreak {
 						return nil
 					} else if _, isContinue := response.(Continue); isContinue {
-						continue outerLoop
+						continue outerloop
 					}
 				}
 
