@@ -22,6 +22,15 @@ type SwiftGrammarListener interface {
 	// EnterInstruction is called when entering the instruction production.
 	EnterInstruction(c *InstructionContext)
 
+	// EnterRemoveatvec is called when entering the removeatvec production.
+	EnterRemoveatvec(c *RemoveatvecContext)
+
+	// EnterAppendvec is called when entering the appendvec production.
+	EnterAppendvec(c *AppendvecContext)
+
+	// EnterRemovelastvec is called when entering the removelastvec production.
+	EnterRemovelastvec(c *RemovelastvecContext)
+
 	// EnterVecdec is called when entering the vecdec production.
 	EnterVecdec(c *VecdecContext)
 
@@ -75,6 +84,15 @@ type SwiftGrammarListener interface {
 
 	// ExitInstruction is called when exiting the instruction production.
 	ExitInstruction(c *InstructionContext)
+
+	// ExitRemoveatvec is called when exiting the removeatvec production.
+	ExitRemoveatvec(c *RemoveatvecContext)
+
+	// ExitAppendvec is called when exiting the appendvec production.
+	ExitAppendvec(c *AppendvecContext)
+
+	// ExitRemovelastvec is called when exiting the removelastvec production.
+	ExitRemovelastvec(c *RemovelastvecContext)
 
 	// ExitVecdec is called when exiting the vecdec production.
 	ExitVecdec(c *VecdecContext)

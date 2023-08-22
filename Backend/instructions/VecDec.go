@@ -108,7 +108,7 @@ func (p VecDec) Execute(ast *environment.AST, env interface{}) interface{} {
 			typesVector = environment.VECTOR_STRING
 
 		}
-		var emptyArray []interface{}
+		var emptyArray []interface{} = []interface{}{}
 		var symbol = environment.Symbol{
 			Lin:   p.Lin,
 			Col:   p.Col,
@@ -116,7 +116,12 @@ func (p VecDec) Execute(ast *environment.AST, env interface{}) interface{} {
 			Value: emptyArray,
 			Const: false,
 		}
-		env.(environment.Environment).SaveVariable(p.Id, symbol)
+		if p.DefType.(string) == p.Type {
+			env.(environment.Environment).SaveVariable(p.Id, symbol)
+		} else {
+			ast.SetPrint("Error: El tipo definido al inicio no es igual al definido por el ultimo\n")
+		}
+
 		return nil
 
 	}

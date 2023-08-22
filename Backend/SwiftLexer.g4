@@ -20,6 +20,10 @@ RLET: 'let';
 RNIL: 'nil';
 RBREAK: 'break';
 RCONTINUE:'continue';
+RAPPEND : 'append'  ;
+RREMOVELAST : 'removeLast';
+RRAT        : 'at';
+RREMOVEAT   : 'remove';
 
 // primitives
 NUMBER : [0-9]+ ('.'[0-9]+)?;
@@ -56,6 +60,7 @@ DOSPTOS:        ':';
 MODULE:         '%' ;
 COMA:           ',' ;
 QM:             '?' ;
+PTO:            '.';
 
 // skip
 WHITESPACE: [ \\\r\n\t]+ -> skip;

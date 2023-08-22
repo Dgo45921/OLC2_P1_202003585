@@ -50,6 +50,24 @@ func (s *BaseSwiftGrammarListener) EnterInstruction(ctx *InstructionContext) {}
 // ExitInstruction is called when production instruction is exited.
 func (s *BaseSwiftGrammarListener) ExitInstruction(ctx *InstructionContext) {}
 
+// EnterRemoveatvec is called when production removeatvec is entered.
+func (s *BaseSwiftGrammarListener) EnterRemoveatvec(ctx *RemoveatvecContext) {}
+
+// ExitRemoveatvec is called when production removeatvec is exited.
+func (s *BaseSwiftGrammarListener) ExitRemoveatvec(ctx *RemoveatvecContext) {}
+
+// EnterAppendvec is called when production appendvec is entered.
+func (s *BaseSwiftGrammarListener) EnterAppendvec(ctx *AppendvecContext) {}
+
+// ExitAppendvec is called when production appendvec is exited.
+func (s *BaseSwiftGrammarListener) ExitAppendvec(ctx *AppendvecContext) {}
+
+// EnterRemovelastvec is called when production removelastvec is entered.
+func (s *BaseSwiftGrammarListener) EnterRemovelastvec(ctx *RemovelastvecContext) {}
+
+// ExitRemovelastvec is called when production removelastvec is exited.
+func (s *BaseSwiftGrammarListener) ExitRemovelastvec(ctx *RemovelastvecContext) {}
+
 // EnterVecdec is called when production vecdec is entered.
 func (s *BaseSwiftGrammarListener) EnterVecdec(ctx *VecdecContext) {}
 

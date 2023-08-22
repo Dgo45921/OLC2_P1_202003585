@@ -59,6 +59,9 @@ instruction returns [interfaces.Instruction inst]
 | vardec PTOCOMA?  { $inst = $vardec.newdec}
 | constdec PTOCOMA? {$inst = $constdec.newconst}
 | vecdec PTOCOMA? {$inst = $vecdec.newvecdec}
+| appendvec PTOCOMA? {$inst = $appendvec.newappendvec}
+| removelastvec PTOCOMA? {$inst = $removelastvec.newremovelastvec}
+| removeatvec PTOCOMA?  {$inst = $removeatvec.newremoveat}
 | asignation PTOCOMA? {$inst = $asignation.newasignation}
 | unarysum PTOCOMA?  {$inst = $unarysum.newunarysum}
 | unarysub PTOCOMA?  {$inst = $unarysub.newunarysub}
@@ -68,6 +71,20 @@ instruction returns [interfaces.Instruction inst]
 | while_statement {$inst = $while_statement.newwhile}
 ;
 //--------------------------
+removeatvec returns [interfaces.Instruction newremoveat]
+: ID PTO RREMOVEAT PARIZQ RRAT DOSPTOS expr PARDER {$newremoveat = instructions.NewRemoveAtVector($ID.line, $ID.pos,$ID.text ,$expr.e)}
+  ;
+
+appendvec returns [interfaces.Instruction newappendvec]
+: ID PTO RAPPEND PARIZQ expr PARDER {$newappendvec = instructions.NewAppendVector($ID.line, $ID.pos,$ID.text ,$expr.e)}
+
+;
+
+removelastvec returns [interfaces.Instruction newremovelastvec]
+: ID PTO RREMOVELAST PARIZQ PARDER {$newremovelastvec = instructions.NewRemoveLastVector($ID.line, $ID.pos,$ID.text)}
+
+;
+
 
 vecdec returns [interfaces.Instruction newvecdec]
 : RVAR ID DOSPTOS OBRA typpe=(RINT|RFLOAT|RBOOL|RSTRING|RCHARACTER) CBRA IG OBRA expr CBRA {$newvecdec = instructions.NewVecDec($RVAR.line, $RVAR.pos, $ID.text, $typpe.text, nil, $expr.e )}

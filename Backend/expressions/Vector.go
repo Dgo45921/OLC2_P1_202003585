@@ -18,11 +18,11 @@ func NewVector(lin int, col int, val []interface{}) Vector {
 
 func (p Vector) Execute(ast *environment.AST, env interface{}) environment.Symbol {
 	if len(p.Value) == 0 {
-		var emptyarray []interface{}
+		var emptyArray []interface{} = []interface{}{}
 		return environment.Symbol{
 			Lin:   p.Lin,
 			Col:   p.Col,
-			Value: emptyarray,
+			Value: emptyArray,
 			Type:  environment.VECTOR,
 			Const: false,
 		}
