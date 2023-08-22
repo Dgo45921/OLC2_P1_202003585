@@ -24,6 +24,8 @@ RAPPEND : 'append'  ;
 RREMOVELAST : 'removeLast';
 RRAT        : 'at';
 RREMOVEAT   : 'remove';
+RISEMPTY :'isEmpty';
+RCOUNT : 'count';
 
 // primitives
 NUMBER : [0-9]+ ('.'[0-9]+)?;

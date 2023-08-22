@@ -31,7 +31,7 @@ func (p Vector) Execute(ast *environment.AST, env interface{}) environment.Symbo
 	if validVector(ast, env, p) {
 		var firstType = environment.INTEGER
 
-		var valuesArray []interface{}
+		var valuesArray []interface{} = []interface{}{}
 		for _, inst := range p.Value {
 			var response = inst.(interfaces.Expression).Execute(ast, env)
 			firstType = response.Type

@@ -70,6 +70,12 @@ type SwiftGrammarListener interface {
 	// EnterUnarysub is called when entering the unarysub production.
 	EnterUnarysub(c *UnarysubContext)
 
+	// EnterIsemptyvec is called when entering the isemptyvec production.
+	EnterIsemptyvec(c *IsemptyvecContext)
+
+	// EnterCountvec is called when entering the countvec production.
+	EnterCountvec(c *CountvecContext)
+
 	// EnterExpr is called when entering the expr production.
 	EnterExpr(c *ExprContext)
 
@@ -135,6 +141,12 @@ type SwiftGrammarListener interface {
 
 	// ExitUnarysub is called when exiting the unarysub production.
 	ExitUnarysub(c *UnarysubContext)
+
+	// ExitIsemptyvec is called when exiting the isemptyvec production.
+	ExitIsemptyvec(c *IsemptyvecContext)
+
+	// ExitCountvec is called when exiting the countvec production.
+	ExitCountvec(c *CountvecContext)
 
 	// ExitExpr is called when exiting the expr production.
 	ExitExpr(c *ExprContext)

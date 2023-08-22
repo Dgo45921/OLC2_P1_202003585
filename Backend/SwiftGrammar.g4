@@ -87,8 +87,7 @@ removelastvec returns [interfaces.Instruction newremovelastvec]
 
 
 vecdec returns [interfaces.Instruction newvecdec]
-: RVAR ID DOSPTOS OBRA typpe=(RINT|RFLOAT|RBOOL|RSTRING|RCHARACTER) CBRA IG OBRA expr CBRA {$newvecdec = instructions.NewVecDec($RVAR.line, $RVAR.pos, $ID.text, $typpe.text, nil, $expr.e )}
-| RVAR ID DOSPTOS OBRA typpe=(RINT|RFLOAT|RBOOL|RSTRING|RCHARACTER) CBRA IG OBRA typpe2=(RINT|RFLOAT|RBOOL|RSTRING|RCHARACTER) CBRA OBRA CBRA {$newvecdec = instructions.NewVecDec($RVAR.line, $RVAR.pos, $ID.text, $typpe.text, $typpe2.text, nil )}
+: RVAR ID DOSPTOS OBRA typpe=(RINT|RFLOAT|RBOOL|RSTRING|RCHARACTER) CBRA IG OBRA typpe2=(RINT|RFLOAT|RBOOL|RSTRING|RCHARACTER) CBRA OBRA CBRA {$newvecdec = instructions.NewVecDec($RVAR.line, $RVAR.pos, $ID.text, $typpe.text, $typpe2.text, nil )}
 | RVAR firstid=ID DOSPTOS  OBRA typpe=(RINT|RFLOAT|RBOOL|RSTRING|RCHARACTER) CBRA IG expr {$newvecdec = instructions.NewVecDec($RVAR.line, $RVAR.pos, $firstid.text, $typpe.text, nil,$expr.e )}
 ;
 
@@ -157,6 +156,14 @@ unarysub returns [interfaces.Instruction newunarysub]
 :ID UNARYMINUS ex=expr { $newunarysub = instructions.NewUnarySum($ID.line,$ID.pos,$ID.text, "-=", $ex.e)}
 ;
 
+isemptyvec returns [interfaces.Expression newisemptyvec]
+: ID PTO RISEMPTY   {$newisemptyvec = expressions.NewIsEmptyVector($ID.line, $ID.pos,$ID.text)}
+  ;
+
+countvec returns [interfaces.Expression newcountvec]
+: ID PTO RCOUNT   {$newcountvec = expressions.NewCountVector($ID.line, $ID.pos,$ID.text)}
+   ;
+
 // EXPRESSIONS -----------------------------------------------------------------
 expr returns [interfaces.Expression e]
 :
@@ -168,6 +175,8 @@ expr returns [interfaces.Expression e]
 | left=expr op=(IG_IG|DIF) right=expr { $e = expressions.NewRelationalOperation($left.start.GetLine(), $left.start.GetColumn(), $left.e, $op.text, $right.e) }
 | left=expr op=AND right=expr { $e = expressions.NewBooleanOperation($left.start.GetLine(), $left.start.GetColumn(), $left.e, $op.text, $right.e) }
 | left=expr op=OR right=expr { $e = expressions.NewBooleanOperation($left.start.GetLine(), $left.start.GetColumn(), $left.e, $op.text, $right.e) }
+| isemptyvec {$e = $isemptyvec.newisemptyvec}
+| countvec {$e = $countvec.newcountvec}
 | OBRA arguments CBRA {$e = expressions.NewVector($OBRA.line, $OBRA.pos, $arguments.args) }
 | ID                        { $e = expressions.NewVariableAccess($ID.text) }
 | NUMBER

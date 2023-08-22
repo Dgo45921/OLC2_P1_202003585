@@ -146,6 +146,18 @@ func (s *BaseSwiftGrammarListener) EnterUnarysub(ctx *UnarysubContext) {}
 // ExitUnarysub is called when production unarysub is exited.
 func (s *BaseSwiftGrammarListener) ExitUnarysub(ctx *UnarysubContext) {}
 
+// EnterIsemptyvec is called when production isemptyvec is entered.
+func (s *BaseSwiftGrammarListener) EnterIsemptyvec(ctx *IsemptyvecContext) {}
+
+// ExitIsemptyvec is called when production isemptyvec is exited.
+func (s *BaseSwiftGrammarListener) ExitIsemptyvec(ctx *IsemptyvecContext) {}
+
+// EnterCountvec is called when production countvec is entered.
+func (s *BaseSwiftGrammarListener) EnterCountvec(ctx *CountvecContext) {}
+
+// ExitCountvec is called when production countvec is exited.
+func (s *BaseSwiftGrammarListener) ExitCountvec(ctx *CountvecContext) {}
+
 // EnterExpr is called when production expr is entered.
 func (s *BaseSwiftGrammarListener) EnterExpr(ctx *ExprContext) {}
 
