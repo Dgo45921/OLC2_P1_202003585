@@ -54,7 +54,7 @@ func (env Environment) FindVar(id string) Symbol {
 func (env Environment) InsideLoop() bool {
 	var tmpEnv = env
 	for {
-		if tmpEnv.Scope == WHILE || tmpEnv.Scope == FOR {
+		if tmpEnv.Scope == WHILE || tmpEnv.Scope == FOR || tmpEnv.Scope == CASE || tmpEnv.Scope == DEFAULT {
 			return true
 		}
 		if tmpEnv.Prev == nil {

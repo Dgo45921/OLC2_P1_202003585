@@ -22,7 +22,7 @@ func (p If) Execute(ast *environment.AST, env interface{}) interface{} {
 	var shouldExecuteElse = false
 	var expResult = p.Condition.Execute(ast, env)
 	if expResult.Type != environment.BOOLEAN {
-		ast.SetPrint("Error: La expresion dentro del if debe ser booleana")
+		ast.SetPrint("Error: La expresion dentro del if debe ser booleana\n")
 		return nil
 	}
 

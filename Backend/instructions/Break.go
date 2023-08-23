@@ -16,7 +16,7 @@ func NewBreak(lin int, col int) Break {
 
 func (p Break) Execute(ast *environment.AST, env interface{}) interface{} {
 	if !env.(environment.Environment).InsideLoop() {
-		ast.SetPrint("Error: sentencia break debe de estar dentro de un ciclo!")
+		ast.SetPrint("Error: sentencia break debe de estar dentro de un ciclo!\n")
 	}
 	return p
 }

@@ -40,11 +40,26 @@ type SwiftGrammarListener interface {
 	// EnterContinuestatement is called when entering the continuestatement production.
 	EnterContinuestatement(c *ContinuestatementContext)
 
+	// EnterSwitchstatement is called when entering the switchstatement production.
+	EnterSwitchstatement(c *SwitchstatementContext)
+
+	// EnterCaselist is called when entering the caselist production.
+	EnterCaselist(c *CaselistContext)
+
+	// EnterCase is called when entering the case production.
+	EnterCase(c *CaseContext)
+
+	// EnterDefaultstatement is called when entering the defaultstatement production.
+	EnterDefaultstatement(c *DefaultstatementContext)
+
 	// EnterIfstmt is called when entering the ifstmt production.
 	EnterIfstmt(c *IfstmtContext)
 
-	// EnterElseifstatement is called when entering the elseifstatement production.
-	EnterElseifstatement(c *ElseifstatementContext)
+	// EnterEliflist is called when entering the eliflist production.
+	EnterEliflist(c *EliflistContext)
+
+	// EnterElif is called when entering the elif production.
+	EnterElif(c *ElifContext)
 
 	// EnterElsestament is called when entering the elsestament production.
 	EnterElsestament(c *ElsestamentContext)
@@ -112,11 +127,26 @@ type SwiftGrammarListener interface {
 	// ExitContinuestatement is called when exiting the continuestatement production.
 	ExitContinuestatement(c *ContinuestatementContext)
 
+	// ExitSwitchstatement is called when exiting the switchstatement production.
+	ExitSwitchstatement(c *SwitchstatementContext)
+
+	// ExitCaselist is called when exiting the caselist production.
+	ExitCaselist(c *CaselistContext)
+
+	// ExitCase is called when exiting the case production.
+	ExitCase(c *CaseContext)
+
+	// ExitDefaultstatement is called when exiting the defaultstatement production.
+	ExitDefaultstatement(c *DefaultstatementContext)
+
 	// ExitIfstmt is called when exiting the ifstmt production.
 	ExitIfstmt(c *IfstmtContext)
 
-	// ExitElseifstatement is called when exiting the elseifstatement production.
-	ExitElseifstatement(c *ElseifstatementContext)
+	// ExitEliflist is called when exiting the eliflist production.
+	ExitEliflist(c *EliflistContext)
+
+	// ExitElif is called when exiting the elif production.
+	ExitElif(c *ElifContext)
 
 	// ExitElsestament is called when exiting the elsestament production.
 	ExitElsestament(c *ElsestamentContext)

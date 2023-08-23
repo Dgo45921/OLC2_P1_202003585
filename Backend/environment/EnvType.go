@@ -11,6 +11,7 @@ const (
 	FUNC
 	SWITCH
 	CASE
+	DEFAULT
 	ElSE
 	ELSEIF
 )

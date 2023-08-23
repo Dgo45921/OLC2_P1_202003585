@@ -86,17 +86,47 @@ func (s *BaseSwiftGrammarListener) EnterContinuestatement(ctx *Continuestatement
 // ExitContinuestatement is called when production continuestatement is exited.
 func (s *BaseSwiftGrammarListener) ExitContinuestatement(ctx *ContinuestatementContext) {}
 
+// EnterSwitchstatement is called when production switchstatement is entered.
+func (s *BaseSwiftGrammarListener) EnterSwitchstatement(ctx *SwitchstatementContext) {}
+
+// ExitSwitchstatement is called when production switchstatement is exited.
+func (s *BaseSwiftGrammarListener) ExitSwitchstatement(ctx *SwitchstatementContext) {}
+
+// EnterCaselist is called when production caselist is entered.
+func (s *BaseSwiftGrammarListener) EnterCaselist(ctx *CaselistContext) {}
+
+// ExitCaselist is called when production caselist is exited.
+func (s *BaseSwiftGrammarListener) ExitCaselist(ctx *CaselistContext) {}
+
+// EnterCase is called when production case is entered.
+func (s *BaseSwiftGrammarListener) EnterCase(ctx *CaseContext) {}
+
+// ExitCase is called when production case is exited.
+func (s *BaseSwiftGrammarListener) ExitCase(ctx *CaseContext) {}
+
+// EnterDefaultstatement is called when production defaultstatement is entered.
+func (s *BaseSwiftGrammarListener) EnterDefaultstatement(ctx *DefaultstatementContext) {}
+
+// ExitDefaultstatement is called when production defaultstatement is exited.
+func (s *BaseSwiftGrammarListener) ExitDefaultstatement(ctx *DefaultstatementContext) {}
+
 // EnterIfstmt is called when production ifstmt is entered.
 func (s *BaseSwiftGrammarListener) EnterIfstmt(ctx *IfstmtContext) {}
 
 // ExitIfstmt is called when production ifstmt is exited.
 func (s *BaseSwiftGrammarListener) ExitIfstmt(ctx *IfstmtContext) {}
 
-// EnterElseifstatement is called when production elseifstatement is entered.
-func (s *BaseSwiftGrammarListener) EnterElseifstatement(ctx *ElseifstatementContext) {}
+// EnterEliflist is called when production eliflist is entered.
+func (s *BaseSwiftGrammarListener) EnterEliflist(ctx *EliflistContext) {}
 
-// ExitElseifstatement is called when production elseifstatement is exited.
-func (s *BaseSwiftGrammarListener) ExitElseifstatement(ctx *ElseifstatementContext) {}
+// ExitEliflist is called when production eliflist is exited.
+func (s *BaseSwiftGrammarListener) ExitEliflist(ctx *EliflistContext) {}
+
+// EnterElif is called when production elif is entered.
+func (s *BaseSwiftGrammarListener) EnterElif(ctx *ElifContext) {}
+
+// ExitElif is called when production elif is exited.
+func (s *BaseSwiftGrammarListener) ExitElif(ctx *ElifContext) {}
 
 // EnterElsestament is called when production elsestament is entered.
 func (s *BaseSwiftGrammarListener) EnterElsestament(ctx *ElsestamentContext) {}

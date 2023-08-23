@@ -26,7 +26,7 @@ block returns [[]interface{} blk]
     $blk = []interface{}{}
     var listInt []IInstructionContext
   }
-: ins+=instruction+
+: ins+=instruction*
     {
         listInt = localctx.(*BlockContext).GetIns()
         for _, e := range listInt {
@@ -69,6 +69,7 @@ instruction returns [interfaces.Instruction inst]
 | continuestatement PTOCOMA? {$inst = $continuestatement.newcontinue}
 | ifstmt {$inst = $ifstmt.newif}
 | while_statement {$inst = $while_statement.newwhile}
+| switchstatement {$inst = $switchstatement.newswitch}
 ;
 //--------------------------
 removeatvec returns [interfaces.Instruction newremoveat]
@@ -101,27 +102,61 @@ continuestatement returns [interfaces.Instruction newcontinue]
 
 ;
 
-ifstmt returns [interfaces.Instruction newif]
-: RIF  ex=expr  LLAVEIZQ b=block LLAVEDER  {$newif = instructions.NewIf($RIF.line, $RIF.pos, $ex.e, $b.blk, nil, nil)}
-| RIF  ex=expr  LLAVEIZQ b=block LLAVEDER elsestament  {$newif = instructions.NewIf($RIF.line, $RIF.pos, $ex.e, $b.blk, nil, $elsestament.newelse)}
-| RIF  ex=expr  LLAVEIZQ b=block LLAVEDER elseifstatement {$newif = instructions.NewIf($RIF.line, $RIF.pos, $ex.e, $b.blk, $elseifstatement.newelif, nil)}
-| RIF  ex=expr  LLAVEIZQ b=block LLAVEDER elseifstatement elsestament {$newif = instructions.NewIf($RIF.line, $RIF.pos, $ex.e, $b.blk, $elseifstatement.newelif, $elsestament.newelse)}
-
+switchstatement returns [interfaces.Instruction newswitch]
+: RSWITCH  ex=expr  LLAVEIZQ caselist LLAVEDER   {$newswitch = instructions.NewSwitch($RSWITCH.line, $RSWITCH.pos, $ex.e, $caselist.newcaselist, nil)}
+ |RSWITCH  ex=expr   LLAVEIZQ caselist defaultstatement LLAVEDER   {$newswitch = instructions.NewSwitch($RSWITCH.line, $RSWITCH.pos, $ex.e, $caselist.newcaselist, $defaultstatement.newdefault)}
 ;
 
-elseifstatement returns [[] interface{} newelif]
-: RELSE RIF  ex=expr  LLAVEIZQ b=block LLAVEDER                {
-                            newIF := instructions.NewIf($RIF.line, $RIF.pos, $ex.e, $b.blk, nil, nil)
-                            $newelif = append($newelif, newIF)
+
+caselist returns [[]interface{} newcaselist]
+@init {
+    $newcaselist = []interface{}{}
 }
-|                             {}
+    :case  caselist  { $newcaselist = append($newcaselist, $case.newcase)
+                                       for _, arg := range $caselist.newcaselist {
+                                           $newcaselist = append($newcaselist, arg)
+                                       }
+                                 }
+    |case { $newcaselist = append( $newcaselist , $case.newcase) }
+    | {}
+    ;
+
+case returns [interfaces.Instruction newcase]
+: RCASE ex=expr DOSPTOS  b=block   {$newcase = instructions.NewCase($RCASE.line, $RCASE.pos, $ex.e, $b.blk)}
+;
+
+defaultstatement returns [[] interface{} newdefault]
+: RDEFAULT DOSPTOS b=block  LLAVEDER             {$newdefault =  $b.blk}
+;
+
+//-----------------------------
+
+ifstmt returns [interfaces.Instruction newif]
+: RIF  ex=expr  LLAVEIZQ b=block LLAVEDER eliflist  {$newif = instructions.NewIf($RIF.line, $RIF.pos, $ex.e, $b.blk, $eliflist.neweliflist, nil)}
+ |RIF  ex=expr  LLAVEIZQ b=block LLAVEDER eliflist elsestament {$newif = instructions.NewIf($RIF.line, $RIF.pos, $ex.e, $b.blk, $eliflist.neweliflist, $elsestament.newelse)}
+;
+
+
+eliflist returns [[]interface{} neweliflist]
+@init {
+    $neweliflist = []interface{}{}
+}
+    :elif  eliflist  { $neweliflist = append($neweliflist, $elif.newelif)
+                                       for _, arg := range $eliflist.neweliflist {
+                                           $neweliflist = append($neweliflist, arg)
+                                       }
+                                 }
+    |elif { $neweliflist = append( $neweliflist , $elif.newelif) }
+    | {}
+    ;
+
+elif returns [interfaces.Instruction newelif]
+: RELSE RIF ex=expr LLAVEIZQ  b=block  LLAVEDER {$newelif = instructions.NewIf($RELSE.line, $RELSE.pos, $ex.e, $b.blk, nil, nil)}
 ;
 
 elsestament returns [[] interface{} newelse]
 : RELSE LLAVEIZQ b=block  LLAVEDER             {$newelse =  $b.blk}
-|                             {}
 ;
-
 // STATEMENTS----------------------------------------------------------------------------------------------
 printstmt returns [interfaces.Instruction prnt]
 : RPRINT PARIZQ arguments PARDER { $prnt = instructions.NewPrint($RPRINT.line,$RPRINT.pos,$arguments.args)}

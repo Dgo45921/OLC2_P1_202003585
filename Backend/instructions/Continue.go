@@ -17,7 +17,7 @@ func NewContinue(lin int, col int) Continue {
 
 func (p Continue) Execute(ast *environment.AST, env interface{}) interface{} {
 	if !env.(environment.Environment).InsideLoop() {
-		ast.SetPrint("Error: sentencia continue debe de estar dentro de un ciclo!")
+		ast.SetPrint("Error: sentencia continue debe de estar dentro de un ciclo!\n")
 	}
 	return p
 }

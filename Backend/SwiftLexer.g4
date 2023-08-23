@@ -26,6 +26,9 @@ RRAT        : 'at';
 RREMOVEAT   : 'remove';
 RISEMPTY :'isEmpty';
 RCOUNT : 'count';
+RSWITCH :'switch';
+RCASE : 'case';
+RDEFAULT : 'default';
 
 // primitives
 NUMBER : [0-9]+ ('.'[0-9]+)?;
