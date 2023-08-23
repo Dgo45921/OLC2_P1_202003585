@@ -50,6 +50,18 @@ func (s *BaseSwiftGrammarListener) EnterInstruction(ctx *InstructionContext) {}
 // ExitInstruction is called when production instruction is exited.
 func (s *BaseSwiftGrammarListener) ExitInstruction(ctx *InstructionContext) {}
 
+// EnterForloop is called when production forloop is entered.
+func (s *BaseSwiftGrammarListener) EnterForloop(ctx *ForloopContext) {}
+
+// ExitForloop is called when production forloop is exited.
+func (s *BaseSwiftGrammarListener) ExitForloop(ctx *ForloopContext) {}
+
+// EnterRange is called when production range is entered.
+func (s *BaseSwiftGrammarListener) EnterRange(ctx *RangeContext) {}
+
+// ExitRange is called when production range is exited.
+func (s *BaseSwiftGrammarListener) ExitRange(ctx *RangeContext) {}
+
 // EnterRemoveatvec is called when production removeatvec is entered.
 func (s *BaseSwiftGrammarListener) EnterRemoveatvec(ctx *RemoveatvecContext) {}
 

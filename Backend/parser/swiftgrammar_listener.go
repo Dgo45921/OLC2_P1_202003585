@@ -22,6 +22,12 @@ type SwiftGrammarListener interface {
 	// EnterInstruction is called when entering the instruction production.
 	EnterInstruction(c *InstructionContext)
 
+	// EnterForloop is called when entering the forloop production.
+	EnterForloop(c *ForloopContext)
+
+	// EnterRange is called when entering the range production.
+	EnterRange(c *RangeContext)
+
 	// EnterRemoveatvec is called when entering the removeatvec production.
 	EnterRemoveatvec(c *RemoveatvecContext)
 
@@ -108,6 +114,12 @@ type SwiftGrammarListener interface {
 
 	// ExitInstruction is called when exiting the instruction production.
 	ExitInstruction(c *InstructionContext)
+
+	// ExitForloop is called when exiting the forloop production.
+	ExitForloop(c *ForloopContext)
+
+	// ExitRange is called when exiting the range production.
+	ExitRange(c *RangeContext)
 
 	// ExitRemoveatvec is called when exiting the removeatvec production.
 	ExitRemoveatvec(c *RemoveatvecContext)

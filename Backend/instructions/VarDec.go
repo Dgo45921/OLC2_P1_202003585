@@ -5,6 +5,7 @@ import (
 	"PY1/interfaces"
 )
 
+// VarDec TODO CHECK NOT REDECLARED VARIABLE
 type VarDec struct {
 	Lin        int
 	Col        int

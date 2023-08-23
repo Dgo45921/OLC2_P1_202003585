@@ -70,7 +70,20 @@ instruction returns [interfaces.Instruction inst]
 | ifstmt {$inst = $ifstmt.newif}
 | while_statement {$inst = $while_statement.newwhile}
 | switchstatement {$inst = $switchstatement.newswitch}
+| forloop {$inst = $forloop.newfor}
 ;
+
+forloop returns [interfaces.Instruction newfor]
+: RFOR ID RIN ex=expr LLAVEIZQ b=block LLAVEDER {$newfor = instructions.NewFor($RFOR.line, $RFOR.pos,$ID.text ,$ex.e, $b.blk)}
+| RFOR ID RIN range LLAVEIZQ b=block LLAVEDER {$newfor = instructions.NewFor($RFOR.line, $RFOR.pos,$ID.text ,$range.newrange, $b.blk)}
+
+;
+
+range returns [interfaces.Expression newrange]
+: exp1=expr PTO PTO PTO exp2=expr {$newrange = expressions.NewRange($exp1.start.GetLine(), $exp1.start.GetColumn(), $exp1.e, $exp2.e) }
+
+;
+
 //--------------------------
 removeatvec returns [interfaces.Instruction newremoveat]
 : ID PTO RREMOVEAT PARIZQ RRAT DOSPTOS expr PARDER {$newremoveat = instructions.NewRemoveAtVector($ID.line, $ID.pos,$ID.text ,$expr.e)}

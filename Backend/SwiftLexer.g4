@@ -29,6 +29,8 @@ RCOUNT : 'count';
 RSWITCH :'switch';
 RCASE : 'case';
 RDEFAULT : 'default';
+RFOR : 'for';
+RIN : 'in';
 
 // primitives
 NUMBER : [0-9]+ ('.'[0-9]+)?;

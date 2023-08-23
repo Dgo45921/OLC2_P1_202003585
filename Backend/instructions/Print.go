@@ -22,7 +22,15 @@ func (p Print) Execute(ast *environment.AST, env interface{}) interface{} {
 
 	for _, val := range p.Value {
 		if expr, ok := val.(interfaces.Expression); ok {
-			valueToPrint := expr.Execute(ast, env).Value
+
+			pivote := expr.Execute(ast, env)
+			valueToPrint := pivote.Value
+			if pivote.Type == environment.CHAR {
+				if _, ischar := valueToPrint.(uint8); ischar {
+					valueToPrint = string(valueToPrint.(uint8))
+				}
+			}
+
 			printedValues = append(printedValues, fmt.Sprintf("%v", valueToPrint))
 		}
 	}
