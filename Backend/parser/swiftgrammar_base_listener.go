@@ -200,6 +200,12 @@ func (s *BaseSwiftGrammarListener) EnterCountvec(ctx *CountvecContext) {}
 // ExitCountvec is called when production countvec is exited.
 func (s *BaseSwiftGrammarListener) ExitCountvec(ctx *CountvecContext) {}
 
+// EnterVectoraccess is called when production vectoraccess is entered.
+func (s *BaseSwiftGrammarListener) EnterVectoraccess(ctx *VectoraccessContext) {}
+
+// ExitVectoraccess is called when production vectoraccess is exited.
+func (s *BaseSwiftGrammarListener) ExitVectoraccess(ctx *VectoraccessContext) {}
+
 // EnterExpr is called when production expr is entered.
 func (s *BaseSwiftGrammarListener) EnterExpr(ctx *ExprContext) {}
 

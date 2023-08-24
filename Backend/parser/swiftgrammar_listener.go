@@ -97,6 +97,9 @@ type SwiftGrammarListener interface {
 	// EnterCountvec is called when entering the countvec production.
 	EnterCountvec(c *CountvecContext)
 
+	// EnterVectoraccess is called when entering the vectoraccess production.
+	EnterVectoraccess(c *VectoraccessContext)
+
 	// EnterExpr is called when entering the expr production.
 	EnterExpr(c *ExprContext)
 
@@ -189,6 +192,9 @@ type SwiftGrammarListener interface {
 
 	// ExitCountvec is called when exiting the countvec production.
 	ExitCountvec(c *CountvecContext)
+
+	// ExitVectoraccess is called when exiting the vectoraccess production.
+	ExitVectoraccess(c *VectoraccessContext)
 
 	// ExitExpr is called when exiting the expr production.
 	ExitExpr(c *ExprContext)

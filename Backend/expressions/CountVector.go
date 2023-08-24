@@ -24,7 +24,7 @@ func (p CountVector) Execute(ast *environment.AST, env interface{}) environment.
 				Lin:   p.Lin,
 				Col:   p.Col,
 				Value: long,
-				Type:  environment.BOOLEAN,
+				Type:  environment.INTEGER,
 				Const: false,
 			}
 

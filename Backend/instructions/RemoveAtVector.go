@@ -29,6 +29,8 @@ func (p RemoveAtVector) Execute(ast *environment.AST, env interface{}) interface
 			} else {
 				ast.SetPrint("Error: Indice no disponible en el vector!\n")
 			}
+		} else {
+			ast.SetPrint("Error: el indice luego de 'at:' debe ser un entero!\n")
 		}
 	} else {
 		ast.SetPrint("Error: la funcion remove(at) solo funciona en vectores!\n")

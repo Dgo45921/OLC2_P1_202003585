@@ -212,6 +212,13 @@ countvec returns [interfaces.Expression newcountvec]
 : ID PTO RCOUNT   {$newcountvec = expressions.NewCountVector($ID.line, $ID.pos,$ID.text)}
    ;
 
+vectoraccess returns [interfaces.Expression newvecaccess]
+: ID OBRA ex=expr CBRA   {$newvecaccess = expressions.NewVectorAccess($ID.line, $ID.pos,$ID.text, $ex.e)}
+ ;
+
+
+
+
 // EXPRESSIONS -----------------------------------------------------------------
 expr returns [interfaces.Expression e]
 :
@@ -225,6 +232,7 @@ expr returns [interfaces.Expression e]
 | left=expr op=OR right=expr { $e = expressions.NewBooleanOperation($left.start.GetLine(), $left.start.GetColumn(), $left.e, $op.text, $right.e) }
 | isemptyvec {$e = $isemptyvec.newisemptyvec}
 | countvec {$e = $countvec.newcountvec}
+| vectoraccess {$e = $vectoraccess.newvecaccess}
 | OBRA arguments CBRA {$e = expressions.NewVector($OBRA.line, $OBRA.pos, $arguments.args) }
 | ID                        { $e = expressions.NewVariableAccess($ID.text) }
 | NUMBER
