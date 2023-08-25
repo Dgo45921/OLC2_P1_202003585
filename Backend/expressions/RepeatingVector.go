@@ -39,6 +39,7 @@ func (p RepeatingVector) Execute(ast *environment.AST, env interface{}) environm
 					Lin:   p.Lin,
 					Col:   p.Col,
 					Value: nil,
+					Const: true,
 				}
 
 			}
@@ -56,6 +57,7 @@ func (p RepeatingVector) Execute(ast *environment.AST, env interface{}) environm
 					Col:   p.Col,
 					Value: arr,
 					Type:  response.Type,
+					Const: true,
 				}
 				// i should be adding the response vector
 

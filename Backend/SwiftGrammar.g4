@@ -230,8 +230,49 @@ repeatingvector returns [interfaces.Expression newrepeatingvec]
 ;
 
 
+//eliflist returns [[]interface{} neweliflist]
+//@init {
+//    $neweliflist = []interface{}{}
+//}
+//    :elif  eliflist  { $neweliflist = append($neweliflist, $elif.newelif)
+//                                       for _, arg := range $eliflist.neweliflist {
+//                                           $neweliflist = append($neweliflist, arg)
+//                                       }
+//                                 }
+//    |elif { $neweliflist = append( $neweliflist , $elif.newelif) }
+//    | {}
+//    ;
+//
+//elif returns [interfaces.Instruction newelif]
+//: RELSE RIF ex=expr LLAVEIZQ  b=block  LLAVEDER {$newelif = instructions.NewIf($RELSE.line, $RELSE.pos, $ex.e, $b.blk, nil, nil)}
+//;
+
+
+manualmatrixdef returns [[] interface{} defmanual]
+: OBRA values2 CBRA {$defmaual = append($defmanual, $values2.values)}
+;
+
+
+values2 returns [[]interface{} newvalueslist]
+@init {
+    $newvalueslist = []interface{}{}
+}
+: values2 COMA manualmatrixdef  { $newvalueslist = append($newvalueslist, $values2.newvalueslist)
+                                    for _, arg := range $eliflist.neweliflist {
+                                            $neweliflist = append($neweliflist, arg)
+                                     }
+                                }
+| manualmatrixdef  { $newvalueslist = append( $newvalueslist , $manualmatrixdef.defmanual) }
+| arguments  { $newvalueslist = append( $newvalueslist , $arguments.args) }
+| {}
+
+;
+
 decmatrix returns [interfaces.Instruction newmatrix]
 : RVAR ID IG repeatingvector  {$newmatrix = instructions.NewMatrixDec($RVAR.line, $RVAR.pos,$ID.text,nil,$repeatingvector.newrepeatingvec)}
+| RVAR ID matrix_type IG repeatingvector  {$newmatrix = instructions.NewMatrixDec($RVAR.line, $RVAR.pos,$ID.text,$matrix_type.text,$repeatingvector.newrepeatingvec)}
+| RVAR ID IG manualmatrixdef  {$newmatrix = instructions.NewMatrixDec($RVAR.line, $RVAR.pos,$ID.text,nil,$repeatingvector.newrepeatingvec)}
+
 ;
 
 
