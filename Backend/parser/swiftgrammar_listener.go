@@ -100,6 +100,15 @@ type SwiftGrammarListener interface {
 	// EnterVectoraccess is called when entering the vectoraccess production.
 	EnterVectoraccess(c *VectoraccessContext)
 
+	// EnterMatrix_type is called when entering the matrix_type production.
+	EnterMatrix_type(c *Matrix_typeContext)
+
+	// EnterRepeatingvector is called when entering the repeatingvector production.
+	EnterRepeatingvector(c *RepeatingvectorContext)
+
+	// EnterDecmatrix is called when entering the decmatrix production.
+	EnterDecmatrix(c *DecmatrixContext)
+
 	// EnterExpr is called when entering the expr production.
 	EnterExpr(c *ExprContext)
 
@@ -195,6 +204,15 @@ type SwiftGrammarListener interface {
 
 	// ExitVectoraccess is called when exiting the vectoraccess production.
 	ExitVectoraccess(c *VectoraccessContext)
+
+	// ExitMatrix_type is called when exiting the matrix_type production.
+	ExitMatrix_type(c *Matrix_typeContext)
+
+	// ExitRepeatingvector is called when exiting the repeatingvector production.
+	ExitRepeatingvector(c *RepeatingvectorContext)
+
+	// ExitDecmatrix is called when exiting the decmatrix production.
+	ExitDecmatrix(c *DecmatrixContext)
 
 	// ExitExpr is called when exiting the expr production.
 	ExitExpr(c *ExprContext)

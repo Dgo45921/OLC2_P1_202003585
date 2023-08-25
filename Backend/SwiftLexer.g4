@@ -31,6 +31,7 @@ RCASE : 'case';
 RDEFAULT : 'default';
 RFOR : 'for';
 RIN : 'in';
+RREPEATING: 'repeating';
 
 // primitives
 NUMBER : [0-9]+ ('.'[0-9]+)?;

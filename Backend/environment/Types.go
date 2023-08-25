@@ -9,10 +9,11 @@ const (
 	CHAR                         //2
 	BOOLEAN                      //3
 	VECTOR
-	VECTOR_INT                       //4
+	VECTOR_INT //4
 	VECTOR_FLOAT
 	VECTOR_CHAR
 	VECTOR_STRING
 	VECTOR_BOOLEAN
-	NULL                         //5
+	MATRIX
+	NULL //5
 )

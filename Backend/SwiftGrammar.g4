@@ -56,6 +56,7 @@ argument returns [interface{} e]
 // INSTRUCTIONS
 instruction returns [interfaces.Instruction inst]
 : printstmt PTOCOMA?  { $inst = $printstmt.prnt}
+| decmatrix {$inst = $decmatrix.newmatrix}
 | vardec PTOCOMA?  { $inst = $vardec.newdec}
 | constdec PTOCOMA? {$inst = $constdec.newconst}
 | vecdec PTOCOMA? {$inst = $vecdec.newvecdec}
@@ -216,6 +217,22 @@ vectoraccess returns [interfaces.Expression newvecaccess]
 : ID OBRA ex=expr CBRA   {$newvecaccess = expressions.NewVectorAccess($ID.line, $ID.pos,$ID.text, $ex.e)}
  ;
 
+
+matrix_type returns [string newmatrixtype]
+: OBRA typpe=(RINT|RFLOAT|RBOOL|RSTRING|RCHARACTER) CBRA {$newmatrixtype = $OBRA.text + $typpe.text + $CBRA.text}
+| OBRA matrix_type CBRA   {$newmatrixtype = $OBRA.text + $matrix_type.text + $CBRA.text}
+;
+
+repeatingvector returns [interfaces.Expression newrepeatingvec]
+: matrix_type PARIZQ RREPEATING DOSPTOS r=repeatingvector COMA RCOUNT DOSPTOS expr PARDER  {$newrepeatingvec = expressions.NewRepeatingVector($r.start.GetLine(), $r.start.GetColumn(),$matrix_type.text,$repeatingvector.newrepeatingvec,$expr.e)}
+| matrix_type PARIZQ RREPEATING DOSPTOS ex1=expr COMA RCOUNT DOSPTOS ex2=expr PARDER  {$newrepeatingvec = expressions.NewRepeatingVector($matrix_type.start.GetLine(), $matrix_type.start.GetColumn(),$matrix_type.text, $ex1.e,$ex2.e)}
+
+;
+
+
+decmatrix returns [interfaces.Instruction newmatrix]
+: RVAR ID IG repeatingvector  {$newmatrix = instructions.NewMatrixDec($RVAR.line, $RVAR.pos,$ID.text,nil,$repeatingvector.newrepeatingvec)}
+;
 
 
 

@@ -206,6 +206,24 @@ func (s *BaseSwiftGrammarListener) EnterVectoraccess(ctx *VectoraccessContext) {
 // ExitVectoraccess is called when production vectoraccess is exited.
 func (s *BaseSwiftGrammarListener) ExitVectoraccess(ctx *VectoraccessContext) {}
 
+// EnterMatrix_type is called when production matrix_type is entered.
+func (s *BaseSwiftGrammarListener) EnterMatrix_type(ctx *Matrix_typeContext) {}
+
+// ExitMatrix_type is called when production matrix_type is exited.
+func (s *BaseSwiftGrammarListener) ExitMatrix_type(ctx *Matrix_typeContext) {}
+
+// EnterRepeatingvector is called when production repeatingvector is entered.
+func (s *BaseSwiftGrammarListener) EnterRepeatingvector(ctx *RepeatingvectorContext) {}
+
+// ExitRepeatingvector is called when production repeatingvector is exited.
+func (s *BaseSwiftGrammarListener) ExitRepeatingvector(ctx *RepeatingvectorContext) {}
+
+// EnterDecmatrix is called when production decmatrix is entered.
+func (s *BaseSwiftGrammarListener) EnterDecmatrix(ctx *DecmatrixContext) {}
+
+// ExitDecmatrix is called when production decmatrix is exited.
+func (s *BaseSwiftGrammarListener) ExitDecmatrix(ctx *DecmatrixContext) {}
+
 // EnterExpr is called when production expr is entered.
 func (s *BaseSwiftGrammarListener) EnterExpr(ctx *ExprContext) {}
 
