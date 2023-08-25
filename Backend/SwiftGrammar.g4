@@ -56,10 +56,10 @@ argument returns [interface{} e]
 // INSTRUCTIONS
 instruction returns [interfaces.Instruction inst]
 : printstmt PTOCOMA?  { $inst = $printstmt.prnt}
+| vecdec PTOCOMA? {$inst = $vecdec.newvecdec}
 | decmatrix {$inst = $decmatrix.newmatrix}
 | vardec PTOCOMA?  { $inst = $vardec.newdec}
 | constdec PTOCOMA? {$inst = $constdec.newconst}
-| vecdec PTOCOMA? {$inst = $vecdec.newvecdec}
 | appendvec PTOCOMA? {$inst = $appendvec.newappendvec}
 | removelastvec PTOCOMA? {$inst = $removelastvec.newremovelastvec}
 | removeatvec PTOCOMA?  {$inst = $removeatvec.newremoveat}
@@ -229,50 +229,43 @@ repeatingvector returns [interfaces.Expression newrepeatingvec]
 
 ;
 
+manualdef   returns [interfaces.Expression newmanualdef]
+: manualmatrixdef {$newmanualdef = expressions.NewManualMatrixDef($manualmatrixdef.start.GetLine(), $manualmatrixdef.start.GetColumn(),$manualmatrixdef.newmanualmatrixdef ) }
 
-//eliflist returns [[]interface{} neweliflist]
-//@init {
-//    $neweliflist = []interface{}{}
-//}
-//    :elif  eliflist  { $neweliflist = append($neweliflist, $elif.newelif)
-//                                       for _, arg := range $eliflist.neweliflist {
-//                                           $neweliflist = append($neweliflist, arg)
-//                                       }
-//                                 }
-//    |elif { $neweliflist = append( $neweliflist , $elif.newelif) }
-//    | {}
-//    ;
-//
-//elif returns [interfaces.Instruction newelif]
-//: RELSE RIF ex=expr LLAVEIZQ  b=block  LLAVEDER {$newelif = instructions.NewIf($RELSE.line, $RELSE.pos, $ex.e, $b.blk, nil, nil)}
-//;
-
-
-manualmatrixdef returns [[] interface{} defmanual]
-: OBRA values2 CBRA {$defmaual = append($defmanual, $values2.values)}
 ;
+
+
+manualmatrixdef returns [[]interface {} newmanualmatrixdef]
+
+: OBRA values2 CBRA {$newmanualmatrixdef = append($newmanualmatrixdef, $values2.newvalueslist)
+                    }
+;
+
+
 
 
 values2 returns [[]interface{} newvalueslist]
 @init {
     $newvalueslist = []interface{}{}
 }
-: values2 COMA manualmatrixdef  { $newvalueslist = append($newvalueslist, $values2.newvalueslist)
-                                    for _, arg := range $eliflist.neweliflist {
-                                            $neweliflist = append($neweliflist, arg)
-                                     }
-                                }
-| manualmatrixdef  { $newvalueslist = append( $newvalueslist , $manualmatrixdef.defmanual) }
-| arguments  { $newvalueslist = append( $newvalueslist , $arguments.args) }
-| {}
-
+: v=values2 COMA manualmatrixdef {
+    $newvalueslist = append($v.newvalueslist, $manualmatrixdef.newmanualmatrixdef...)
+}
+| manualmatrixdef {
+    $newvalueslist = append($newvalueslist, $manualmatrixdef.newmanualmatrixdef...)
+}
+| arguments {
+    $newvalueslist = append($newvalueslist, $arguments.args...)
+}
 ;
 
-decmatrix returns [interfaces.Instruction newmatrix]
-: RVAR ID IG repeatingvector  {$newmatrix = instructions.NewMatrixDec($RVAR.line, $RVAR.pos,$ID.text,nil,$repeatingvector.newrepeatingvec)}
-| RVAR ID matrix_type IG repeatingvector  {$newmatrix = instructions.NewMatrixDec($RVAR.line, $RVAR.pos,$ID.text,$matrix_type.text,$repeatingvector.newrepeatingvec)}
-| RVAR ID IG manualmatrixdef  {$newmatrix = instructions.NewMatrixDec($RVAR.line, $RVAR.pos,$ID.text,nil,$repeatingvector.newrepeatingvec)}
 
+
+decmatrix returns [interfaces.Instruction newmatrix]
+: RVAR ID IG manualdef  {$newmatrix = instructions.NewMatrixDec($RVAR.line, $RVAR.pos,$ID.text,nil,$manualdef.newmanualdef)}
+| RVAR ID DOSPTOS matrix_type IG manualdef  {$newmatrix = instructions.NewMatrixDec($RVAR.line, $RVAR.pos,$ID.text,$matrix_type.text,$manualdef.newmanualdef)}
+| RVAR ID IG repeatingvector  {$newmatrix = instructions.NewMatrixDec($RVAR.line, $RVAR.pos,$ID.text,nil,$repeatingvector.newrepeatingvec)}
+| RVAR ID DOSPTOS matrix_type IG repeatingvector  {$newmatrix = instructions.NewMatrixDec($RVAR.line, $RVAR.pos,$ID.text,$matrix_type.text,$repeatingvector.newrepeatingvec)}
 ;
 
 

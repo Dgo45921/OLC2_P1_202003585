@@ -106,6 +106,15 @@ type SwiftGrammarListener interface {
 	// EnterRepeatingvector is called when entering the repeatingvector production.
 	EnterRepeatingvector(c *RepeatingvectorContext)
 
+	// EnterManualdef is called when entering the manualdef production.
+	EnterManualdef(c *ManualdefContext)
+
+	// EnterManualmatrixdef is called when entering the manualmatrixdef production.
+	EnterManualmatrixdef(c *ManualmatrixdefContext)
+
+	// EnterValues2 is called when entering the values2 production.
+	EnterValues2(c *Values2Context)
+
 	// EnterDecmatrix is called when entering the decmatrix production.
 	EnterDecmatrix(c *DecmatrixContext)
 
@@ -210,6 +219,15 @@ type SwiftGrammarListener interface {
 
 	// ExitRepeatingvector is called when exiting the repeatingvector production.
 	ExitRepeatingvector(c *RepeatingvectorContext)
+
+	// ExitManualdef is called when exiting the manualdef production.
+	ExitManualdef(c *ManualdefContext)
+
+	// ExitManualmatrixdef is called when exiting the manualmatrixdef production.
+	ExitManualmatrixdef(c *ManualmatrixdefContext)
+
+	// ExitValues2 is called when exiting the values2 production.
+	ExitValues2(c *Values2Context)
 
 	// ExitDecmatrix is called when exiting the decmatrix production.
 	ExitDecmatrix(c *DecmatrixContext)

@@ -218,6 +218,24 @@ func (s *BaseSwiftGrammarListener) EnterRepeatingvector(ctx *RepeatingvectorCont
 // ExitRepeatingvector is called when production repeatingvector is exited.
 func (s *BaseSwiftGrammarListener) ExitRepeatingvector(ctx *RepeatingvectorContext) {}
 
+// EnterManualdef is called when production manualdef is entered.
+func (s *BaseSwiftGrammarListener) EnterManualdef(ctx *ManualdefContext) {}
+
+// ExitManualdef is called when production manualdef is exited.
+func (s *BaseSwiftGrammarListener) ExitManualdef(ctx *ManualdefContext) {}
+
+// EnterManualmatrixdef is called when production manualmatrixdef is entered.
+func (s *BaseSwiftGrammarListener) EnterManualmatrixdef(ctx *ManualmatrixdefContext) {}
+
+// ExitManualmatrixdef is called when production manualmatrixdef is exited.
+func (s *BaseSwiftGrammarListener) ExitManualmatrixdef(ctx *ManualmatrixdefContext) {}
+
+// EnterValues2 is called when production values2 is entered.
+func (s *BaseSwiftGrammarListener) EnterValues2(ctx *Values2Context) {}
+
+// ExitValues2 is called when production values2 is exited.
+func (s *BaseSwiftGrammarListener) ExitValues2(ctx *Values2Context) {}
+
 // EnterDecmatrix is called when production decmatrix is entered.
 func (s *BaseSwiftGrammarListener) EnterDecmatrix(ctx *DecmatrixContext) {}
 
