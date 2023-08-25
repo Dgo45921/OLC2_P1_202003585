@@ -33,13 +33,13 @@ func (p MatrixDec) Execute(ast *environment.AST, env interface{}) interface{} {
 				return nil
 			}
 
-			arrayType := getArrayType(value.Value)
+			arrayType := getCommonType(value.Value)
 			if arrayType != nil {
 				if arrayType == reflect.TypeOf(1) && strings.Contains(p.Type.(string), "Int") {
 					value.Type = environment.MATRIX_INT
 				} else if arrayType == reflect.TypeOf("x") && strings.Contains(p.Type.(string), "String") {
 					value.Type = environment.MATRIX_STRING
-				} else if arrayType == reflect.TypeOf('c') && strings.Contains(p.Type.(string), "Character") {
+				} else if arrayType == reflect.TypeOf(int32(0)) && strings.Contains(p.Type.(string), "Character") {
 					value.Type = environment.MATRIX_CHAR
 				} else if arrayType == reflect.TypeOf(5.121) && strings.Contains(p.Type.(string), "Float") {
 					value.Type = environment.MATRIX_FLOAT
@@ -61,13 +61,13 @@ func (p MatrixDec) Execute(ast *environment.AST, env interface{}) interface{} {
 			return nil
 		}
 	} else {
-		arrayType := getArrayType(value.Value)
+		arrayType := getCommonType(value.Value)
 		if arrayType != nil {
 			if arrayType == reflect.TypeOf(1) {
 				value.Type = environment.MATRIX_INT
 			} else if arrayType == reflect.TypeOf("x") {
 				value.Type = environment.MATRIX_STRING
-			} else if arrayType == reflect.TypeOf('c') {
+			} else if arrayType == reflect.TypeOf(int32(0)) {
 				value.Type = environment.MATRIX_CHAR
 			} else if arrayType == reflect.TypeOf(5.121) {
 				value.Type = environment.MATRIX_FLOAT
@@ -130,30 +130,37 @@ func getMatrixType(typee environment.TipoExpresion) environment.TipoExpresion {
 	return environment.NULL
 }
 
-func getArrayType(arr interface{}) reflect.Type {
-	var elementType reflect.Type
-
+func getCommonType(arr interface{}) reflect.Type {
 	switch arr.(type) {
 	case []interface{}:
+		var commonType reflect.Type
+		hasMultipleTypes := false
+
 		for _, item := range arr.([]interface{}) {
-			itemType := getArrayType(item)
-			if elementType == nil {
-				elementType = itemType
-			} else if elementType != itemType {
-				return nil
+			itemType := getCommonType(item)
+			if itemType == nil {
+				hasMultipleTypes = true
+			} else if commonType == nil {
+				commonType = itemType
+			} else if commonType != itemType {
+				hasMultipleTypes = true
 			}
 		}
+
+		if hasMultipleTypes {
+			return nil
+		}
+
+		return commonType
+
+	case string:
+		if len(arr.(string)) == 1 {
+			return reflect.TypeOf('a') // Treat single-sized strings as strings
+		} else {
+			return reflect.TypeOf(arr)
+		}
+
 	default:
-		elementType = reflect.TypeOf(arr)
-
-		// Check for string type with length 1
-		if elementType == reflect.TypeOf("") {
-			str := arr.(string)
-			if len(str) == 1 {
-				elementType = reflect.TypeOf('c') // Replace 'c' with the actual character
-			}
-		}
+		return reflect.TypeOf(arr)
 	}
-
-	return elementType
 }
