@@ -3,7 +3,6 @@ package expressions
 import (
 	"PY1/environment"
 	"PY1/interfaces"
-	"fmt"
 )
 
 type ManualMatrixDef struct {
@@ -20,7 +19,6 @@ func NewManualMatrixDef(lin int, col int, val interface{}) ManualMatrixDef {
 func (p ManualMatrixDef) Execute(ast *environment.AST, env interface{}) environment.Symbol {
 	newArray := subtractOneFromElements(p.Value, ast, env)
 	response := newArray.([]interface{})[0]
-	fmt.Println(newArray)
 
 	return environment.Symbol{
 		Lin:   p.Lin,

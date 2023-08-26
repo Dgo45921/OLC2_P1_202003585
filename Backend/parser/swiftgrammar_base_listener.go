@@ -50,6 +50,12 @@ func (s *BaseSwiftGrammarListener) EnterInstruction(ctx *InstructionContext) {}
 // ExitInstruction is called when production instruction is exited.
 func (s *BaseSwiftGrammarListener) ExitInstruction(ctx *InstructionContext) {}
 
+// EnterVectormodification is called when production vectormodification is entered.
+func (s *BaseSwiftGrammarListener) EnterVectormodification(ctx *VectormodificationContext) {}
+
+// ExitVectormodification is called when production vectormodification is exited.
+func (s *BaseSwiftGrammarListener) ExitVectormodification(ctx *VectormodificationContext) {}
+
 // EnterForloop is called when production forloop is entered.
 func (s *BaseSwiftGrammarListener) EnterForloop(ctx *ForloopContext) {}
 

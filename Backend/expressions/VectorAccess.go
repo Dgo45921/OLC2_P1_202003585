@@ -29,9 +29,9 @@ func (p VectorAccess) Execute(ast *environment.AST, env interface{}) environment
 		}
 	}
 
-	var indexes = getIndexes(p.Index, ast, env)
+	var indexes = GetIndexes(p.Index, ast, env)
 
-	if !allNonNegativeIntegers(indexes) {
+	if !AllNonNegativeIntegers(indexes) {
 		ast.SetPrint("Error: el o los indices deben de ser un entero mayor o igual a 0!\n")
 		return environment.Symbol{
 			Lin:   p.Lin,
@@ -43,7 +43,7 @@ func (p VectorAccess) Execute(ast *environment.AST, env interface{}) environment
 	if _, isArray := foundVar.Value.([]interface{}); isArray {
 		if foundVar.Type == environment.VECTOR_STRING || foundVar.Type == environment.VECTOR_CHAR || foundVar.Type == environment.VECTOR_FLOAT || foundVar.Type == environment.VECTOR_BOOLEAN || foundVar.Type == environment.VECTOR_INT || foundVar.Type == environment.MATRIX_INT || foundVar.Type == environment.MATRIX_FLOAT || foundVar.Type == environment.MATRIX_STRING || foundVar.Type == environment.MATRIX_BOOLEAN || foundVar.Type == environment.MATRIX_CHAR {
 
-			val, exists := getIndexValue(foundVar.Value, indexes)
+			val, exists := GetIndexValue(foundVar.Value, indexes)
 
 			if !exists {
 				ast.SetPrint("Error: indice no existente!\n")
@@ -95,7 +95,7 @@ func (p VectorAccess) Execute(ast *environment.AST, env interface{}) environment
 
 }
 
-func getIndexValue(arr interface{}, indexes []int) (interface{}, bool) {
+func GetIndexValue(arr interface{}, indexes []int) (interface{}, bool) {
 	if len(indexes) == 0 || reflect.ValueOf(arr).Kind() != reflect.Slice {
 		return nil, false
 	}
@@ -110,10 +110,10 @@ func getIndexValue(arr interface{}, indexes []int) (interface{}, bool) {
 	}
 
 	nextLevel := reflect.ValueOf(arr).Index(index).Interface()
-	return getIndexValue(nextLevel, indexes[1:])
+	return GetIndexValue(nextLevel, indexes[1:])
 }
 
-func getIndexes(val []interface{}, ast *environment.AST, env interface{}) []int {
+func GetIndexes(val []interface{}, ast *environment.AST, env interface{}) []int {
 	indexes := make([]int, len(val))
 	for i, index := range val {
 		var retrievedVal = index.(interfaces.Expression).Execute(ast, env).Value
@@ -123,7 +123,7 @@ func getIndexes(val []interface{}, ast *environment.AST, env interface{}) []int 
 	return indexes
 }
 
-func allNonNegativeIntegers(arr []int) bool {
+func AllNonNegativeIntegers(arr []int) bool {
 	for _, num := range arr {
 		if num < 0 {
 			return false

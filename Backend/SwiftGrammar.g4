@@ -68,10 +68,16 @@ instruction returns [interfaces.Instruction inst]
 | unarysub PTOCOMA?  {$inst = $unarysub.newunarysub}
 | breakstatement PTOCOMA? {$inst = $breakstatement.newbreak}
 | continuestatement PTOCOMA? {$inst = $continuestatement.newcontinue}
+| vectormodification PTOCOMA? {$inst = $vectormodification.newvecmod}
 | ifstmt {$inst = $ifstmt.newif}
 | while_statement {$inst = $while_statement.newwhile}
 | switchstatement {$inst = $switchstatement.newswitch}
 | forloop {$inst = $forloop.newfor}
+;
+
+vectormodification returns [interfaces.Instruction newvecmod]
+: ID indexesList IG expr {$newvecmod = instructions.NewVectorModification($ID.line, $ID.pos,$ID.text ,$indexesList.indexes, $expr.e)}
+
 ;
 
 forloop returns [interfaces.Instruction newfor]

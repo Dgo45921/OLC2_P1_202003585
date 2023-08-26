@@ -22,6 +22,9 @@ type SwiftGrammarListener interface {
 	// EnterInstruction is called when entering the instruction production.
 	EnterInstruction(c *InstructionContext)
 
+	// EnterVectormodification is called when entering the vectormodification production.
+	EnterVectormodification(c *VectormodificationContext)
+
 	// EnterForloop is called when entering the forloop production.
 	EnterForloop(c *ForloopContext)
 
@@ -141,6 +144,9 @@ type SwiftGrammarListener interface {
 
 	// ExitInstruction is called when exiting the instruction production.
 	ExitInstruction(c *InstructionContext)
+
+	// ExitVectormodification is called when exiting the vectormodification production.
+	ExitVectormodification(c *VectormodificationContext)
 
 	// ExitForloop is called when exiting the forloop production.
 	ExitForloop(c *ForloopContext)
