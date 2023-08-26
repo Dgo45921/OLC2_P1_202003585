@@ -155,7 +155,7 @@ func getCommonType(arr interface{}) reflect.Type {
 
 	case string:
 		if len(arr.(string)) == 1 {
-			return reflect.TypeOf('a') // Treat single-sized strings as strings
+			return reflect.TypeOf('a')
 		} else {
 			return reflect.TypeOf(arr)
 		}

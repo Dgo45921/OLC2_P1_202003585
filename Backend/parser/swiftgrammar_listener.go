@@ -100,6 +100,12 @@ type SwiftGrammarListener interface {
 	// EnterVectoraccess is called when entering the vectoraccess production.
 	EnterVectoraccess(c *VectoraccessContext)
 
+	// EnterIndexesList is called when entering the indexesList production.
+	EnterIndexesList(c *IndexesListContext)
+
+	// EnterVecac is called when entering the vecac production.
+	EnterVecac(c *VecacContext)
+
 	// EnterMatrix_type is called when entering the matrix_type production.
 	EnterMatrix_type(c *Matrix_typeContext)
 
@@ -213,6 +219,12 @@ type SwiftGrammarListener interface {
 
 	// ExitVectoraccess is called when exiting the vectoraccess production.
 	ExitVectoraccess(c *VectoraccessContext)
+
+	// ExitIndexesList is called when exiting the indexesList production.
+	ExitIndexesList(c *IndexesListContext)
+
+	// ExitVecac is called when exiting the vecac production.
+	ExitVecac(c *VecacContext)
 
 	// ExitMatrix_type is called when exiting the matrix_type production.
 	ExitMatrix_type(c *Matrix_typeContext)

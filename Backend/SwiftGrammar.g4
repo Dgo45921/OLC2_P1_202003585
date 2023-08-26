@@ -57,10 +57,10 @@ argument returns [interface{} e]
 instruction returns [interfaces.Instruction inst]
 : printstmt PTOCOMA?  { $inst = $printstmt.prnt}
 | vecdec PTOCOMA? {$inst = $vecdec.newvecdec}
-| decmatrix {$inst = $decmatrix.newmatrix}
 | vardec PTOCOMA?  { $inst = $vardec.newdec}
 | constdec PTOCOMA? {$inst = $constdec.newconst}
 | appendvec PTOCOMA? {$inst = $appendvec.newappendvec}
+| decmatrix {$inst = $decmatrix.newmatrix}
 | removelastvec PTOCOMA? {$inst = $removelastvec.newremovelastvec}
 | removeatvec PTOCOMA?  {$inst = $removeatvec.newremoveat}
 | asignation PTOCOMA? {$inst = $asignation.newasignation}
@@ -213,9 +213,46 @@ countvec returns [interfaces.Expression newcountvec]
 : ID PTO RCOUNT   {$newcountvec = expressions.NewCountVector($ID.line, $ID.pos,$ID.text)}
    ;
 
+//arguments returns [[]interface{} args]
+//@init {
+//    $args = []interface{}{}
+//}
+//    :argument COMA arguments  { $args = append($args, $argument.e)
+//                                       for _, arg := range $arguments.args {
+//                                           $args = append($args, arg)
+//                                       }
+//                                 }
+//    |argument { $args = append( $args , $argument.e) }
+//    | {}
+//    ;
+//
+//argument returns [interface{} e]
+//    : expr { $e = $expr.e; }
+//    ;
+
+
+//-----------------------
 vectoraccess returns [interfaces.Expression newvecaccess]
-: ID OBRA ex=expr CBRA   {$newvecaccess = expressions.NewVectorAccess($ID.line, $ID.pos,$ID.text, $ex.e)}
- ;
+: ID indexesList  {$newvecaccess = expressions.NewVectorAccess($ID.line, $ID.pos,$ID.text, $indexesList.indexes)}
+;
+
+indexesList returns [[]interface{} indexes]
+@init {
+    $indexes = []interface{}{}
+}
+: vecac  i=indexesList {            $indexes = append($indexes, $vecac.newvecac)
+                                       for _, arg := range $i.indexes{
+                                           $indexes = append($indexes, arg)
+                                      }
+
+                                 }
+    |vecac { $indexes = append( $indexes , $vecac.newvecac) }
+    ;
+
+vecac returns [interface{} newvecac]
+    : OBRA expr CBRA { $newvecac = $expr.e; }
+;
+
 
 
 matrix_type returns [string newmatrixtype]
@@ -267,6 +304,8 @@ decmatrix returns [interfaces.Instruction newmatrix]
 | RVAR ID IG repeatingvector  {$newmatrix = instructions.NewMatrixDec($RVAR.line, $RVAR.pos,$ID.text,nil,$repeatingvector.newrepeatingvec)}
 | RVAR ID DOSPTOS matrix_type IG repeatingvector  {$newmatrix = instructions.NewMatrixDec($RVAR.line, $RVAR.pos,$ID.text,$matrix_type.text,$repeatingvector.newrepeatingvec)}
 ;
+
+//vectormodification:;
 
 
 

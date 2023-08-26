@@ -206,6 +206,18 @@ func (s *BaseSwiftGrammarListener) EnterVectoraccess(ctx *VectoraccessContext) {
 // ExitVectoraccess is called when production vectoraccess is exited.
 func (s *BaseSwiftGrammarListener) ExitVectoraccess(ctx *VectoraccessContext) {}
 
+// EnterIndexesList is called when production indexesList is entered.
+func (s *BaseSwiftGrammarListener) EnterIndexesList(ctx *IndexesListContext) {}
+
+// ExitIndexesList is called when production indexesList is exited.
+func (s *BaseSwiftGrammarListener) ExitIndexesList(ctx *IndexesListContext) {}
+
+// EnterVecac is called when production vecac is entered.
+func (s *BaseSwiftGrammarListener) EnterVecac(ctx *VecacContext) {}
+
+// ExitVecac is called when production vecac is exited.
+func (s *BaseSwiftGrammarListener) ExitVecac(ctx *VecacContext) {}
+
 // EnterMatrix_type is called when production matrix_type is entered.
 func (s *BaseSwiftGrammarListener) EnterMatrix_type(ctx *Matrix_typeContext) {}
 

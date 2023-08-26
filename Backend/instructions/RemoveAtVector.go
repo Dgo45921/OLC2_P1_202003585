@@ -22,8 +22,7 @@ func (p RemoveAtVector) Execute(ast *environment.AST, env interface{}) interface
 	indexval := p.Index.Execute(ast, env)
 	if slice, isArray := foundVar.Value.([]interface{}); isArray {
 		if indexval.Type == environment.INTEGER {
-			if indexval.Value.(int) >= 0 && indexval.Value.(int) < len(slice) {
-
+			if indexval.Value.(int) >= 0 && indexval.Value.(int) < len(slice) && !foundVar.Const {
 				foundVar.Value = append(slice[:indexval.Value.(int)], slice[indexval.Value.(int)+1:]...)
 				env.(environment.Environment).UpdateVariable(p.Id, foundVar)
 			} else {
