@@ -109,7 +109,9 @@ func (p For) Execute(ast *environment.AST, env interface{}) interface{} {
 
 			}
 		}
-
+	} else {
+		ast.SetPrint("Error, no se recibió un iterable!\n")
+		return nil
 	}
 
 	return nil

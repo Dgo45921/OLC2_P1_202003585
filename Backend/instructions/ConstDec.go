@@ -68,6 +68,61 @@ func (p ConstDec) Execute(ast *environment.AST, env interface{}) interface{} {
 		} else if p.Type == "Bool" && value.Type == environment.BOOLEAN {
 			env.(environment.Environment).SaveVariable(p.Id, value)
 			return nil
+		} else {
+			ast.SetPrint("Error: declaración de constante no coincide con el tipo definido!\n")
+		}
+	}
+
+	return nil
+}
+
+func (p ConstDec) GetConstDec(ast *environment.AST, env interface{}) interface{} {
+	if env == nil {
+		return nil
+	}
+	if p.Type == nil {
+
+		if _, ok := p.Expression.(interfaces.Expression); ok {
+			expression := p.Expression.(interfaces.Expression)
+			value := expression.Execute(ast, env)
+			value.Const = true
+			return value
+
+		}
+	}
+
+	if _, ok := p.Expression.(interfaces.Expression); ok {
+
+		expression := p.Expression.(interfaces.Expression)
+		value := expression.Execute(ast, env)
+		value.Const = true
+		if p.Type == "String" && value.Type == environment.STRING {
+			return value
+
+		} else if p.Type == "Int" && value.Type == environment.INTEGER {
+			return value
+
+		} else if p.Type == "Character" && value.Type == environment.CHAR {
+			return value
+
+		} else if p.Type == "Float" {
+			if value.Type == environment.FLOAT {
+				return value
+
+			} else if value.Type == environment.INTEGER {
+				if _, ok := value.Value.(int); ok {
+					value.Value = float64(value.Value.(int))
+					value.Type = environment.FLOAT
+					return value
+
+				}
+			}
+
+		} else if p.Type == "Bool" && value.Type == environment.BOOLEAN {
+			return value
+
+		} else {
+			return nil
 		}
 	}
 

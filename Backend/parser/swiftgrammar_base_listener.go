@@ -50,6 +50,24 @@ func (s *BaseSwiftGrammarListener) EnterInstruction(ctx *InstructionContext) {}
 // ExitInstruction is called when production instruction is exited.
 func (s *BaseSwiftGrammarListener) ExitInstruction(ctx *InstructionContext) {}
 
+// EnterStructinstruction is called when production structinstruction is entered.
+func (s *BaseSwiftGrammarListener) EnterStructinstruction(ctx *StructinstructionContext) {}
+
+// ExitStructinstruction is called when production structinstruction is exited.
+func (s *BaseSwiftGrammarListener) ExitStructinstruction(ctx *StructinstructionContext) {}
+
+// EnterStructblock is called when production structblock is entered.
+func (s *BaseSwiftGrammarListener) EnterStructblock(ctx *StructblockContext) {}
+
+// ExitStructblock is called when production structblock is exited.
+func (s *BaseSwiftGrammarListener) ExitStructblock(ctx *StructblockContext) {}
+
+// EnterStructdef is called when production structdef is entered.
+func (s *BaseSwiftGrammarListener) EnterStructdef(ctx *StructdefContext) {}
+
+// ExitStructdef is called when production structdef is exited.
+func (s *BaseSwiftGrammarListener) ExitStructdef(ctx *StructdefContext) {}
+
 // EnterVectormodification is called when production vectormodification is entered.
 func (s *BaseSwiftGrammarListener) EnterVectormodification(ctx *VectormodificationContext) {}
 

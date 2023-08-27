@@ -32,12 +32,13 @@ RDEFAULT : 'default';
 RFOR : 'for';
 RIN : 'in';
 RREPEATING: 'repeating';
+RSTRUCT: 'struct';
 
 // primitives
 NUMBER : [0-9]+ ('.'[0-9]+)?;
 STRING: '"' ('\\' ('\\' | '"' | 'r'| 't'| 'n') | ~('\\' | '"'))* '"';
 
-ID: ([a-zA-Z_])[a-zA-Z0-9_]*;
+ID: [a-zA-Z_][a-zA-Z0-9_]*;
 
 // symbols
 

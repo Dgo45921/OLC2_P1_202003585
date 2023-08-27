@@ -4,6 +4,7 @@ import (
 	"PY1/environment"
 	"PY1/expressions"
 	"PY1/interfaces"
+	"fmt"
 	"reflect"
 )
 
@@ -45,8 +46,11 @@ func (p VectorModification) Execute(ast *environment.AST, env interface{}) inter
 				return nil
 			}
 
+			fmt.Println(foundVar.Value)
+
 			if setIndexValue(foundVar.Value, targetValue.Value, indexes) {
-				if getCommonType(foundVar.Value) != nil {
+				ashkur := getCommonType(foundVar.Value)
+				if ashkur != nil {
 					env.(environment.Environment).UpdateVariable(p.DestinyID, foundVar)
 				} else {
 					ast.SetPrint("Error: la matriz debe de ser de un solo tipo!\n")

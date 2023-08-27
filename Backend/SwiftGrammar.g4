@@ -56,11 +56,11 @@ argument returns [interface{} e]
 // INSTRUCTIONS
 instruction returns [interfaces.Instruction inst]
 : printstmt PTOCOMA?  { $inst = $printstmt.prnt}
+| decmatrix PTOCOMA? {$inst = $decmatrix.newmatrix}
 | vecdec PTOCOMA? {$inst = $vecdec.newvecdec}
 | vardec PTOCOMA?  { $inst = $vardec.newdec}
 | constdec PTOCOMA? {$inst = $constdec.newconst}
 | appendvec PTOCOMA? {$inst = $appendvec.newappendvec}
-| decmatrix {$inst = $decmatrix.newmatrix}
 | removelastvec PTOCOMA? {$inst = $removelastvec.newremovelastvec}
 | removeatvec PTOCOMA?  {$inst = $removeatvec.newremoveat}
 | asignation PTOCOMA? {$inst = $asignation.newasignation}
@@ -73,7 +73,40 @@ instruction returns [interfaces.Instruction inst]
 | while_statement {$inst = $while_statement.newwhile}
 | switchstatement {$inst = $switchstatement.newswitch}
 | forloop {$inst = $forloop.newfor}
+| structdef {$inst = $structdef.newstruct}
 ;
+
+// INSTRUCTIONS
+structinstruction returns [interfaces.Instruction inst]
+: vecdec PTOCOMA? {$inst = $vecdec.newvecdec}
+| vardec PTOCOMA?  { $inst = $vardec.newdec}
+| constdec PTOCOMA? {$inst = $constdec.newconst}
+| decmatrix PTOCOMA? {$inst = $decmatrix.newmatrix}
+;
+
+
+
+structblock returns [[]interface{} sblk]
+@init{
+    $sblk = []interface{}{}
+    var listsinst []IStructinstructionContext
+  }
+: ins+=structinstruction*
+    {
+        listsinst = localctx.(*StructblockContext).GetIns()
+        for _, e := range listsinst {
+            $sblk = append($sblk, e.GetInst())
+        }
+    }
+;
+
+// TODO ADD FUNCTIONS TO STRUCTS
+
+structdef returns [interfaces.Instruction newstruct]
+: RSTRUCT ID LLAVEIZQ structblock LLAVEDER {$newstruct = instructions.NewStructDef($ID.line, $ID.pos,$ID.text ,$structblock.sblk)}
+
+;
+
 
 vectormodification returns [interfaces.Instruction newvecmod]
 : ID indexesList IG expr {$newvecmod = instructions.NewVectorModification($ID.line, $ID.pos,$ID.text ,$indexesList.indexes, $expr.e)}
@@ -364,7 +397,7 @@ expr returns [interfaces.Expression e]
             $e = expressions.NewPrimitive($STRING.line, $STRING.pos, chari,environment.STRING)
         }
 
-    }                        
+    }
 | RTRUE { $e = expressions.NewPrimitive($RTRUE.line, $RTRUE.pos, true, environment.BOOLEAN) }
 | RFALSE { $e = expressions.NewPrimitive($RFALSE.line, $RFALSE.pos, false, environment.BOOLEAN) }
 | RNIL  { $e = expressions.NewPrimitive($RFALSE.line, $RFALSE.pos, nil, environment.NULL) }

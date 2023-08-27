@@ -22,6 +22,15 @@ type SwiftGrammarListener interface {
 	// EnterInstruction is called when entering the instruction production.
 	EnterInstruction(c *InstructionContext)
 
+	// EnterStructinstruction is called when entering the structinstruction production.
+	EnterStructinstruction(c *StructinstructionContext)
+
+	// EnterStructblock is called when entering the structblock production.
+	EnterStructblock(c *StructblockContext)
+
+	// EnterStructdef is called when entering the structdef production.
+	EnterStructdef(c *StructdefContext)
+
 	// EnterVectormodification is called when entering the vectormodification production.
 	EnterVectormodification(c *VectormodificationContext)
 
@@ -144,6 +153,15 @@ type SwiftGrammarListener interface {
 
 	// ExitInstruction is called when exiting the instruction production.
 	ExitInstruction(c *InstructionContext)
+
+	// ExitStructinstruction is called when exiting the structinstruction production.
+	ExitStructinstruction(c *StructinstructionContext)
+
+	// ExitStructblock is called when exiting the structblock production.
+	ExitStructblock(c *StructblockContext)
+
+	// ExitStructdef is called when exiting the structdef production.
+	ExitStructdef(c *StructdefContext)
 
 	// ExitVectormodification is called when exiting the vectormodification production.
 	ExitVectormodification(c *VectormodificationContext)
