@@ -12,6 +12,11 @@ type StructDef struct {
 	Type     environment.TipoExpresion
 }
 
+type KeyValue struct {
+	Key   string
+	Value interface{}
+}
+
 func NewStructDef(lin int, col int, id string, insBlock []interface{}) StructDef {
 	return StructDef{lin, col, id, insBlock, environment.STRUCT_DEF}
 }
@@ -38,7 +43,7 @@ func (p StructDef) Execute(ast *environment.AST, env interface{}) interface{} {
 			if response != nil {
 				structMap[inst.(VarDec).Id] = response
 			} else {
-				ast.SetPrint("Error: El tipo de asignacion a un atributo no fue válida!\n")
+				ast.SetPrint("Error: El tipo de asignacion a un atributo var no fue válida!\n")
 				return nil
 
 			}
@@ -49,14 +54,31 @@ func (p StructDef) Execute(ast *environment.AST, env interface{}) interface{} {
 			if response != nil {
 				structMap[inst.(ConstDec).Id] = response
 			} else {
-				ast.SetPrint("Error: El tipo de asignacion a un atributo no fue válida!\n")
+				ast.SetPrint("Error: El tipo de asignacion a un atributo const no fue válida!\n")
 				return nil
 
 			}
 
 		} else if _, isVecDec := inst.(VecDec); isVecDec {
+			response := inst.(VecDec).GetVecDec(ast, env)
+			if response != nil {
+				structMap[inst.(VecDec).Id] = response
+			} else {
+				ast.SetPrint("Error: El tipo de asignacion a un atributo vector no fue válida!\n")
+				return nil
+
+			}
 
 		} else if _, isMatrixDec := inst.(MatrixDec); isMatrixDec {
+
+			response := inst.(MatrixDec).GetMatrixDec(ast, env)
+			if response != nil {
+				structMap[inst.(MatrixDec).Id] = response
+			} else {
+				ast.SetPrint("Error: El tipo de asignacion a un atributo matriz no fue válida!\n")
+				return nil
+
+			}
 
 		}
 

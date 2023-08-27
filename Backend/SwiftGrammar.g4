@@ -76,7 +76,9 @@ instruction returns [interfaces.Instruction inst]
 | structdef {$inst = $structdef.newstruct}
 ;
 
+
 // INSTRUCTIONS
+
 structinstruction returns [interfaces.Instruction inst]
 : vecdec PTOCOMA? {$inst = $vecdec.newvecdec}
 | vardec PTOCOMA?  { $inst = $vardec.newdec}
@@ -224,6 +226,16 @@ vardec returns [interfaces.Instruction newdec]
 | RVAR ID DOSPTOS typpe=(RINT|RFLOAT|RBOOL|RSTRING|RCHARACTER) QM         { $newdec = instructions.NewVarDec($RVAR.line,$RVAR.pos,$ID.text, $typpe.text, nil)}
 ;
 
+// TODO add the dosptos id
+//structdec returns [interfaces.Instruction newstructdec]
+////vorc = (RVAR|RLET) ID IG ID PARIZQ  PARDER
+//// vorc = (RVAR|RLET) ID DOSPTOS ID IG ID PARIZQ  PARDER
+//: vorc = (RVAR|RLET) ID IG ID PARIZQ keyvaluelist PARDER { $newstructdec = instructions.NewVarDec($RVAR.line,$RVAR.pos,$ID.text,$typpe.text, $ex.e)}
+//
+//;
+
+
+
 constdec returns [interfaces.Instruction newconst]
 : RLET ID DOSPTOS typpe=(RINT|RFLOAT|RBOOL|RSTRING|RCHARACTER) IG ex=expr { $newconst = instructions.NewConstDec($RLET.line,$RLET.pos,$ID.text,$typpe.text, $ex.e)}
 | RLET ID IG ex=expr                                                      { $newconst = instructions.NewConstDec($RLET.line,$RLET.pos,$ID.text, nil, $ex.e)}
@@ -252,22 +264,6 @@ countvec returns [interfaces.Expression newcountvec]
 : ID PTO RCOUNT   {$newcountvec = expressions.NewCountVector($ID.line, $ID.pos,$ID.text)}
    ;
 
-//arguments returns [[]interface{} args]
-//@init {
-//    $args = []interface{}{}
-//}
-//    :argument COMA arguments  { $args = append($args, $argument.e)
-//                                       for _, arg := range $arguments.args {
-//                                           $args = append($args, arg)
-//                                       }
-//                                 }
-//    |argument { $args = append( $args , $argument.e) }
-//    | {}
-//    ;
-//
-//argument returns [interface{} e]
-//    : expr { $e = $expr.e; }
-//    ;
 
 
 //-----------------------
@@ -344,7 +340,53 @@ decmatrix returns [interfaces.Instruction newmatrix]
 | RVAR ID DOSPTOS matrix_type IG repeatingvector  {$newmatrix = instructions.NewMatrixDec($RVAR.line, $RVAR.pos,$ID.text,$matrix_type.text,$repeatingvector.newrepeatingvec)}
 ;
 
-//vectormodification:;
+
+attrlist returns [[]string atrlist]
+@init {
+    $atrlist = []string{}
+}
+     : attr { $atrlist = append($atrlist, $attr.atr) }
+       PTO a=attrlist  { $atrlist = append($atrlist, $a.atrlist...) }
+       | attr { $atrlist = append($atrlist, $attr.atr) }
+    ;
+
+
+attr returns [string atr]
+: ID {$atr=$ID.text}
+
+;
+
+structaccess returns [interfaces.Expression saccess]
+: ID PTO attrlist  {$saccess = expressions.NewStructAccess($ID.line, $ID.pos, $ID.text, $attrlist.atrlist)}
+
+
+;
+
+structexp returns [interfaces.Expression structexxp ]
+: ID PARIZQ keyvaluelist PARDER  {$structexxp = expressions.NewStructExp($ID.line, $ID.pos, $ID.text, $keyvaluelist.maplist)}
+;
+
+keyvaluelist returns [map[string]interface{} maplist]
+@init {
+    $maplist = make(map[string]interface{})
+}
+     : keyvalue { $maplist[$keyvalue.key] = $keyvalue.value }
+       COMA a=keyvaluelist  { for k, v := range $a.maplist {
+                                $maplist[k] = v
+                              }
+                            }
+       | keyvalue { $maplist[$keyvalue.key] = $keyvalue.value }
+    ;
+
+keyvalue returns [string key, interface{} value]
+
+: ID DOSPTOS expr {
+                    $key = $ID.text
+                    $value = $expr.e
+                  }
+
+;
+
 
 
 
@@ -359,6 +401,8 @@ expr returns [interfaces.Expression e]
 | left=expr op=(IG_IG|DIF) right=expr { $e = expressions.NewRelationalOperation($left.start.GetLine(), $left.start.GetColumn(), $left.e, $op.text, $right.e) }
 | left=expr op=AND right=expr { $e = expressions.NewBooleanOperation($left.start.GetLine(), $left.start.GetColumn(), $left.e, $op.text, $right.e) }
 | left=expr op=OR right=expr { $e = expressions.NewBooleanOperation($left.start.GetLine(), $left.start.GetColumn(), $left.e, $op.text, $right.e) }
+| structexp {$e = $structexp.structexxp}
+| structaccess {$e = $structaccess.saccess}
 | isemptyvec {$e = $isemptyvec.newisemptyvec}
 | countvec {$e = $countvec.newcountvec}
 | vectoraccess {$e = $vectoraccess.newvecaccess}

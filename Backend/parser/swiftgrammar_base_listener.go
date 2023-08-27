@@ -278,6 +278,42 @@ func (s *BaseSwiftGrammarListener) EnterDecmatrix(ctx *DecmatrixContext) {}
 // ExitDecmatrix is called when production decmatrix is exited.
 func (s *BaseSwiftGrammarListener) ExitDecmatrix(ctx *DecmatrixContext) {}
 
+// EnterAttrlist is called when production attrlist is entered.
+func (s *BaseSwiftGrammarListener) EnterAttrlist(ctx *AttrlistContext) {}
+
+// ExitAttrlist is called when production attrlist is exited.
+func (s *BaseSwiftGrammarListener) ExitAttrlist(ctx *AttrlistContext) {}
+
+// EnterAttr is called when production attr is entered.
+func (s *BaseSwiftGrammarListener) EnterAttr(ctx *AttrContext) {}
+
+// ExitAttr is called when production attr is exited.
+func (s *BaseSwiftGrammarListener) ExitAttr(ctx *AttrContext) {}
+
+// EnterStructaccess is called when production structaccess is entered.
+func (s *BaseSwiftGrammarListener) EnterStructaccess(ctx *StructaccessContext) {}
+
+// ExitStructaccess is called when production structaccess is exited.
+func (s *BaseSwiftGrammarListener) ExitStructaccess(ctx *StructaccessContext) {}
+
+// EnterStructexp is called when production structexp is entered.
+func (s *BaseSwiftGrammarListener) EnterStructexp(ctx *StructexpContext) {}
+
+// ExitStructexp is called when production structexp is exited.
+func (s *BaseSwiftGrammarListener) ExitStructexp(ctx *StructexpContext) {}
+
+// EnterKeyvaluelist is called when production keyvaluelist is entered.
+func (s *BaseSwiftGrammarListener) EnterKeyvaluelist(ctx *KeyvaluelistContext) {}
+
+// ExitKeyvaluelist is called when production keyvaluelist is exited.
+func (s *BaseSwiftGrammarListener) ExitKeyvaluelist(ctx *KeyvaluelistContext) {}
+
+// EnterKeyvalue is called when production keyvalue is entered.
+func (s *BaseSwiftGrammarListener) EnterKeyvalue(ctx *KeyvalueContext) {}
+
+// ExitKeyvalue is called when production keyvalue is exited.
+func (s *BaseSwiftGrammarListener) ExitKeyvalue(ctx *KeyvalueContext) {}
+
 // EnterExpr is called when production expr is entered.
 func (s *BaseSwiftGrammarListener) EnterExpr(ctx *ExprContext) {}
 

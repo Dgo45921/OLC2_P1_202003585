@@ -136,6 +136,24 @@ type SwiftGrammarListener interface {
 	// EnterDecmatrix is called when entering the decmatrix production.
 	EnterDecmatrix(c *DecmatrixContext)
 
+	// EnterAttrlist is called when entering the attrlist production.
+	EnterAttrlist(c *AttrlistContext)
+
+	// EnterAttr is called when entering the attr production.
+	EnterAttr(c *AttrContext)
+
+	// EnterStructaccess is called when entering the structaccess production.
+	EnterStructaccess(c *StructaccessContext)
+
+	// EnterStructexp is called when entering the structexp production.
+	EnterStructexp(c *StructexpContext)
+
+	// EnterKeyvaluelist is called when entering the keyvaluelist production.
+	EnterKeyvaluelist(c *KeyvaluelistContext)
+
+	// EnterKeyvalue is called when entering the keyvalue production.
+	EnterKeyvalue(c *KeyvalueContext)
+
 	// EnterExpr is called when entering the expr production.
 	EnterExpr(c *ExprContext)
 
@@ -267,6 +285,24 @@ type SwiftGrammarListener interface {
 
 	// ExitDecmatrix is called when exiting the decmatrix production.
 	ExitDecmatrix(c *DecmatrixContext)
+
+	// ExitAttrlist is called when exiting the attrlist production.
+	ExitAttrlist(c *AttrlistContext)
+
+	// ExitAttr is called when exiting the attr production.
+	ExitAttr(c *AttrContext)
+
+	// ExitStructaccess is called when exiting the structaccess production.
+	ExitStructaccess(c *StructaccessContext)
+
+	// ExitStructexp is called when exiting the structexp production.
+	ExitStructexp(c *StructexpContext)
+
+	// ExitKeyvaluelist is called when exiting the keyvaluelist production.
+	ExitKeyvaluelist(c *KeyvaluelistContext)
+
+	// ExitKeyvalue is called when exiting the keyvalue production.
+	ExitKeyvalue(c *KeyvalueContext)
 
 	// ExitExpr is called when exiting the expr production.
 	ExitExpr(c *ExprContext)

@@ -196,8 +196,8 @@ func (p VecDec) GetVecDec(ast *environment.AST, env interface{}) interface{} {
 
 		} else {
 			ast.SetPrint("Error: elemento del arreglo, no coincide con el tipo!\n")
+			return nil
 		}
-		return nil
 	}
 
 	if p.DefType != nil && p.Exp == nil {
@@ -223,13 +223,14 @@ func (p VecDec) GetVecDec(ast *environment.AST, env interface{}) interface{} {
 			Value: emptyArray,
 			Const: false,
 		}
+
 		if p.DefType.(string) == p.Type {
 			return symbol
 		} else {
 			ast.SetPrint("Error: El tipo definido al inicio no es igual al definido por el ultimo\n")
+			return nil
 		}
 
-		return nil
 
 	}
 
