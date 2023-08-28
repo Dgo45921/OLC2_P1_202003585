@@ -24,7 +24,7 @@ func (p For) Execute(ast *environment.AST, env interface{}) interface{} {
 		return nil
 	}
 
-	if iterable.Type == environment.VECTOR_BOOLEAN || iterable.Type == environment.VECTOR_INT || iterable.Type == environment.VECTOR_STRING || iterable.Type == environment.VECTOR_FLOAT || iterable.Type == environment.VECTOR_CHAR {
+	if iterable.Type == environment.VECTOR_BOOLEAN || iterable.Type == environment.VECTOR_INT || iterable.Type == environment.VECTOR_STRING || iterable.Type == environment.VECTOR_FLOAT || iterable.Type == environment.VECTOR_CHAR || iterable.Type == environment.VECTOR_STRUCT {
 		var iterableType = environment.INTEGER
 		switch iterable.Type {
 		case environment.VECTOR_BOOLEAN:
@@ -35,9 +35,10 @@ func (p For) Execute(ast *environment.AST, env interface{}) interface{} {
 			iterableType = environment.STRING
 		case environment.VECTOR_FLOAT:
 			iterableType = environment.FLOAT
-
 		case environment.VECTOR_CHAR:
 			iterableType = environment.CHAR
+		case environment.VECTOR_STRUCT:
+			iterableType = environment.STRUCT_IMP
 
 		}
 

@@ -19,7 +19,7 @@ func NewAppendVector(lin int, col int, id string, val interfaces.Expression) App
 
 func (p AppendVector) Execute(ast *environment.AST, env interface{}) interface{} {
 	foundVar := env.(environment.Environment).FindVar(p.Id)
-	if foundVar.Type == environment.VECTOR_INT || foundVar.Type == environment.VECTOR_FLOAT || foundVar.Type == environment.VECTOR_CHAR || foundVar.Type == environment.VECTOR_STRING || foundVar.Type == environment.VECTOR_BOOLEAN || foundVar.Type == environment.VECTOR {
+	if foundVar.Type == environment.VECTOR_STRUCT || foundVar.Type == environment.VECTOR_INT || foundVar.Type == environment.VECTOR_FLOAT || foundVar.Type == environment.VECTOR_CHAR || foundVar.Type == environment.VECTOR_STRING || foundVar.Type == environment.VECTOR_BOOLEAN || foundVar.Type == environment.VECTOR {
 		value := p.Expression.Execute(ast, env)
 
 		if foundVar.Type == environment.VECTOR {
@@ -53,6 +53,12 @@ func (p AppendVector) Execute(ast *environment.AST, env interface{}) interface{}
 					foundVar.Value = append(foundVar.Value.([]interface{}), value.Value)
 				}
 				env.(environment.Environment).UpdateVariable(p.Id, foundVar)
+			} else if value.Type == environment.STRUCT_IMP {
+				foundVar.Type = environment.VECTOR_STRUCT
+				if _, isArray := foundVar.Value.([]interface{}); isArray {
+					foundVar.Value = append(foundVar.Value.([]interface{}), value.Value)
+				}
+				env.(environment.Environment).UpdateVariable(p.Id, foundVar)
 			} else {
 				ast.SetPrint("Error: tipo de concatenacion incompatible! \n")
 			}
@@ -77,7 +83,12 @@ func (p AppendVector) Execute(ast *environment.AST, env interface{}) interface{}
 					foundVar.Value = append(foundVar.Value.([]interface{}), value.Value)
 				}
 				env.(environment.Environment).UpdateVariable(p.Id, foundVar)
-			} else if value.Type == environment.CHAR && foundVar.Type == environment.CHAR {
+			} else if value.Type == environment.CHAR && foundVar.Type == environment.VECTOR_CHAR {
+				if _, isArray := foundVar.Value.([]interface{}); isArray {
+					foundVar.Value = append(foundVar.Value.([]interface{}), value.Value)
+				}
+				env.(environment.Environment).UpdateVariable(p.Id, foundVar)
+			} else if value.Type == environment.STRUCT_IMP && foundVar.Type == environment.VECTOR_STRUCT {
 				if _, isArray := foundVar.Value.([]interface{}); isArray {
 					foundVar.Value = append(foundVar.Value.([]interface{}), value.Value)
 				}

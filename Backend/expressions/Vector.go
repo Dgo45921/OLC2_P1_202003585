@@ -49,6 +49,8 @@ func (p Vector) Execute(ast *environment.AST, env interface{}) environment.Symbo
 			vectype = environment.VECTOR_STRING
 		} else if firstType == environment.CHAR {
 			vectype = environment.VECTOR_CHAR
+		} else if firstType == environment.STRUCT_IMP {
+			vectype = environment.VECTOR_STRUCT
 		}
 
 		return environment.Symbol{
@@ -78,14 +80,21 @@ func validVector(ast *environment.AST, env interface{}, vector Vector) bool {
 	}
 
 	if len(vector.Value) > 0 {
-		firstType = vector.Value[0].(interfaces.Expression).Execute(ast, env).Type
+
+		if _, isExp := vector.Value[0].(interfaces.Expression); isExp {
+			firstType = vector.Value[0].(interfaces.Expression).Execute(ast, env).Type
+		}
+
 	}
 
 	for _, inst := range vector.Value {
-		var response = inst.(interfaces.Expression).Execute(ast, env)
-		if response.Type != firstType {
-			return false
+		if _, isExp := inst.(interfaces.Expression); isExp {
+			var response = inst.(interfaces.Expression).Execute(ast, env)
+			if response.Type != firstType {
+				return false
+			}
 		}
+
 	}
 
 	return true

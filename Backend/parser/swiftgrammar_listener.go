@@ -112,6 +112,15 @@ type SwiftGrammarListener interface {
 	// EnterVectoraccess is called when entering the vectoraccess production.
 	EnterVectoraccess(c *VectoraccessContext)
 
+	// EnterStructaccess is called when entering the structaccess production.
+	EnterStructaccess(c *StructaccessContext)
+
+	// EnterVecindexstruct is called when entering the vecindexstruct production.
+	EnterVecindexstruct(c *VecindexstructContext)
+
+	// EnterVectorstructaccess is called when entering the vectorstructaccess production.
+	EnterVectorstructaccess(c *VectorstructaccessContext)
+
 	// EnterIndexesList is called when entering the indexesList production.
 	EnterIndexesList(c *IndexesListContext)
 
@@ -141,9 +150,6 @@ type SwiftGrammarListener interface {
 
 	// EnterAttr is called when entering the attr production.
 	EnterAttr(c *AttrContext)
-
-	// EnterStructaccess is called when entering the structaccess production.
-	EnterStructaccess(c *StructaccessContext)
 
 	// EnterStructexp is called when entering the structexp production.
 	EnterStructexp(c *StructexpContext)
@@ -262,6 +268,15 @@ type SwiftGrammarListener interface {
 	// ExitVectoraccess is called when exiting the vectoraccess production.
 	ExitVectoraccess(c *VectoraccessContext)
 
+	// ExitStructaccess is called when exiting the structaccess production.
+	ExitStructaccess(c *StructaccessContext)
+
+	// ExitVecindexstruct is called when exiting the vecindexstruct production.
+	ExitVecindexstruct(c *VecindexstructContext)
+
+	// ExitVectorstructaccess is called when exiting the vectorstructaccess production.
+	ExitVectorstructaccess(c *VectorstructaccessContext)
+
 	// ExitIndexesList is called when exiting the indexesList production.
 	ExitIndexesList(c *IndexesListContext)
 
@@ -291,9 +306,6 @@ type SwiftGrammarListener interface {
 
 	// ExitAttr is called when exiting the attr production.
 	ExitAttr(c *AttrContext)
-
-	// ExitStructaccess is called when exiting the structaccess production.
-	ExitStructaccess(c *StructaccessContext)
 
 	// ExitStructexp is called when exiting the structexp production.
 	ExitStructexp(c *StructexpContext)

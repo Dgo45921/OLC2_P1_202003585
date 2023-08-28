@@ -71,6 +71,11 @@ func (p VecDec) Execute(ast *environment.AST, env interface{}) interface{} {
 			types = environment.VECTOR_BOOLEAN
 		case "String":
 			types = environment.VECTOR_STRING
+		default:
+			res := env.(environment.Environment).FindVar(p.Type)
+			if res.Type == environment.STRUCT_DEF {
+				types = environment.VECTOR_STRUCT
+			}
 
 		}
 
@@ -230,7 +235,6 @@ func (p VecDec) GetVecDec(ast *environment.AST, env interface{}) interface{} {
 			ast.SetPrint("Error: El tipo definido al inicio no es igual al definido por el ultimo\n")
 			return nil
 		}
-
 
 	}
 

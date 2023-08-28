@@ -230,6 +230,24 @@ func (s *BaseSwiftGrammarListener) EnterVectoraccess(ctx *VectoraccessContext) {
 // ExitVectoraccess is called when production vectoraccess is exited.
 func (s *BaseSwiftGrammarListener) ExitVectoraccess(ctx *VectoraccessContext) {}
 
+// EnterStructaccess is called when production structaccess is entered.
+func (s *BaseSwiftGrammarListener) EnterStructaccess(ctx *StructaccessContext) {}
+
+// ExitStructaccess is called when production structaccess is exited.
+func (s *BaseSwiftGrammarListener) ExitStructaccess(ctx *StructaccessContext) {}
+
+// EnterVecindexstruct is called when production vecindexstruct is entered.
+func (s *BaseSwiftGrammarListener) EnterVecindexstruct(ctx *VecindexstructContext) {}
+
+// ExitVecindexstruct is called when production vecindexstruct is exited.
+func (s *BaseSwiftGrammarListener) ExitVecindexstruct(ctx *VecindexstructContext) {}
+
+// EnterVectorstructaccess is called when production vectorstructaccess is entered.
+func (s *BaseSwiftGrammarListener) EnterVectorstructaccess(ctx *VectorstructaccessContext) {}
+
+// ExitVectorstructaccess is called when production vectorstructaccess is exited.
+func (s *BaseSwiftGrammarListener) ExitVectorstructaccess(ctx *VectorstructaccessContext) {}
+
 // EnterIndexesList is called when production indexesList is entered.
 func (s *BaseSwiftGrammarListener) EnterIndexesList(ctx *IndexesListContext) {}
 
@@ -289,12 +307,6 @@ func (s *BaseSwiftGrammarListener) EnterAttr(ctx *AttrContext) {}
 
 // ExitAttr is called when production attr is exited.
 func (s *BaseSwiftGrammarListener) ExitAttr(ctx *AttrContext) {}
-
-// EnterStructaccess is called when production structaccess is entered.
-func (s *BaseSwiftGrammarListener) EnterStructaccess(ctx *StructaccessContext) {}
-
-// ExitStructaccess is called when production structaccess is exited.
-func (s *BaseSwiftGrammarListener) ExitStructaccess(ctx *StructaccessContext) {}
 
 // EnterStructexp is called when production structexp is entered.
 func (s *BaseSwiftGrammarListener) EnterStructexp(ctx *StructexpContext) {}

@@ -29,12 +29,15 @@ func (p StructExp) Execute(ast *environment.AST, env interface{}) environment.Sy
 		}
 
 		for _, kv := range p.Fields {
-			if !valTypeOk(kv.Key, typeStruct.Value.([]environment.KeyValue), kv.Value.(interfaces.Expression).Execute(ast, env).Type) {
-				ast.SetPrint("Error: Argumento pasado no coincide con el definido por el struct!\n")
-				return environment.Symbol{Lin: p.Lin, Col: p.Col, Type: environment.NULL, Value: nil}
+			if _, isBreak := kv.Value.(interfaces.Expression); isBreak {
+				if !valTypeOk(kv.Key, typeStruct.Value.([]environment.KeyValue), kv.Value.(interfaces.Expression).Execute(ast, env).Type) {
+					ast.SetPrint("Error: Argumento pasado no coincide con el definido por el struct!\n")
+					return environment.Symbol{Lin: p.Lin, Col: p.Col, Type: environment.NULL, Value: nil}
+				}
 			}
+
 		}
-		executeAllKeyValues(p.Fields, ast, env)
+		addDefaultValues(&p.Fields, typeStruct.Value.([]environment.KeyValue))
 		finalStruct = append(finalStruct, p.Fields...)
 		return environment.Symbol{Lin: p.Lin, Col: p.Col, Type: environment.STRUCT_IMP, Value: finalStruct}
 
@@ -51,6 +54,27 @@ func executeAllKeyValues(val []environment.KeyValue, ast *environment.AST, env i
 	}
 
 }
+
+func addDefaultValues(fields *[]environment.KeyValue, defaults []environment.KeyValue) {
+
+	for index, d := range defaults {
+		found := false
+		for _, f := range *fields {
+			if f.Key == d.Key {
+				found = true
+				break
+			}
+		}
+		if !found {
+
+			valToAdd := defaults[index]
+			*fields = append(*fields, valToAdd)
+		}
+
+	}
+
+}
+
 func valTypeOk(targetField string, fields []environment.KeyValue, typee environment.TipoExpresion) bool {
 	for _, kv := range fields {
 

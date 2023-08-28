@@ -56,11 +56,11 @@ argument returns [interface{} e]
 // INSTRUCTIONS
 instruction returns [interfaces.Instruction inst]
 : printstmt PTOCOMA?  { $inst = $printstmt.prnt}
-| decmatrix PTOCOMA? {$inst = $decmatrix.newmatrix}
 | vecdec PTOCOMA? {$inst = $vecdec.newvecdec}
 | vardec PTOCOMA?  { $inst = $vardec.newdec}
 | constdec PTOCOMA? {$inst = $constdec.newconst}
 | appendvec PTOCOMA? {$inst = $appendvec.newappendvec}
+| decmatrix PTOCOMA? {$inst = $decmatrix.newmatrix}
 | removelastvec PTOCOMA? {$inst = $removelastvec.newremovelastvec}
 | removeatvec PTOCOMA?  {$inst = $removeatvec.newremoveat}
 | asignation PTOCOMA? {$inst = $asignation.newasignation}
@@ -143,8 +143,8 @@ removelastvec returns [interfaces.Instruction newremovelastvec]
 
 
 vecdec returns [interfaces.Instruction newvecdec]
-: RVAR ID DOSPTOS OBRA typpe=(RINT|RFLOAT|RBOOL|RSTRING|RCHARACTER) CBRA IG OBRA typpe2=(RINT|RFLOAT|RBOOL|RSTRING|RCHARACTER) CBRA OBRA CBRA {$newvecdec = instructions.NewVecDec($RVAR.line, $RVAR.pos, $ID.text, $typpe.text, $typpe2.text, nil )}
-| RVAR firstid=ID DOSPTOS  OBRA typpe=(RINT|RFLOAT|RBOOL|RSTRING|RCHARACTER) CBRA IG expr {$newvecdec = instructions.NewVecDec($RVAR.line, $RVAR.pos, $firstid.text, $typpe.text, nil,$expr.e )}
+: RVAR ID DOSPTOS OBRA typpe=(RINT|RFLOAT|RBOOL|RSTRING|RCHARACTER|ID) CBRA IG OBRA typpe2=(RINT|RFLOAT|RBOOL|RSTRING|RCHARACTER) CBRA OBRA CBRA {$newvecdec = instructions.NewVecDec($RVAR.line, $RVAR.pos, $ID.text, $typpe.text, $typpe2.text, nil )}
+| RVAR firstid=ID DOSPTOS  OBRA typpe=(RINT|RFLOAT|RBOOL|RSTRING|RCHARACTER|ID) CBRA IG expr {$newvecdec = instructions.NewVecDec($RVAR.line, $RVAR.pos, $firstid.text, $typpe.text, nil,$expr.e )}
 ;
 
 breakstatement returns [interfaces.Instruction newbreak]
@@ -230,7 +230,7 @@ vardec returns [interfaces.Instruction newdec]
 //structdec returns [interfaces.Instruction newstructdec]
 ////vorc = (RVAR|RLET) ID IG ID PARIZQ  PARDER
 //// vorc = (RVAR|RLET) ID DOSPTOS ID IG ID PARIZQ  PARDER
-//: vorc = (RVAR|RLET) ID IG ID PARIZQ keyvaluelist PARDER { $newstructdec = instructions.NewVarDec($RVAR.line,$RVAR.pos,$ID.text,$typpe.text, $ex.e)}
+//: varorconst= (RVAR|RLET) ID IG ID PARIZQ structexp PARDER { $newstructdec = instructions.NewVarDec($RVAR.line,$RVAR.pos,$ID.text,$typpe.text, $ex.e)}
 //
 //;
 
@@ -270,6 +270,25 @@ countvec returns [interfaces.Expression newcountvec]
 vectoraccess returns [interfaces.Expression newvecaccess]
 : ID indexesList  {$newvecaccess = expressions.NewVectorAccess($ID.line, $ID.pos,$ID.text, $indexesList.indexes)}
 ;
+
+structaccess returns [interfaces.Expression saccess]
+: ID PTO attrlist  {$saccess = expressions.NewStructAccess($ID.line, $ID.pos, $ID.text, $attrlist.atrlist)}
+// | vectoraccess PTO attrlist {$saccess = expressions.NewStructAccess($ID.line, $ID.pos, $ID.text, $attrlist.atrlist)}
+
+
+;
+
+vecindexstruct returns  [[]string vecinlist]
+: PTO attrlist  {$vecinlist = $attrlist.atrlist}
+
+
+;
+
+vectorstructaccess returns [interfaces.Expression vecstructaccess]:
+ID indexesList vecindexstruct {$vecstructaccess = expressions.NewVectorStructAccess($ID.line, $ID.pos,$ID.text, $indexesList.indexes, $vecindexstruct.vecinlist)}
+;
+
+
 
 indexesList returns [[]interface{} indexes]
 @init {
@@ -356,11 +375,6 @@ attr returns [string atr]
 
 ;
 
-structaccess returns [interfaces.Expression saccess]
-: ID PTO attrlist  {$saccess = expressions.NewStructAccess($ID.line, $ID.pos, $ID.text, $attrlist.atrlist)}
-
-
-;
 
 structexp returns [interfaces.Expression structexxp ]
 : ID PARIZQ keyvaluelist PARDER  {$structexxp = expressions.NewStructExp($ID.line, $ID.pos, $ID.text, $keyvaluelist.kvlist)}
@@ -401,6 +415,7 @@ expr returns [interfaces.Expression e]
 | left=expr op=(IG_IG|DIF) right=expr { $e = expressions.NewRelationalOperation($left.start.GetLine(), $left.start.GetColumn(), $left.e, $op.text, $right.e) }
 | left=expr op=AND right=expr { $e = expressions.NewBooleanOperation($left.start.GetLine(), $left.start.GetColumn(), $left.e, $op.text, $right.e) }
 | left=expr op=OR right=expr { $e = expressions.NewBooleanOperation($left.start.GetLine(), $left.start.GetColumn(), $left.e, $op.text, $right.e) }
+| vectorstructaccess {$e = $vectorstructaccess.vecstructaccess}
 | structexp {$e = $structexp.structexxp}
 | structaccess {$e = $structaccess.saccess}
 | isemptyvec {$e = $isemptyvec.newisemptyvec}
