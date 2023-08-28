@@ -14,7 +14,15 @@ func NewEnvironment(prev interface{}, scope EnvType) Environment {
 	}
 }
 
-// SaveVariable TODO CHECK THAT THE VARIABLE IS NOT DECLARED ALREADY
+func (env Environment) VariableExists(id string) bool{
+
+	if _, ok := env.SymbolTable[id]; ok {
+		return true
+	}
+
+
+	return false
+}
 func (env Environment) SaveVariable(id string, value Symbol) {
 	env.SymbolTable[id] = value
 }

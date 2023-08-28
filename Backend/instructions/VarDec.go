@@ -6,7 +6,6 @@ import (
 	"PY1/interfaces"
 )
 
-// VarDec TODO CHECK NOT REDECLARED VARIABLE
 type VarDec struct {
 	Lin        int
 	Col        int
@@ -21,9 +20,12 @@ func NewVarDec(lin int, col int, id string, tyype interface{}, val interface{}) 
 }
 
 func (p VarDec) Execute(ast *environment.AST, env interface{}) interface{} {
-	if env == nil {
+
+	if env.(environment.Environment).VariableExists(p.Id) {
+		ast.SetPrint("Error, variable ya declarada!\n")
 		return nil
 	}
+
 	if p.Type == nil {
 
 		if _, ok := p.Expression.(interfaces.Expression); ok {
@@ -57,6 +59,16 @@ func (p VarDec) Execute(ast *environment.AST, env interface{}) interface{} {
 				value.Type = environment.BOOLEAN
 			} else if p.Type == "Character" {
 				value.Type = environment.CHAR
+			} else {
+				typeStruct := env.(environment.Environment).FindVar(p.Type.(string))
+				if typeStruct.Type == environment.STRUCT_DEF {
+					value = environment.Symbol{Lin: 0, Col: 0, Type: environment.STRUCT_IMP, Value: nil, StructType: p.Type.(string)}
+					env.(environment.Environment).SaveVariable(p.Id, value)
+
+				} else {
+					ast.SetPrint("Error: Tipo de variable no valida!\n")
+				}
+
 			}
 
 			env.(environment.Environment).SaveVariable(p.Id, value)
@@ -91,13 +103,27 @@ func (p VarDec) Execute(ast *environment.AST, env interface{}) interface{} {
 		} else if p.Type == "Bool" && value.Type == environment.BOOLEAN {
 			env.(environment.Environment).SaveVariable(p.Id, value)
 			return nil
-		} else if value.Type == environment.VECTOR_INT || value.Type == environment.VECTOR_FLOAT || value.Type == environment.VECTOR_STRING || value.Type == environment.VECTOR_CHAR || value.Type == environment.VECTOR_BOOLEAN || value.Type == environment.MATRIX_INT || value.Type == environment.MATRIX_FLOAT || value.Type == environment.MATRIX_STRING || value.Type == environment.MATRIX_CHAR || value.Type == environment.MATRIX_BOOLEAN || value.Type == environment.VECTOR {
+		} else if value.Type == environment.VECTOR_INT || value.Type == environment.VECTOR_FLOAT || value.Type == environment.VECTOR_STRING || value.Type == environment.VECTOR_CHAR || value.Type == environment.VECTOR_BOOLEAN || value.Type == environment.MATRIX_INT || value.Type == environment.MATRIX_FLOAT || value.Type == environment.MATRIX_STRING || value.Type == environment.MATRIX_CHAR || value.Type == environment.MATRIX_BOOLEAN || value.Type == environment.VECTOR || value.Type == environment.VECTOR_STRUCT {
 			val := expressions.DeepCopyArray(value.Value)
 			value.Value = val
 			env.(environment.Environment).SaveVariable(p.Id, value)
 			return nil
 		} else {
-			ast.SetPrint("Error: Type de variable no coincide con la asignación dada!")
+			typeStruct := env.(environment.Environment).FindVar(p.Type.(string))
+			if typeStruct.Type == environment.STRUCT_DEF {
+				if p.Type.(string) == value.StructType {
+					value = environment.Symbol{Lin: p.Lin, Col: p.Col, Type: environment.STRUCT_IMP, Value: value.Value, StructType: p.Type.(string)}
+					env.(environment.Environment).SaveVariable(p.Id, value)
+					return nil
+				} else {
+					ast.SetPrint("Error: Tipo de struct distinto al definido!\n")
+					return nil
+				}
+
+			} else {
+				ast.SetPrint("Error: Tipo de variable no valida!\n")
+			}
+
 		}
 	} else if p.Expression == nil {
 
@@ -123,6 +149,16 @@ func (p VarDec) Execute(ast *environment.AST, env interface{}) interface{} {
 			value = environment.Symbol{Lin: 0, Col: 0, Type: environment.BOOLEAN, Value: nil}
 			env.(environment.Environment).SaveVariable(p.Id, value)
 			return nil
+		} else {
+			typeStruct := env.(environment.Environment).FindVar(p.Type.(string))
+			if typeStruct.Type == environment.STRUCT_DEF {
+				value = environment.Symbol{Lin: 0, Col: 0, Type: environment.STRUCT_IMP, Value: nil, StructType: p.Type.(string)}
+				env.(environment.Environment).SaveVariable(p.Id, value)
+
+			} else {
+				ast.SetPrint("Error: Tipo de variable no valida!\n")
+			}
+
 		}
 
 	}

@@ -39,7 +39,7 @@ func (p StructExp) Execute(ast *environment.AST, env interface{}) environment.Sy
 		}
 		addDefaultValues(&p.Fields, typeStruct.Value.([]environment.KeyValue))
 		finalStruct = append(finalStruct, p.Fields...)
-		return environment.Symbol{Lin: p.Lin, Col: p.Col, Type: environment.STRUCT_IMP, Value: finalStruct}
+		return environment.Symbol{Lin: p.Lin, Col: p.Col, Type: environment.STRUCT_IMP, Value: finalStruct, StructType: p.ID}
 
 	} else {
 		ast.SetPrint("Error: el struct: " + p.ID + "no existe!\n")

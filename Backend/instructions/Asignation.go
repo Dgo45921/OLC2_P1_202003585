@@ -40,6 +40,16 @@ func (p Asignation) Execute(ast *environment.AST, env interface{}) interface{} {
 		}
 
 		if value.Type == foundVar.Type {
+			if value.Type == environment.STRUCT_IMP {
+				if value.StructType == foundVar.StructType {
+					foundVar.Value = value.Value
+					env.(environment.Environment).UpdateVariable(p.Id, foundVar)
+				} else {
+					ast.SetPrint("Error: Variable de struct no compatible con la asignacion dada!\n")
+					return nil
+				}
+			}
+
 			if foundVar.Type == environment.VECTOR_STRUCT || foundVar.Type == environment.VECTOR_INT || foundVar.Type == environment.VECTOR_FLOAT || foundVar.Type == environment.VECTOR_STRING || foundVar.Type == environment.VECTOR_CHAR || foundVar.Type == environment.VECTOR_BOOLEAN || foundVar.Type == environment.MATRIX_INT || foundVar.Type == environment.MATRIX_FLOAT || foundVar.Type == environment.MATRIX_STRING || foundVar.Type == environment.MATRIX_CHAR || foundVar.Type == environment.MATRIX_BOOLEAN || foundVar.Type == environment.VECTOR {
 				foundVar.Value = expressions.DeepCopyArray(value.Value)
 				env.(environment.Environment).UpdateVariable(p.Id, foundVar)

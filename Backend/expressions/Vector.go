@@ -97,5 +97,19 @@ func validVector(ast *environment.AST, env interface{}, vector Vector) bool {
 
 	}
 
+	if firstType == environment.STRUCT_IMP {
+		var structType = vector.Value[0].(interfaces.Expression).Execute(ast, env).StructType
+		for _, inst := range vector.Value {
+			if _, isExp := inst.(interfaces.Expression); isExp {
+				var response = inst.(interfaces.Expression).Execute(ast, env)
+				if response.StructType != structType {
+					return false
+				}
+
+			}
+
+		}
+	}
+
 	return true
 }

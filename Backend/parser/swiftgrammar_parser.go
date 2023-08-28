@@ -292,12 +292,12 @@ func swiftgrammarParserInit() {
 		448, 6, 25, -1, 0, 448, 51, 1, 0, 0, 0, 449, 450, 5, 11, 0, 0, 450, 451,
 		3, 102, 51, 0, 451, 452, 5, 51, 0, 0, 452, 453, 3, 2, 1, 0, 453, 454, 5,
 		52, 0, 0, 454, 455, 6, 26, -1, 0, 455, 53, 1, 0, 0, 0, 456, 457, 5, 12,
-		0, 0, 457, 458, 5, 32, 0, 0, 458, 459, 5, 56, 0, 0, 459, 460, 7, 1, 0,
+		0, 0, 457, 458, 5, 32, 0, 0, 458, 459, 5, 56, 0, 0, 459, 460, 7, 0, 0,
 		0, 460, 461, 5, 40, 0, 0, 461, 462, 3, 102, 51, 0, 462, 463, 6, 27, -1,
 		0, 463, 477, 1, 0, 0, 0, 464, 465, 5, 12, 0, 0, 465, 466, 5, 32, 0, 0,
 		466, 467, 5, 40, 0, 0, 467, 468, 3, 102, 51, 0, 468, 469, 6, 27, -1, 0,
 		469, 477, 1, 0, 0, 0, 470, 471, 5, 12, 0, 0, 471, 472, 5, 32, 0, 0, 472,
-		473, 5, 56, 0, 0, 473, 474, 7, 1, 0, 0, 474, 475, 5, 59, 0, 0, 475, 477,
+		473, 5, 56, 0, 0, 473, 474, 7, 0, 0, 0, 474, 475, 5, 59, 0, 0, 475, 477,
 		6, 27, -1, 0, 476, 456, 1, 0, 0, 0, 476, 464, 1, 0, 0, 0, 476, 470, 1,
 		0, 0, 0, 477, 55, 1, 0, 0, 0, 478, 479, 5, 13, 0, 0, 479, 480, 5, 32, 0,
 		0, 480, 481, 5, 56, 0, 0, 481, 482, 7, 1, 0, 0, 482, 483, 5, 40, 0, 0,
@@ -7800,7 +7800,8 @@ type IVardecContext interface {
 
 	// Getter signatures
 	RVAR() antlr.TerminalNode
-	ID() antlr.TerminalNode
+	AllID() []antlr.TerminalNode
+	ID(i int) antlr.TerminalNode
 	DOSPTOS() antlr.TerminalNode
 	IG() antlr.TerminalNode
 	Expr() IExprContext
@@ -7876,8 +7877,12 @@ func (s *VardecContext) RVAR() antlr.TerminalNode {
 	return s.GetToken(SwiftGrammarParserRVAR, 0)
 }
 
-func (s *VardecContext) ID() antlr.TerminalNode {
-	return s.GetToken(SwiftGrammarParserID, 0)
+func (s *VardecContext) AllID() []antlr.TerminalNode {
+	return s.GetTokens(SwiftGrammarParserID)
+}
+
+func (s *VardecContext) ID(i int) antlr.TerminalNode {
+	return s.GetToken(SwiftGrammarParserID, i)
 }
 
 func (s *VardecContext) DOSPTOS() antlr.TerminalNode {
@@ -8001,7 +8006,7 @@ func (p *SwiftGrammarParser) Vardec() (localctx IVardecContext) {
 
 			_la = p.GetTokenStream().LA(1)
 
-			if !((int64(_la) & ^0x3f) == 0 && ((int64(1)<<_la)&62) != 0) {
+			if !((int64(_la) & ^0x3f) == 0 && ((int64(1)<<_la)&4294967358) != 0) {
 				var _ri = p.GetErrorHandler().RecoverInline(p)
 
 				localctx.(*VardecContext).typpe = _ri
@@ -8151,7 +8156,7 @@ func (p *SwiftGrammarParser) Vardec() (localctx IVardecContext) {
 
 			_la = p.GetTokenStream().LA(1)
 
-			if !((int64(_la) & ^0x3f) == 0 && ((int64(1)<<_la)&62) != 0) {
+			if !((int64(_la) & ^0x3f) == 0 && ((int64(1)<<_la)&4294967358) != 0) {
 				var _ri = p.GetErrorHandler().RecoverInline(p)
 
 				localctx.(*VardecContext).typpe = _ri

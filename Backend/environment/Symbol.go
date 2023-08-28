@@ -8,6 +8,7 @@ type Symbol struct {
 	Type  TipoExpresion
 	Value interface{}
 	Const bool
+	StructType string
 }
 
 func (s Symbol) GetType() string {
