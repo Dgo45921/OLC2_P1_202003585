@@ -12572,7 +12572,7 @@ func (p *SwiftGrammarParser) Structexp() (localctx IStructexpContext) {
 		} else {
 			return localctx.(*StructexpContext).Get_ID().GetText()
 		}
-	}()), localctx.(*StructexpContext).Get_keyvaluelist().GetMaplist())
+	}()), localctx.(*StructexpContext).Get_keyvaluelist().GetKvlist())
 
 errorExit:
 	if p.HasError() {
@@ -12606,11 +12606,11 @@ type IKeyvaluelistContext interface {
 	// SetA sets the a rule contexts.
 	SetA(IKeyvaluelistContext)
 
-	// GetMaplist returns the maplist attribute.
-	GetMaplist() map[string]interface{}
+	// GetKvlist returns the kvlist attribute.
+	GetKvlist() []environment.KeyValue
 
-	// SetMaplist sets the maplist attribute.
-	SetMaplist(map[string]interface{})
+	// SetKvlist sets the kvlist attribute.
+	SetKvlist([]environment.KeyValue)
 
 	// Getter signatures
 	Keyvalue() IKeyvalueContext
@@ -12624,7 +12624,7 @@ type IKeyvaluelistContext interface {
 type KeyvaluelistContext struct {
 	antlr.BaseParserRuleContext
 	parser    antlr.Parser
-	maplist   map[string]interface{}
+	kvlist    []environment.KeyValue
 	_keyvalue IKeyvalueContext
 	a         IKeyvaluelistContext
 }
@@ -12664,9 +12664,9 @@ func (s *KeyvaluelistContext) Set_keyvalue(v IKeyvalueContext) { s._keyvalue = v
 
 func (s *KeyvaluelistContext) SetA(v IKeyvaluelistContext) { s.a = v }
 
-func (s *KeyvaluelistContext) GetMaplist() map[string]interface{} { return s.maplist }
+func (s *KeyvaluelistContext) GetKvlist() []environment.KeyValue { return s.kvlist }
 
-func (s *KeyvaluelistContext) SetMaplist(v map[string]interface{}) { s.maplist = v }
+func (s *KeyvaluelistContext) SetKvlist(v []environment.KeyValue) { s.kvlist = v }
 
 func (s *KeyvaluelistContext) Keyvalue() IKeyvalueContext {
 	var t antlr.RuleContext
@@ -12728,7 +12728,7 @@ func (p *SwiftGrammarParser) Keyvaluelist() (localctx IKeyvaluelistContext) {
 	localctx = NewKeyvaluelistContext(p, p.GetParserRuleContext(), p.GetState())
 	p.EnterRule(localctx, 94, SwiftGrammarParserRULE_keyvaluelist)
 
-	localctx.(*KeyvaluelistContext).maplist = make(map[string]interface{})
+	localctx.(*KeyvaluelistContext).kvlist = []environment.KeyValue{}
 
 	p.SetState(661)
 	p.GetErrorHandler().Sync(p)
@@ -12746,7 +12746,7 @@ func (p *SwiftGrammarParser) Keyvaluelist() (localctx IKeyvaluelistContext) {
 
 			localctx.(*KeyvaluelistContext)._keyvalue = _x
 		}
-		localctx.(*KeyvaluelistContext).maplist[localctx.(*KeyvaluelistContext).Get_keyvalue().GetKey()] = localctx.(*KeyvaluelistContext).Get_keyvalue().GetValue()
+		localctx.(*KeyvaluelistContext).kvlist = append(localctx.(*KeyvaluelistContext).kvlist, localctx.(*KeyvaluelistContext).Get_keyvalue().GetKv())
 		{
 			p.SetState(654)
 			p.Match(SwiftGrammarParserCOMA)
@@ -12762,9 +12762,7 @@ func (p *SwiftGrammarParser) Keyvaluelist() (localctx IKeyvaluelistContext) {
 
 			localctx.(*KeyvaluelistContext).a = _x
 		}
-		for k, v := range localctx.(*KeyvaluelistContext).GetA().GetMaplist() {
-			localctx.(*KeyvaluelistContext).maplist[k] = v
-		}
+		localctx.(*KeyvaluelistContext).kvlist = append(localctx.(*KeyvaluelistContext).kvlist, localctx.(*KeyvaluelistContext).GetA().GetKvlist()...)
 
 	case 2:
 		p.EnterOuterAlt(localctx, 2)
@@ -12775,7 +12773,7 @@ func (p *SwiftGrammarParser) Keyvaluelist() (localctx IKeyvaluelistContext) {
 
 			localctx.(*KeyvaluelistContext)._keyvalue = _x
 		}
-		localctx.(*KeyvaluelistContext).maplist[localctx.(*KeyvaluelistContext).Get_keyvalue().GetKey()] = localctx.(*KeyvaluelistContext).Get_keyvalue().GetValue()
+		localctx.(*KeyvaluelistContext).kvlist = append(localctx.(*KeyvaluelistContext).kvlist, localctx.(*KeyvaluelistContext).Get_keyvalue().GetKv())
 
 	case antlr.ATNInvalidAltNumber:
 		goto errorExit
@@ -12813,17 +12811,11 @@ type IKeyvalueContext interface {
 	// Set_expr sets the _expr rule contexts.
 	Set_expr(IExprContext)
 
-	// GetKey returns the key attribute.
-	GetKey() string
+	// GetKv returns the kv attribute.
+	GetKv() environment.KeyValue
 
-	// GetValue returns the value attribute.
-	GetValue() interface{}
-
-	// SetKey sets the key attribute.
-	SetKey(string)
-
-	// SetValue sets the value attribute.
-	SetValue(interface{})
+	// SetKv sets the kv attribute.
+	SetKv(environment.KeyValue)
 
 	// Getter signatures
 	ID() antlr.TerminalNode
@@ -12837,8 +12829,7 @@ type IKeyvalueContext interface {
 type KeyvalueContext struct {
 	antlr.BaseParserRuleContext
 	parser antlr.Parser
-	key    string
-	value  interface{}
+	kv     environment.KeyValue
 	_ID    antlr.Token
 	_expr  IExprContext
 }
@@ -12878,13 +12869,9 @@ func (s *KeyvalueContext) Get_expr() IExprContext { return s._expr }
 
 func (s *KeyvalueContext) Set_expr(v IExprContext) { s._expr = v }
 
-func (s *KeyvalueContext) GetKey() string { return s.key }
+func (s *KeyvalueContext) GetKv() environment.KeyValue { return s.kv }
 
-func (s *KeyvalueContext) GetValue() interface{} { return s.value }
-
-func (s *KeyvalueContext) SetKey(v string) { s.key = v }
-
-func (s *KeyvalueContext) SetValue(v interface{}) { s.value = v }
+func (s *KeyvalueContext) SetKv(v environment.KeyValue) { s.kv = v }
 
 func (s *KeyvalueContext) ID() antlr.TerminalNode {
 	return s.GetToken(SwiftGrammarParserID, 0)
@@ -12961,14 +12948,16 @@ func (p *SwiftGrammarParser) Keyvalue() (localctx IKeyvalueContext) {
 		localctx.(*KeyvalueContext)._expr = _x
 	}
 
-	localctx.(*KeyvalueContext).key = (func() string {
-		if localctx.(*KeyvalueContext).Get_ID() == nil {
-			return ""
-		} else {
-			return localctx.(*KeyvalueContext).Get_ID().GetText()
-		}
-	}())
-	localctx.(*KeyvalueContext).value = localctx.(*KeyvalueContext).Get_expr().GetE()
+	localctx.(*KeyvalueContext).kv = environment.KeyValue{
+		Key: (func() string {
+			if localctx.(*KeyvalueContext).Get_ID() == nil {
+				return ""
+			} else {
+				return localctx.(*KeyvalueContext).Get_ID().GetText()
+			}
+		}()),
+		Value: localctx.(*KeyvalueContext).Get_expr().GetE(),
+	}
 
 errorExit:
 	if p.HasError() {

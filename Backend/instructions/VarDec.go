@@ -2,6 +2,7 @@ package instructions
 
 import (
 	"PY1/environment"
+	"PY1/expressions"
 	"PY1/interfaces"
 )
 
@@ -28,6 +29,13 @@ func (p VarDec) Execute(ast *environment.AST, env interface{}) interface{} {
 		if _, ok := p.Expression.(interfaces.Expression); ok {
 			expression := p.Expression.(interfaces.Expression)
 			value := expression.Execute(ast, env)
+			if value.Type == environment.VECTOR_INT || value.Type == environment.VECTOR_FLOAT || value.Type == environment.VECTOR_STRING || value.Type == environment.VECTOR_CHAR || value.Type == environment.VECTOR_BOOLEAN || value.Type == environment.MATRIX_INT || value.Type == environment.MATRIX_FLOAT || value.Type == environment.MATRIX_STRING || value.Type == environment.MATRIX_CHAR || value.Type == environment.MATRIX_BOOLEAN || value.Type == environment.VECTOR {
+				val := expressions.DeepCopyArray(value.Value)
+				value.Value = val
+				env.(environment.Environment).SaveVariable(p.Id, value)
+				return nil
+			}
+
 			env.(environment.Environment).SaveVariable(p.Id, value)
 			return nil
 
@@ -83,8 +91,13 @@ func (p VarDec) Execute(ast *environment.AST, env interface{}) interface{} {
 		} else if p.Type == "Bool" && value.Type == environment.BOOLEAN {
 			env.(environment.Environment).SaveVariable(p.Id, value)
 			return nil
+		} else if value.Type == environment.VECTOR_INT || value.Type == environment.VECTOR_FLOAT || value.Type == environment.VECTOR_STRING || value.Type == environment.VECTOR_CHAR || value.Type == environment.VECTOR_BOOLEAN || value.Type == environment.MATRIX_INT || value.Type == environment.MATRIX_FLOAT || value.Type == environment.MATRIX_STRING || value.Type == environment.MATRIX_CHAR || value.Type == environment.MATRIX_BOOLEAN || value.Type == environment.VECTOR {
+			val := expressions.DeepCopyArray(value.Value)
+			value.Value = val
+			env.(environment.Environment).SaveVariable(p.Id, value)
+			return nil
 		} else {
-			ast.SetPrint("Error: Tipo de variable no coincide con la asignación dada!")
+			ast.SetPrint("Error: Type de variable no coincide con la asignación dada!")
 		}
 	} else if p.Expression == nil {
 
@@ -178,7 +191,7 @@ func (p VarDec) GetVarDec(ast *environment.AST, env interface{}) interface{} {
 			return value
 
 		} else {
-			ast.SetPrint("Error: Tipo de variable no coincide con la asignación dada!")
+			ast.SetPrint("Error: Type de variable no coincide con la asignación dada!")
 			return nil
 		}
 	} else if p.Expression == nil {

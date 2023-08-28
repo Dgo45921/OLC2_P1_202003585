@@ -48,7 +48,7 @@ func (p RepeatingVector) Execute(ast *environment.AST, env interface{}) environm
 
 			arr := make([]interface{}, N)
 			for i := 0; i < N; i++ {
-				arr[i] = p.deepCopyArray(response.Value)
+				arr[i] = DeepCopyArray(response.Value)
 			}
 
 			if (strings.Contains(p.MatrixType, "Int") && response.Type == environment.VECTOR_INT) || (strings.Contains(p.MatrixType, "String") && response.Type == environment.VECTOR_STRING) || (strings.Contains(p.MatrixType, "Character") && response.Type == environment.VECTOR_CHAR) || (strings.Contains(p.MatrixType, "Float") && response.Type == environment.VECTOR_FLOAT) || (strings.Contains(p.MatrixType, "Bool") && response.Type == environment.VECTOR_BOOLEAN) {
@@ -148,12 +148,12 @@ func countCharOccurrences(input string, char rune) int {
 	return count
 }
 
-func (p RepeatingVector) deepCopyArray(source interface{}) interface{} {
+func DeepCopyArray(source interface{}) interface{} {
 	switch source := source.(type) {
 	case []interface{}:
 		copyArray := make([]interface{}, len(source))
 		for i, val := range source {
-			copyArray[i] = p.deepCopyArray(val)
+			copyArray[i] = DeepCopyArray(val)
 		}
 		return copyArray
 	default:

@@ -363,29 +363,29 @@ structaccess returns [interfaces.Expression saccess]
 ;
 
 structexp returns [interfaces.Expression structexxp ]
-: ID PARIZQ keyvaluelist PARDER  {$structexxp = expressions.NewStructExp($ID.line, $ID.pos, $ID.text, $keyvaluelist.maplist)}
+: ID PARIZQ keyvaluelist PARDER  {$structexxp = expressions.NewStructExp($ID.line, $ID.pos, $ID.text, $keyvaluelist.kvlist)}
 ;
 
-keyvaluelist returns [map[string]interface{} maplist]
+keyvaluelist returns [[]environment.KeyValue kvlist]
 @init {
-    $maplist = make(map[string]interface{})
+    $kvlist = []environment.KeyValue{}
 }
-     : keyvalue { $maplist[$keyvalue.key] = $keyvalue.value }
-       COMA a=keyvaluelist  { for k, v := range $a.maplist {
-                                $maplist[k] = v
-                              }
-                            }
-       | keyvalue { $maplist[$keyvalue.key] = $keyvalue.value }
+     : keyvalue { $kvlist = append($kvlist, $keyvalue.kv) }
+       COMA a=keyvaluelist  { $kvlist = append($kvlist, $a.kvlist...) }
+       | keyvalue { $kvlist = append($kvlist, $keyvalue.kv) }
     ;
 
-keyvalue returns [string key, interface{} value]
+keyvalue returns [environment.KeyValue kv]
 
 : ID DOSPTOS expr {
-                    $key = $ID.text
-                    $value = $expr.e
+                    $kv = environment.KeyValue{
+                        Key:   $ID.text,
+                        Value: $expr.e,
+                    }
                   }
 
 ;
+
 
 
 

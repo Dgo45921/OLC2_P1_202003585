@@ -12,11 +12,6 @@ type StructDef struct {
 	Type     environment.TipoExpresion
 }
 
-type KeyValue struct {
-	Key   string
-	Value interface{}
-}
-
 func NewStructDef(lin int, col int, id string, insBlock []interface{}) StructDef {
 	return StructDef{lin, col, id, insBlock, environment.STRUCT_DEF}
 }
@@ -27,21 +22,15 @@ func (p StructDef) Execute(ast *environment.AST, env interface{}) interface{} {
 		return nil
 	}
 
-	structMap := make(map[string]interface{})
-
-	newstruct := environment.Symbol{
-		Lin:   p.Lin,
-		Col:   p.Col,
-		Value: structMap,
-		Type:  p.Type,
-	}
+	structMap := []environment.KeyValue{}
 
 	for _, inst := range p.insBlock {
 
 		if _, isVarDec := inst.(VarDec); isVarDec {
 			response := inst.(VarDec).GetVarDec(ast, env)
 			if response != nil {
-				structMap[inst.(VarDec).Id] = response
+				newKeyValuePair := environment.KeyValue{inst.(VarDec).Id, response}
+				structMap = append(structMap, newKeyValuePair)
 			} else {
 				ast.SetPrint("Error: El tipo de asignacion a un atributo var no fue válida!\n")
 				return nil
@@ -52,7 +41,8 @@ func (p StructDef) Execute(ast *environment.AST, env interface{}) interface{} {
 
 			response := inst.(ConstDec).GetConstDec(ast, env)
 			if response != nil {
-				structMap[inst.(ConstDec).Id] = response
+				newKeyValuePair := environment.KeyValue{inst.(ConstDec).Id, response}
+				structMap = append(structMap, newKeyValuePair)
 			} else {
 				ast.SetPrint("Error: El tipo de asignacion a un atributo const no fue válida!\n")
 				return nil
@@ -62,7 +52,8 @@ func (p StructDef) Execute(ast *environment.AST, env interface{}) interface{} {
 		} else if _, isVecDec := inst.(VecDec); isVecDec {
 			response := inst.(VecDec).GetVecDec(ast, env)
 			if response != nil {
-				structMap[inst.(VecDec).Id] = response
+				newKeyValuePair := environment.KeyValue{inst.(VecDec).Id, response}
+				structMap = append(structMap, newKeyValuePair)
 			} else {
 				ast.SetPrint("Error: El tipo de asignacion a un atributo vector no fue válida!\n")
 				return nil
@@ -73,7 +64,8 @@ func (p StructDef) Execute(ast *environment.AST, env interface{}) interface{} {
 
 			response := inst.(MatrixDec).GetMatrixDec(ast, env)
 			if response != nil {
-				structMap[inst.(MatrixDec).Id] = response
+				newKeyValuePair := environment.KeyValue{inst.(MatrixDec).Id, response}
+				structMap = append(structMap, newKeyValuePair)
 			} else {
 				ast.SetPrint("Error: El tipo de asignacion a un atributo matriz no fue válida!\n")
 				return nil
@@ -83,6 +75,14 @@ func (p StructDef) Execute(ast *environment.AST, env interface{}) interface{} {
 		}
 
 	}
+
+	newstruct := environment.Symbol{
+		Lin:   p.Lin,
+		Col:   p.Col,
+		Value: structMap,
+		Type:  p.Type,
+	}
+
 	env.(environment.Environment).SaveStruct(p.Id, newstruct)
 
 	return nil

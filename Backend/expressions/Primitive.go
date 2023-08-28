@@ -7,8 +7,8 @@ import (
 type Primitive struct {
 	Lin   int
 	Col   int
-	Valor interface{}
-	Tipo  environment.TipoExpresion
+	Value interface{}
+	Type  environment.TipoExpresion
 }
 
 func NewPrimitive(lin int, col int, valor interface{}, tipo environment.TipoExpresion) Primitive {
@@ -20,7 +20,7 @@ func (p Primitive) Execute(ast *environment.AST, env interface{}) environment.Sy
 	return environment.Symbol{
 		Lin:   p.Lin,
 		Col:   p.Col,
-		Type:  p.Tipo,
-		Value: p.Valor,
+		Type:  p.Type,
+		Value: p.Value,
 	}
 }
