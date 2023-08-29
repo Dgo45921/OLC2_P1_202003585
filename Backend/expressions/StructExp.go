@@ -18,6 +18,7 @@ func NewStructExp(lin int, col int, id string, accesses []environment.KeyValue) 
 }
 
 func (p StructExp) Execute(ast *environment.AST, env interface{}) environment.Symbol {
+
 	typeStruct := env.(environment.Environment).FindVar(p.ID)
 	finalStruct := []environment.KeyValue{}
 
@@ -28,17 +29,29 @@ func (p StructExp) Execute(ast *environment.AST, env interface{}) environment.Sy
 			return environment.Symbol{Lin: p.Lin, Col: p.Col, Type: environment.NULL, Value: nil}
 		}
 
-		for _, kv := range p.Fields {
-			if _, isBreak := kv.Value.(interfaces.Expression); isBreak {
-				if !valTypeOk(kv.Key, typeStruct.Value.([]environment.KeyValue), kv.Value.(interfaces.Expression).Execute(ast, env).Type) {
+		for index, kv := range p.Fields {
+			if _, isBreak := p.Fields[index].Value.(interfaces.Expression); isBreak {
+				p.Fields[index].Value = p.Fields[index].Value.(interfaces.Expression).Execute(ast, env)
+			}
+
+			if _, isBreak := kv.Value.(StructExp); isBreak {
+				skrr := kv.Value.(interfaces.Expression).Execute(ast, env)
+				if !valTypeOk(kv.Key, typeStruct.Value.([]environment.KeyValue), skrr.Type) {
+					ast.SetPrint("Error: Argumento pasado no coincide con el definido por el struct!\n")
+					return environment.Symbol{Lin: p.Lin, Col: p.Col, Type: environment.NULL, Value: nil}
+				}
+				p.Fields[index].Value = skrr
+			} else if _, isBreak := kv.Value.(interfaces.Expression); isBreak {
+				skrr := kv.Value.(interfaces.Expression).Execute(ast, env)
+				if !valTypeOk(kv.Key, typeStruct.Value.([]environment.KeyValue), skrr.Type) {
 					ast.SetPrint("Error: Argumento pasado no coincide con el definido por el struct!\n")
 					return environment.Symbol{Lin: p.Lin, Col: p.Col, Type: environment.NULL, Value: nil}
 				}
 			}
 
 		}
-		addDefaultValues(&p.Fields, typeStruct.Value.([]environment.KeyValue))
-		finalStruct = append(finalStruct, p.Fields...)
+		xd := addDefaultValues(p.Fields, typeStruct.Value.([]environment.KeyValue))
+		finalStruct = append(finalStruct, xd...)
 		return environment.Symbol{Lin: p.Lin, Col: p.Col, Type: environment.STRUCT_IMP, Value: finalStruct, StructType: p.ID}
 
 	} else {
@@ -55,11 +68,11 @@ func executeAllKeyValues(val []environment.KeyValue, ast *environment.AST, env i
 
 }
 
-func addDefaultValues(fields *[]environment.KeyValue, defaults []environment.KeyValue) {
+func addDefaultValues(fields []environment.KeyValue, defaults []environment.KeyValue) []environment.KeyValue {
 
 	for index, d := range defaults {
 		found := false
-		for _, f := range *fields {
+		for _, f := range fields {
 			if f.Key == d.Key {
 				found = true
 				break
@@ -68,10 +81,13 @@ func addDefaultValues(fields *[]environment.KeyValue, defaults []environment.Key
 		if !found {
 
 			valToAdd := defaults[index]
-			*fields = append(*fields, valToAdd)
+			fields = append(fields, valToAdd)
 		}
 
 	}
+
+	newFields := fields
+	return newFields
 
 }
 

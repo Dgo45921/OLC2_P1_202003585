@@ -387,6 +387,7 @@ keyvaluelist returns [[]environment.KeyValue kvlist]
      : keyvalue { $kvlist = append($kvlist, $keyvalue.kv) }
        COMA a=keyvaluelist  { $kvlist = append($kvlist, $a.kvlist...) }
        | keyvalue { $kvlist = append($kvlist, $keyvalue.kv) }
+       | {}
     ;
 
 keyvalue returns [environment.KeyValue kv]

@@ -18,36 +18,48 @@ func NewStructAccess(lin int, col int, id string, accesses []string) StructAcces
 	return structaccess
 }
 
-
 func (p StructAccess) Execute(ast *environment.AST, env interface{}) environment.Symbol {
 	foundVar := env.(environment.Environment).FindVar(p.ID)
 	if foundVar.Type == environment.STRUCT_IMP {
-
-		for _, acc := range p.Accesses {
-			if _, isArrayKeyValue := foundVar.Value.([]environment.KeyValue); isArrayKeyValue {
-				for _, kv := range foundVar.Value.([]environment.KeyValue) {
-					if kv.Key == acc {
-						result, err := searchNestedValue(kv, p.Accesses)
-						if err != nil {
-							return environment.Symbol{Lin: p.Lin, Col: p.Col, Type: environment.NULL, Value: nil}
-						} else {
-							result = result.(interfaces.Expression).Execute(ast, env)
-							return environment.Symbol{Lin: p.Lin, Col: p.Col, Type: result.(environment.Symbol).Type, Value: result.(environment.Symbol).Value}
-						}
-
-					}
-
-				}
+		foundSymbol := GetValueByArray(p.Accesses, foundVar)
+		fmt.Println(foundSymbol)
+		if foundSymbol != nil {
+			if _, isBreak := foundSymbol.(interfaces.Expression); isBreak {
+				foundSymbol = foundSymbol.(interfaces.Expression).Execute(ast, env)
+				return environment.Symbol{Lin: p.Lin, Col: p.Col, Type: foundSymbol.(environment.Symbol).Type, Value: foundSymbol.(environment.Symbol).Value}
 			}
-
+			return foundSymbol.(environment.Symbol)
 		}
+		return environment.Symbol{Lin: p.Lin, Col: p.Col, Type: environment.NULL, Value: nil}
 
 	} else {
 		return environment.Symbol{Lin: p.Lin, Col: p.Col, Type: environment.NULL, Value: nil}
 
 	}
 
-	return environment.Symbol{Lin: p.Lin, Col: p.Col, Type: environment.NULL, Value: nil}
+}
+
+func GetValueByArray(arr []string, symbol environment.Symbol) interface{} {
+	var currentSymbol = symbol
+
+	for _, key := range arr {
+		found := false
+		if kvArr, ok := currentSymbol.Value.([]environment.KeyValue); ok {
+			for _, kv := range kvArr {
+				if kv.Key == key {
+					currentSymbol = kv.Value.(environment.Symbol)
+					found = true
+					break
+				}
+			}
+		}
+
+		if !found {
+			return nil
+		}
+	}
+
+	return currentSymbol
 }
 
 func searchNestedValue(data environment.KeyValue, keys []string) (interface{}, error) {
