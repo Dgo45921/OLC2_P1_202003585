@@ -22,6 +22,11 @@ func NewVecDec(lin int, col int, id string, tyype string, deftype interface{}, e
 
 func (p VecDec) Execute(ast *environment.AST, env interface{}) interface{} {
 
+	if env.(environment.Environment).VariableExists(p.Id) {
+		ast.SetPrint("Error, variable ya declarada!\n")
+		return nil
+	}
+
 	if _, isArray := p.Exp.(expressions.VariableAccess); isArray {
 		var response = p.Exp.(interfaces.Expression).Execute(ast, env)
 		types := environment.VECTOR_INT

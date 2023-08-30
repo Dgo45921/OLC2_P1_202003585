@@ -1,9 +1,10 @@
 package environment
 
 type Environment struct {
-	Prev        interface{}
-	SymbolTable map[string]Symbol
-	Scope       EnvType
+	Prev          interface{}
+	SymbolTable   map[string]Symbol
+	FunctionTable map[string]Symbol
+	Scope         EnvType
 }
 
 func NewEnvironment(prev interface{}, scope EnvType) Environment {
@@ -14,12 +15,11 @@ func NewEnvironment(prev interface{}, scope EnvType) Environment {
 	}
 }
 
-func (env Environment) VariableExists(id string) bool{
+func (env Environment) VariableExists(id string) bool {
 
 	if _, ok := env.SymbolTable[id]; ok {
 		return true
 	}
-
 
 	return false
 }

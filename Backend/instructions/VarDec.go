@@ -168,10 +168,6 @@ func (p VarDec) Execute(ast *environment.AST, env interface{}) interface{} {
 
 func (p VarDec) GetVarDec(ast *environment.AST, env interface{}) interface{} {
 
-	if env.(environment.Environment).VariableExists(p.Id) {
-		ast.SetPrint("Error, variable ya declarada!\n")
-		return nil
-	}
 
 	if p.Type == nil {
 

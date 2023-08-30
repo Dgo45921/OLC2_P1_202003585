@@ -22,7 +22,6 @@ func (p StructAccess) Execute(ast *environment.AST, env interface{}) environment
 	foundVar := env.(environment.Environment).FindVar(p.ID)
 	if foundVar.Type == environment.STRUCT_IMP {
 		foundSymbol := GetValueByArray(p.Accesses, foundVar)
-		fmt.Println(foundSymbol)
 		if foundSymbol != nil {
 			if _, isBreak := foundSymbol.(interfaces.Expression); isBreak {
 				foundSymbol = foundSymbol.(interfaces.Expression).Execute(ast, env)

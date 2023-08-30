@@ -19,7 +19,9 @@ func NewConstDec(lin int, col int, id string, tyype interface{}, val interface{}
 }
 
 func (p ConstDec) Execute(ast *environment.AST, env interface{}) interface{} {
-	if env == nil {
+
+	if env.(environment.Environment).VariableExists(p.Id) {
+		ast.SetPrint("Error, constante ya declarada!\n")
 		return nil
 	}
 	if p.Type == nil {
@@ -77,9 +79,6 @@ func (p ConstDec) Execute(ast *environment.AST, env interface{}) interface{} {
 }
 
 func (p ConstDec) GetConstDec(ast *environment.AST, env interface{}) interface{} {
-	if env == nil {
-		return nil
-	}
 	if p.Type == nil {
 
 		if _, ok := p.Expression.(interfaces.Expression); ok {

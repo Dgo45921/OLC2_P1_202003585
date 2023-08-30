@@ -55,7 +55,7 @@ func (p StructExp) Execute(ast *environment.AST, env interface{}) environment.Sy
 		return environment.Symbol{Lin: p.Lin, Col: p.Col, Type: environment.STRUCT_IMP, Value: finalStruct, StructType: p.ID}
 
 	} else {
-		ast.SetPrint("Error: el struct: " + p.ID + "no existe!\n")
+		ast.SetPrint("Error: el struct: " + p.ID + " no existe!\n")
 	}
 
 	return environment.Symbol{Lin: p.Lin, Col: p.Col, Type: environment.NULL, Value: nil}

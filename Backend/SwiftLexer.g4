@@ -33,6 +33,7 @@ RFOR : 'for';
 RIN : 'in';
 RREPEATING: 'repeating';
 RSTRUCT: 'struct';
+RGUARD : 'guard';
 
 // primitives
 NUMBER : [0-9]+ ('.'[0-9]+)?;
