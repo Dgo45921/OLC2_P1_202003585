@@ -31,6 +31,18 @@ type SwiftGrammarListener interface {
 	// EnterStructdef is called when entering the structdef production.
 	EnterStructdef(c *StructdefContext)
 
+	// EnterFuncblock is called when entering the funcblock production.
+	EnterFuncblock(c *FuncblockContext)
+
+	// EnterFuncinst is called when entering the funcinst production.
+	EnterFuncinst(c *FuncinstContext)
+
+	// EnterRetturn is called when entering the retturn production.
+	EnterRetturn(c *RetturnContext)
+
+	// EnterFuncdec is called when entering the funcdec production.
+	EnterFuncdec(c *FuncdecContext)
+
 	// EnterVectormodification is called when entering the vectormodification production.
 	EnterVectormodification(c *VectormodificationContext)
 
@@ -186,6 +198,18 @@ type SwiftGrammarListener interface {
 
 	// ExitStructdef is called when exiting the structdef production.
 	ExitStructdef(c *StructdefContext)
+
+	// ExitFuncblock is called when exiting the funcblock production.
+	ExitFuncblock(c *FuncblockContext)
+
+	// ExitFuncinst is called when exiting the funcinst production.
+	ExitFuncinst(c *FuncinstContext)
+
+	// ExitRetturn is called when exiting the retturn production.
+	ExitRetturn(c *RetturnContext)
+
+	// ExitFuncdec is called when exiting the funcdec production.
+	ExitFuncdec(c *FuncdecContext)
 
 	// ExitVectormodification is called when exiting the vectormodification production.
 	ExitVectormodification(c *VectormodificationContext)

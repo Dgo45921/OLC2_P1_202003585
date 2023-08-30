@@ -68,6 +68,30 @@ func (s *BaseSwiftGrammarListener) EnterStructdef(ctx *StructdefContext) {}
 // ExitStructdef is called when production structdef is exited.
 func (s *BaseSwiftGrammarListener) ExitStructdef(ctx *StructdefContext) {}
 
+// EnterFuncblock is called when production funcblock is entered.
+func (s *BaseSwiftGrammarListener) EnterFuncblock(ctx *FuncblockContext) {}
+
+// ExitFuncblock is called when production funcblock is exited.
+func (s *BaseSwiftGrammarListener) ExitFuncblock(ctx *FuncblockContext) {}
+
+// EnterFuncinst is called when production funcinst is entered.
+func (s *BaseSwiftGrammarListener) EnterFuncinst(ctx *FuncinstContext) {}
+
+// ExitFuncinst is called when production funcinst is exited.
+func (s *BaseSwiftGrammarListener) ExitFuncinst(ctx *FuncinstContext) {}
+
+// EnterRetturn is called when production retturn is entered.
+func (s *BaseSwiftGrammarListener) EnterRetturn(ctx *RetturnContext) {}
+
+// ExitRetturn is called when production retturn is exited.
+func (s *BaseSwiftGrammarListener) ExitRetturn(ctx *RetturnContext) {}
+
+// EnterFuncdec is called when production funcdec is entered.
+func (s *BaseSwiftGrammarListener) EnterFuncdec(ctx *FuncdecContext) {}
+
+// ExitFuncdec is called when production funcdec is exited.
+func (s *BaseSwiftGrammarListener) ExitFuncdec(ctx *FuncdecContext) {}
+
 // EnterVectormodification is called when production vectormodification is entered.
 func (s *BaseSwiftGrammarListener) EnterVectormodification(ctx *VectormodificationContext) {}
 

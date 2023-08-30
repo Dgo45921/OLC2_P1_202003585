@@ -25,10 +25,11 @@ func (p Switch) Execute(ast *environment.AST, env interface{}) interface{} {
 	if len(p.CasesList) > 0 {
 		for _, inst := range p.CasesList {
 			if instruction, isCase := inst.(Case); isCase {
-				var condResult = inst.(Case).Condition.Execute(ast, env)
+				var newEnv = environment.NewEnvironment(env, environment.CASE)
+				var condResult = inst.(Case).Condition.Execute(ast, newEnv)
 				if condResult.Value == targetValue {
 					shouldExecuteDefault = false
-					var response = instruction.Execute(ast, env)
+					var response = instruction.Execute(ast, newEnv)
 					if response != nil {
 						if _, isBreak := response.(Break); isBreak {
 							break

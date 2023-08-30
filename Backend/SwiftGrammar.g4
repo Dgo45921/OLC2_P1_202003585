@@ -74,6 +74,7 @@ instruction returns [interfaces.Instruction inst]
 | switchstatement {$inst = $switchstatement.newswitch}
 | forloop {$inst = $forloop.newfor}
 | structdef {$inst = $structdef.newstruct}
+| funcdec   {$inst = $funcdec.newfuncdec}
 ;
 
 
@@ -106,6 +107,58 @@ structblock returns [[]interface{} sblk]
 
 structdef returns [interfaces.Instruction newstruct]
 : RSTRUCT ID LLAVEIZQ structblock LLAVEDER {$newstruct = instructions.NewStructDef($ID.line, $ID.pos,$ID.text ,$structblock.sblk)}
+
+;
+
+
+
+funcblock returns [[]interface{} blk]
+@init{
+    $blk = []interface{}{}
+    var listInt []IFuncinstContext
+  }
+: ins+=funcinst*
+    {
+        listInt = localctx.(*FuncblockContext).GetIns()
+        for _, e := range listInt {
+            $blk = append($blk, e.GetInst())
+        }
+    }
+;
+
+funcinst returns [interfaces.Instruction inst]
+: printstmt PTOCOMA?  { $inst = $printstmt.prnt}
+| vecdec PTOCOMA? {$inst = $vecdec.newvecdec}
+| vardec PTOCOMA?  { $inst = $vardec.newdec}
+| constdec PTOCOMA? {$inst = $constdec.newconst}
+| appendvec PTOCOMA? {$inst = $appendvec.newappendvec}
+| decmatrix PTOCOMA? {$inst = $decmatrix.newmatrix}
+| removelastvec PTOCOMA? {$inst = $removelastvec.newremovelastvec}
+| removeatvec PTOCOMA?  {$inst = $removeatvec.newremoveat}
+| asignation PTOCOMA? {$inst = $asignation.newasignation}
+| unarysum PTOCOMA?  {$inst = $unarysum.newunarysum}
+| unarysub PTOCOMA?  {$inst = $unarysub.newunarysub}
+| breakstatement PTOCOMA? {$inst = $breakstatement.newbreak}
+| continuestatement PTOCOMA? {$inst = $continuestatement.newcontinue}
+| vectormodification PTOCOMA? {$inst = $vectormodification.newvecmod}
+| ifstmt {$inst = $ifstmt.newif}
+| while_statement {$inst = $while_statement.newwhile}
+| switchstatement {$inst = $switchstatement.newswitch}
+| forloop {$inst = $forloop.newfor}
+| retturn PTOCOMA? {$inst = $retturn.newreturn}
+;
+
+retturn returns [interfaces.Instruction newreturn] :
+
+RRETURN expr {$newreturn = instructions.NewReturn($RRETURN.line, $RRETURN.pos,$expr.e )}
+
+;
+
+
+funcdec returns [interfaces.Instruction newfuncdec]
+: RFUNC ID PARIZQ PARDER ARROW typpe=(RINT|RFLOAT|RBOOL|RSTRING|RCHARACTER|ID) LLAVEIZQ funcblock LLAVEDER {$newfuncdec = instructions.NewFuncDec($RFUNC.line, $RFUNC.pos,$ID.text ,nil, $typpe.text,$funcblock.blk )}
+
+
 
 ;
 
@@ -226,13 +279,6 @@ vardec returns [interfaces.Instruction newdec]
 | RVAR ID DOSPTOS typpe=(RINT|RFLOAT|RBOOL|RSTRING|RCHARACTER|ID) QM         { $newdec = instructions.NewVarDec($RVAR.line,$RVAR.pos,$ID.text, $typpe.text, nil)}
 ;
 
-// TODO add the dosptos id
-//structdec returns [interfaces.Instruction newstructdec]
-////vorc = (RVAR|RLET) ID IG ID PARIZQ  PARDER
-//// vorc = (RVAR|RLET) ID DOSPTOS ID IG ID PARIZQ  PARDER
-//: varorconst= (RVAR|RLET) ID IG ID PARIZQ structexp PARDER { $newstructdec = instructions.NewVarDec($RVAR.line,$RVAR.pos,$ID.text,$typpe.text, $ex.e)}
-//
-//;
 
 
 

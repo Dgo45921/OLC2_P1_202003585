@@ -3,7 +3,7 @@ package environment
 type Environment struct {
 	Prev          interface{}
 	SymbolTable   map[string]Symbol
-	FunctionTable map[string]Symbol
+	FunctionTable map[string]FunctionSymbol
 	Scope         EnvType
 }
 
@@ -11,6 +11,7 @@ func NewEnvironment(prev interface{}, scope EnvType) Environment {
 	return Environment{
 		Prev:        prev,
 		SymbolTable: make(map[string]Symbol),
+		FunctionTable: make(map[string]FunctionSymbol),
 		Scope:       scope,
 	}
 }
@@ -25,6 +26,18 @@ func (env Environment) VariableExists(id string) bool {
 }
 func (env Environment) SaveVariable(id string, value Symbol) {
 	env.SymbolTable[id] = value
+}
+
+func (env Environment) FuncExists(id string) bool {
+
+	if _, ok := env.FunctionTable[id]; ok {
+		return true
+	}
+
+	return false
+}
+func (env Environment) SaveFunc(id string, value FunctionSymbol) {
+	env.FunctionTable[id] = value
 }
 
 func (env Environment) SaveStruct(id string, value Symbol) {
