@@ -154,6 +154,18 @@ type SwiftGrammarListener interface {
 	// EnterValues2 is called when entering the values2 production.
 	EnterValues2(c *Values2Context)
 
+	// EnterFuncarglist is called when entering the funcarglist production.
+	EnterFuncarglist(c *FuncarglistContext)
+
+	// EnterFuncarg is called when entering the funcarg production.
+	EnterFuncarg(c *FuncargContext)
+
+	// EnterFuncparameterlist is called when entering the funcparameterlist production.
+	EnterFuncparameterlist(c *FuncparameterlistContext)
+
+	// EnterFuncparameter is called when entering the funcparameter production.
+	EnterFuncparameter(c *FuncparameterContext)
+
 	// EnterDecmatrix is called when entering the decmatrix production.
 	EnterDecmatrix(c *DecmatrixContext)
 
@@ -171,6 +183,9 @@ type SwiftGrammarListener interface {
 
 	// EnterKeyvalue is called when entering the keyvalue production.
 	EnterKeyvalue(c *KeyvalueContext)
+
+	// EnterCallfuncexp is called when entering the callfuncexp production.
+	EnterCallfuncexp(c *CallfuncexpContext)
 
 	// EnterExpr is called when entering the expr production.
 	EnterExpr(c *ExprContext)
@@ -322,6 +337,18 @@ type SwiftGrammarListener interface {
 	// ExitValues2 is called when exiting the values2 production.
 	ExitValues2(c *Values2Context)
 
+	// ExitFuncarglist is called when exiting the funcarglist production.
+	ExitFuncarglist(c *FuncarglistContext)
+
+	// ExitFuncarg is called when exiting the funcarg production.
+	ExitFuncarg(c *FuncargContext)
+
+	// ExitFuncparameterlist is called when exiting the funcparameterlist production.
+	ExitFuncparameterlist(c *FuncparameterlistContext)
+
+	// ExitFuncparameter is called when exiting the funcparameter production.
+	ExitFuncparameter(c *FuncparameterContext)
+
 	// ExitDecmatrix is called when exiting the decmatrix production.
 	ExitDecmatrix(c *DecmatrixContext)
 
@@ -339,6 +366,9 @@ type SwiftGrammarListener interface {
 
 	// ExitKeyvalue is called when exiting the keyvalue production.
 	ExitKeyvalue(c *KeyvalueContext)
+
+	// ExitCallfuncexp is called when exiting the callfuncexp production.
+	ExitCallfuncexp(c *CallfuncexpContext)
 
 	// ExitExpr is called when exiting the expr production.
 	ExitExpr(c *ExprContext)

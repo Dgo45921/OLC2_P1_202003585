@@ -1,12 +1,11 @@
 package environment
 
-
-
 type FunctionSymbol struct {
-	Lin   	   int
+	Lin        int
 	Col        int
 	ReturnType TipoExpresion
-	InsBlock   [] interface{}
+	Args       []FuncParam
+	InsBlock   []interface{}
 	StructType string
 }
 

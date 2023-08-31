@@ -314,6 +314,30 @@ func (s *BaseSwiftGrammarListener) EnterValues2(ctx *Values2Context) {}
 // ExitValues2 is called when production values2 is exited.
 func (s *BaseSwiftGrammarListener) ExitValues2(ctx *Values2Context) {}
 
+// EnterFuncarglist is called when production funcarglist is entered.
+func (s *BaseSwiftGrammarListener) EnterFuncarglist(ctx *FuncarglistContext) {}
+
+// ExitFuncarglist is called when production funcarglist is exited.
+func (s *BaseSwiftGrammarListener) ExitFuncarglist(ctx *FuncarglistContext) {}
+
+// EnterFuncarg is called when production funcarg is entered.
+func (s *BaseSwiftGrammarListener) EnterFuncarg(ctx *FuncargContext) {}
+
+// ExitFuncarg is called when production funcarg is exited.
+func (s *BaseSwiftGrammarListener) ExitFuncarg(ctx *FuncargContext) {}
+
+// EnterFuncparameterlist is called when production funcparameterlist is entered.
+func (s *BaseSwiftGrammarListener) EnterFuncparameterlist(ctx *FuncparameterlistContext) {}
+
+// ExitFuncparameterlist is called when production funcparameterlist is exited.
+func (s *BaseSwiftGrammarListener) ExitFuncparameterlist(ctx *FuncparameterlistContext) {}
+
+// EnterFuncparameter is called when production funcparameter is entered.
+func (s *BaseSwiftGrammarListener) EnterFuncparameter(ctx *FuncparameterContext) {}
+
+// ExitFuncparameter is called when production funcparameter is exited.
+func (s *BaseSwiftGrammarListener) ExitFuncparameter(ctx *FuncparameterContext) {}
+
 // EnterDecmatrix is called when production decmatrix is entered.
 func (s *BaseSwiftGrammarListener) EnterDecmatrix(ctx *DecmatrixContext) {}
 
@@ -349,6 +373,12 @@ func (s *BaseSwiftGrammarListener) EnterKeyvalue(ctx *KeyvalueContext) {}
 
 // ExitKeyvalue is called when production keyvalue is exited.
 func (s *BaseSwiftGrammarListener) ExitKeyvalue(ctx *KeyvalueContext) {}
+
+// EnterCallfuncexp is called when production callfuncexp is entered.
+func (s *BaseSwiftGrammarListener) EnterCallfuncexp(ctx *CallfuncexpContext) {}
+
+// ExitCallfuncexp is called when production callfuncexp is exited.
+func (s *BaseSwiftGrammarListener) ExitCallfuncexp(ctx *CallfuncexpContext) {}
 
 // EnterExpr is called when production expr is entered.
 func (s *BaseSwiftGrammarListener) EnterExpr(ctx *ExprContext) {}

@@ -36,6 +36,7 @@ RSTRUCT: 'struct';
 RGUARD : 'guard';
 RFUNC : 'func';
 RRETURN : 'return';
+RINOUT : 'inout';
 
 // primitives
 NUMBER : [0-9]+ ('.'[0-9]+)?;
@@ -73,6 +74,8 @@ MODULE:         '%' ;
 COMA:           ',' ;
 QM:             '?' ;
 PTO:            '.';
+AMPERSAND :     '&';
+UNDERSCORE :    '_';
 
 // skip
 WHITESPACE: [ \\\r\n\t]+ -> skip;

@@ -156,7 +156,7 @@ RRETURN expr {$newreturn = instructions.NewReturn($RRETURN.line, $RRETURN.pos,$e
 
 
 funcdec returns [interfaces.Instruction newfuncdec]
-: RFUNC ID PARIZQ PARDER ARROW typpe=(RINT|RFLOAT|RBOOL|RSTRING|RCHARACTER|ID) LLAVEIZQ funcblock LLAVEDER {$newfuncdec = instructions.NewFuncDec($RFUNC.line, $RFUNC.pos,$ID.text ,nil, $typpe.text,$funcblock.blk )}
+: RFUNC ID PARIZQ funcparameterlist  PARDER ARROW typpe=(RINT|RFLOAT|RBOOL|RSTRING|RCHARACTER|ID) LLAVEIZQ funcblock LLAVEDER {$newfuncdec = instructions.NewFuncDec($RFUNC.line, $RFUNC.pos,$ID.text ,$funcparameterlist.fplist, $typpe.text,$funcblock.blk )}
 
 
 
@@ -396,6 +396,93 @@ values2 returns [[]interface{} newvalueslist]
 }
 ;
 
+funcarglist returns [[]environment.FuncArg fplist]
+@init {
+    $fplist = make([]environment.FuncArg, 0)
+}
+     : funcarg { $fplist = append($fplist, $funcarg.fp) }
+       COMA a=funcarglist  { $fplist = append($fplist, $a.fplist...) }
+       | funcarg { $fplist = append($fplist, $funcarg.fp) }
+       | {$fplist = make([]environment.FuncArg, 0)}
+    ;
+
+
+funcarg returns [environment.FuncArg fp]
+
+: ID DOSPTOS expr {
+                    $fp = environment.FuncArg{
+                        Id:   $ID.text,
+                        Value: $expr.e,
+                        Reference: false,
+                    }
+                  }
+
+| expr {
+                      $fp = environment.FuncArg{
+                          Id:   "",
+                          Value: $expr.e,
+                          Reference: false,
+                      }
+                    }
+
+| ID DOSPTOS AMPERSAND expr {
+                      $fp = environment.FuncArg{
+                          Id:   $ID.text,
+                          Value: $expr.e,
+                          Reference: true,
+                      }
+                    }
+
+| AMPERSAND expr {
+                        $fp = environment.FuncArg{
+                            Id:   "",
+                            Value: $expr.e,
+                            Reference: true,
+                        }
+                      }
+
+
+;
+
+
+
+// ------------------------------------------------------
+funcparameterlist returns [[]environment.FuncParam fplist]
+@init {
+    $fplist = make([]environment.FuncParam, 0)
+}
+     : funcparameter { $fplist = append($fplist, $funcparameter.fp) }
+       COMA a=funcparameterlist  { $fplist = append($fplist, $a.fplist...) }
+       | funcparameter { $fplist = append($fplist, $funcparameter.fp) }
+       | {$fplist = make([]environment.FuncParam, 0)}
+    ;
+
+
+funcparameter returns [environment.FuncParam fp]
+
+: p=(ID|UNDERSCORE)  ID DOSPTOS typpe=(RINT|RFLOAT|RBOOL|RSTRING|RCHARACTER|ID) {
+                    $fp = environment.FuncParam{
+                        Id:   $p.text,
+                        SID: $ID.text,
+                        Type: $typpe.text,
+                        Reference: false,
+                    }
+                  }
+
+| p=(ID|UNDERSCORE) ID DOSPTOS RINOUT typpe=(RINT|RFLOAT|RBOOL|RSTRING|RCHARACTER|ID) {
+                      $fp = environment.FuncParam{
+                          Id:   $p.text,
+                          SID: $ID.text,
+                          Type: $typpe.text,
+                          Reference: true,
+                      }
+                    }
+
+
+;
+
+
+
 
 
 decmatrix returns [interfaces.Instruction newmatrix]
@@ -421,9 +508,9 @@ attr returns [string atr]
 
 ;
 
-
+// TODO maybe fix this?
 structexp returns [interfaces.Expression structexxp ]
-: ID PARIZQ keyvaluelist PARDER  {$structexxp = expressions.NewStructExp($ID.line, $ID.pos, $ID.text, $keyvaluelist.kvlist)}
+: ID OBRA keyvaluelist CBRA  {$structexxp = expressions.NewStructExp($ID.line, $ID.pos, $ID.text, $keyvaluelist.kvlist)}
 ;
 
 keyvaluelist returns [[]environment.KeyValue kvlist]
@@ -450,7 +537,10 @@ keyvalue returns [environment.KeyValue kv]
 
 
 
+callfuncexp returns [interfaces.Expression newcallfuncexp]
+: ID PARIZQ funcarglist PARDER { $newcallfuncexp = expressions.NewCallFuncExp($ID.line, $ID.pos, $ID.text, $funcarglist.fplist) }
 
+;
 // EXPRESSIONS -----------------------------------------------------------------
 expr returns [interfaces.Expression e]
 :
@@ -463,6 +553,7 @@ expr returns [interfaces.Expression e]
 | left=expr op=AND right=expr { $e = expressions.NewBooleanOperation($left.start.GetLine(), $left.start.GetColumn(), $left.e, $op.text, $right.e) }
 | left=expr op=OR right=expr { $e = expressions.NewBooleanOperation($left.start.GetLine(), $left.start.GetColumn(), $left.e, $op.text, $right.e) }
 | vectorstructaccess {$e = $vectorstructaccess.vecstructaccess}
+| callfuncexp {$e = $callfuncexp.newcallfuncexp}
 | structexp {$e = $structexp.structexxp}
 | structaccess {$e = $structaccess.saccess}
 | isemptyvec {$e = $isemptyvec.newisemptyvec}

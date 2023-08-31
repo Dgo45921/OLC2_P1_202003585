@@ -9,10 +9,10 @@ type Environment struct {
 
 func NewEnvironment(prev interface{}, scope EnvType) Environment {
 	return Environment{
-		Prev:        prev,
-		SymbolTable: make(map[string]Symbol),
+		Prev:          prev,
+		SymbolTable:   make(map[string]Symbol),
 		FunctionTable: make(map[string]FunctionSymbol),
-		Scope:       scope,
+		Scope:         scope,
 	}
 }
 
@@ -72,6 +72,22 @@ func (env Environment) FindVar(id string) Symbol {
 			continue
 		}
 		return Symbol{Lin: 0, Col: 0, Type: NULL, Value: nil}
+
+	}
+
+}
+
+func (env Environment) FindFunc(id string) (FunctionSymbol, bool) {
+	var envTemporal = env
+	for {
+		if foundVar, ok := envTemporal.FunctionTable[id]; ok {
+			return foundVar, true
+		}
+		if envTemporal.Prev != nil {
+			envTemporal = envTemporal.Prev.(Environment)
+			continue
+		}
+		return FunctionSymbol{Lin: 0, Col: 0}, false
 
 	}
 

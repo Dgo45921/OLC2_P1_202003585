@@ -8,18 +8,18 @@ type FuncDec struct {
 	Lin        int
 	Col        int
 	Id         string
-	Args       []interface{}
+	Args       []environment.FuncParam
 	ReturnType interface{}
 	insBlock   []interface{}
 }
 
-func NewFuncDec(lin int, col int, id string, args []interface{}, ret interface{}, insb []interface{}) FuncDec {
+func NewFuncDec(lin int, col int, id string, args []environment.FuncParam, ret interface{}, insb []interface{}) FuncDec {
 	return FuncDec{lin, col, id, args, ret, insb}
 }
 
 func (p FuncDec) Execute(ast *environment.AST, env interface{}) interface{} {
 
-	if !env.(environment.Environment).FuncExists(p.Id) {
+	if env.(environment.Environment).FuncExists(p.Id) {
 		ast.SetPrint("Error, funcion ya declarada!\n")
 		return nil
 
@@ -38,6 +38,7 @@ func (p FuncDec) Execute(ast *environment.AST, env interface{}) interface{} {
 			Lin:        p.Lin,
 			Col:        p.Col,
 			ReturnType: getReturnType(p.ReturnType.(string)),
+			Args:       p.Args,
 			InsBlock:   p.insBlock,
 			StructType: "",
 		}
@@ -49,6 +50,7 @@ func (p FuncDec) Execute(ast *environment.AST, env interface{}) interface{} {
 			Lin:        p.Lin,
 			Col:        p.Col,
 			ReturnType: environment.NULL,
+			Args:       p.Args,
 			InsBlock:   p.insBlock,
 			StructType: "",
 		}
