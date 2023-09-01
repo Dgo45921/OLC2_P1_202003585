@@ -28,7 +28,7 @@ func (p MatrixDec) Execute(ast *environment.AST, env interface{}) interface{} {
 	}
 
 	value := p.Def.Execute(ast, env)
-	deepness := getDepth(value.Value.([]interface{}))
+	deepness := GetDepth(value.Value.([]interface{}))
 	if _, isString := p.Type.(string); isString {
 		if countCharOccurrences(p.Type.(string), ']') == deepness {
 			if deepness == 1 {
@@ -96,7 +96,7 @@ func (p MatrixDec) Execute(ast *environment.AST, env interface{}) interface{} {
 func (p MatrixDec) GetMatrixDec(ast *environment.AST, env interface{}) interface{} {
 
 	value := p.Def.Execute(ast, env)
-	deepness := getDepth(value.Value.([]interface{}))
+	deepness := GetDepth(value.Value.([]interface{}))
 	if _, isString := p.Type.(string); isString {
 		if countCharOccurrences(p.Type.(string), ']') == deepness {
 			if deepness == 1 {
@@ -161,7 +161,7 @@ func (p MatrixDec) GetMatrixDec(ast *environment.AST, env interface{}) interface
 
 }
 
-func getDepth(arr []interface{}) int {
+func GetDepth(arr []interface{}) int {
 	if len(arr) == 0 {
 		return 1
 	}
@@ -169,7 +169,7 @@ func getDepth(arr []interface{}) int {
 	maxDepth := 0
 	for _, item := range arr {
 		if nestedArr, ok := item.([]interface{}); ok {
-			depth := getDepth(nestedArr)
+			depth := GetDepth(nestedArr)
 			if depth > maxDepth {
 				maxDepth = depth
 			}

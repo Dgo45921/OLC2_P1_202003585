@@ -510,7 +510,7 @@ attr returns [string atr]
 
 // TODO maybe fix this?
 structexp returns [interfaces.Expression structexxp ]
-: ID OBRA keyvaluelist CBRA  {$structexxp = expressions.NewStructExp($ID.line, $ID.pos, $ID.text, $keyvaluelist.kvlist)}
+: ID LLAVEIZQ keyvaluelist LLAVEDER  {$structexxp = expressions.NewStructExp($ID.line, $ID.pos, $ID.text, $keyvaluelist.kvlist)}
 ;
 
 keyvaluelist returns [[]environment.KeyValue kvlist]

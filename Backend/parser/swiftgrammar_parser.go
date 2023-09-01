@@ -461,8 +461,8 @@ func swiftgrammarParserInit() {
 		857, 858, 3, 110, 55, 0, 858, 859, 6, 54, -1, 0, 859, 861, 1, 0, 0, 0,
 		860, 851, 1, 0, 0, 0, 860, 857, 1, 0, 0, 0, 861, 109, 1, 0, 0, 0, 862,
 		863, 5, 36, 0, 0, 863, 864, 6, 55, -1, 0, 864, 111, 1, 0, 0, 0, 865, 866,
-		5, 36, 0, 0, 866, 867, 5, 58, 0, 0, 867, 868, 3, 114, 57, 0, 868, 869,
-		5, 59, 0, 0, 869, 870, 6, 56, -1, 0, 870, 113, 1, 0, 0, 0, 871, 872, 3,
+		5, 36, 0, 0, 866, 867, 5, 56, 0, 0, 867, 868, 3, 114, 57, 0, 868, 869,
+		5, 57, 0, 0, 869, 870, 6, 56, -1, 0, 870, 113, 1, 0, 0, 0, 871, 872, 3,
 		116, 58, 0, 872, 873, 6, 57, -1, 0, 873, 874, 5, 63, 0, 0, 874, 875, 3,
 		114, 57, 0, 875, 876, 6, 57, -1, 0, 876, 882, 1, 0, 0, 0, 877, 878, 3,
 		116, 58, 0, 878, 879, 6, 57, -1, 0, 879, 882, 1, 0, 0, 0, 880, 882, 6,
@@ -15885,9 +15885,9 @@ type IStructexpContext interface {
 
 	// Getter signatures
 	ID() antlr.TerminalNode
-	OBRA() antlr.TerminalNode
+	LLAVEIZQ() antlr.TerminalNode
 	Keyvaluelist() IKeyvaluelistContext
-	CBRA() antlr.TerminalNode
+	LLAVEDER() antlr.TerminalNode
 
 	// IsStructexpContext differentiates from other interfaces.
 	IsStructexpContext()
@@ -15944,8 +15944,8 @@ func (s *StructexpContext) ID() antlr.TerminalNode {
 	return s.GetToken(SwiftGrammarParserID, 0)
 }
 
-func (s *StructexpContext) OBRA() antlr.TerminalNode {
-	return s.GetToken(SwiftGrammarParserOBRA, 0)
+func (s *StructexpContext) LLAVEIZQ() antlr.TerminalNode {
+	return s.GetToken(SwiftGrammarParserLLAVEIZQ, 0)
 }
 
 func (s *StructexpContext) Keyvaluelist() IKeyvaluelistContext {
@@ -15964,8 +15964,8 @@ func (s *StructexpContext) Keyvaluelist() IKeyvaluelistContext {
 	return t.(IKeyvaluelistContext)
 }
 
-func (s *StructexpContext) CBRA() antlr.TerminalNode {
-	return s.GetToken(SwiftGrammarParserCBRA, 0)
+func (s *StructexpContext) LLAVEDER() antlr.TerminalNode {
+	return s.GetToken(SwiftGrammarParserLLAVEDER, 0)
 }
 
 func (s *StructexpContext) GetRuleContext() antlr.RuleContext {
@@ -16005,7 +16005,7 @@ func (p *SwiftGrammarParser) Structexp() (localctx IStructexpContext) {
 	}
 	{
 		p.SetState(866)
-		p.Match(SwiftGrammarParserOBRA)
+		p.Match(SwiftGrammarParserLLAVEIZQ)
 		if p.HasError() {
 			// Recognition error - abort rule
 			goto errorExit
@@ -16020,7 +16020,7 @@ func (p *SwiftGrammarParser) Structexp() (localctx IStructexpContext) {
 	}
 	{
 		p.SetState(868)
-		p.Match(SwiftGrammarParserCBRA)
+		p.Match(SwiftGrammarParserLLAVEDER)
 		if p.HasError() {
 			// Recognition error - abort rule
 			goto errorExit
