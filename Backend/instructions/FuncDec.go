@@ -27,12 +27,6 @@ func (p FuncDec) Execute(ast *environment.AST, env interface{}) interface{} {
 
 	// has a return type
 	if p.ReturnType != nil {
-		containsreturn := checkIfReturn(p.insBlock)
-
-		if !containsreturn {
-			ast.SetPrint("Error: La funcion no tiene un return! \n")
-			return nil
-		}
 
 		funcval := environment.FunctionSymbol{
 			Lin:        p.Lin,
@@ -61,16 +55,7 @@ func (p FuncDec) Execute(ast *environment.AST, env interface{}) interface{} {
 	return nil
 }
 
-func checkIfReturn(block []interface{}) bool {
-	for _, inst := range block {
-		if _, isReturn := inst.(Return); isReturn {
-			return true
 
-		}
-	}
-
-	return false
-}
 
 func getReturnType(str string) environment.TipoExpresion {
 	if str == "String" {

@@ -33,6 +33,9 @@ func (p While) Execute(ast *environment.AST, env interface{}) interface{} {
 						return nil
 					} else if _, isContinue := response.(Continue); isContinue {
 						continue outerloop
+					} else if _, isReturn := response.(environment.Symbol); isReturn {
+						return response
+
 					}
 				}
 

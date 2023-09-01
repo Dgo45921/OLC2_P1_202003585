@@ -75,6 +75,7 @@ instruction returns [interfaces.Instruction inst]
 | forloop {$inst = $forloop.newfor}
 | structdef {$inst = $structdef.newstruct}
 | funcdec   {$inst = $funcdec.newfuncdec}
+| retturn PTOCOMA? {$inst = $retturn.newreturn}
 ;
 
 
@@ -128,6 +129,7 @@ funcblock returns [[]interface{} blk]
 
 funcinst returns [interfaces.Instruction inst]
 : printstmt PTOCOMA?  { $inst = $printstmt.prnt}
+| ifstmt {$inst = $ifstmt.newif}
 | vecdec PTOCOMA? {$inst = $vecdec.newvecdec}
 | vardec PTOCOMA?  { $inst = $vardec.newdec}
 | constdec PTOCOMA? {$inst = $constdec.newconst}
@@ -141,7 +143,6 @@ funcinst returns [interfaces.Instruction inst]
 | breakstatement PTOCOMA? {$inst = $breakstatement.newbreak}
 | continuestatement PTOCOMA? {$inst = $continuestatement.newcontinue}
 | vectormodification PTOCOMA? {$inst = $vectormodification.newvecmod}
-| ifstmt {$inst = $ifstmt.newif}
 | while_statement {$inst = $while_statement.newwhile}
 | switchstatement {$inst = $switchstatement.newswitch}
 | forloop {$inst = $forloop.newfor}
@@ -151,6 +152,7 @@ funcinst returns [interfaces.Instruction inst]
 retturn returns [interfaces.Instruction newreturn] :
 
 RRETURN expr {$newreturn = instructions.NewReturn($RRETURN.line, $RRETURN.pos,$expr.e )}
+| RRETURN expr {$newreturn = instructions.NewReturn($RRETURN.line, $RRETURN.pos,nil)}
 
 ;
 

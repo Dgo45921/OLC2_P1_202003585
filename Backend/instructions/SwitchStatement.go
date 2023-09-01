@@ -35,6 +35,9 @@ func (p Switch) Execute(ast *environment.AST, env interface{}) interface{} {
 							break
 						} else if _, isContinue := response.(Continue); isContinue {
 							return response
+						} else if _, isReturn := response.(environment.Symbol); isReturn {
+							return response
+
 						}
 					}
 					break
@@ -57,6 +60,9 @@ func (p Switch) Execute(ast *environment.AST, env interface{}) interface{} {
 							break
 						} else if _, isContinue := response.(Continue); isContinue {
 							return response
+						} else if _, isReturn := response.(environment.Symbol); isReturn {
+							return response
+
 						}
 					}
 

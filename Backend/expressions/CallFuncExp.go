@@ -3,8 +3,6 @@ package expressions
 import (
 	"PY1/environment"
 	"PY1/interfaces"
-	"fmt"
-	"reflect"
 	"strings"
 )
 
@@ -119,15 +117,32 @@ func (p CallFuncExp) Execute(ast *environment.AST, env interface{}) environment.
 	}
 
 	// setting up the function
+	for _, inst := range foundFunc.InsBlock {
 
-	for index, _ := range p.Parameters {
-		if p.Parameters[index].Reference {
-			fmt.Println(foundFunc)
-			fmt.Println(newEnv)
+		var response = inst.(interfaces.Instruction).Execute(ast, newEnv)
 
+		if response != nil {
+			if _, isReturn := response.(environment.Symbol); isReturn {
+				valretorno := response.(environment.Symbol)
+				if valretorno.Type == foundFunc.ReturnType {
+					return valretorno
+
+				} else {
+					ast.SetPrint("Error: El tipo de retorno definido en la funcion no coincide con el valor del return\n")
+
+					return environment.Symbol{
+						Lin:   p.Lin,
+						Col:   p.Col,
+						Value: nil,
+					}
+
+				}
+
+			}
 		} else {
-
+			continue
 		}
+
 	}
 
 	return environment.Symbol{
@@ -222,31 +237,6 @@ func GetDepth(arr []interface{}) int {
 	}
 
 	return maxDepth + 1
-}
-
-func deepCopy(src interface{}) interface{} {
-	srcValue := reflect.ValueOf(src)
-	if srcValue.Kind() != reflect.Struct {
-		return nil
-	}
-
-	// Create a new instance of the same type
-	dest := reflect.New(srcValue.Type()).Elem()
-
-	for i := 0; i < srcValue.NumField(); i++ {
-		srcField := srcValue.Field(i)
-		destField := dest.Field(i)
-
-		// If the field is a struct, recursively deep copy it
-		if srcField.Kind() == reflect.Struct {
-			destField.Set(deepCopy(srcField.Interface()).(reflect.Value))
-		} else {
-			// Copy other types directly
-			destField.Set(srcField)
-		}
-	}
-
-	return dest.Interface()
 }
 
 func checkIfParameterExists(arr []environment.FuncParam, str string) (bool, int) {

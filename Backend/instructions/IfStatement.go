@@ -35,6 +35,9 @@ func (p If) Execute(ast *environment.AST, env interface{}) interface{} {
 					return response
 				} else if _, isContinue := response.(Continue); isContinue {
 					return response
+				} else if _, isReturn := response.(environment.Symbol); isReturn {
+					return response
+
 				}
 			}
 		}
@@ -54,6 +57,9 @@ func (p If) Execute(ast *environment.AST, env interface{}) interface{} {
 								return response
 							} else if _, isContinue := response.(Continue); isContinue {
 								return response
+							} else if _, isReturn := response.(environment.Symbol); isReturn {
+								return response
+
 							}
 						}
 						break
@@ -76,6 +82,9 @@ func (p If) Execute(ast *environment.AST, env interface{}) interface{} {
 								return response
 							} else if _, isContinue := response.(Continue); isContinue {
 								return response
+							} else if _, isReturn := response.(environment.Symbol); isReturn {
+								return response
+
 							}
 						}
 
