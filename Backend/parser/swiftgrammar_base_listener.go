@@ -380,6 +380,12 @@ func (s *BaseSwiftGrammarListener) EnterCallfuncexp(ctx *CallfuncexpContext) {}
 // ExitCallfuncexp is called when production callfuncexp is exited.
 func (s *BaseSwiftGrammarListener) ExitCallfuncexp(ctx *CallfuncexpContext) {}
 
+// EnterCallfuncins is called when production callfuncins is entered.
+func (s *BaseSwiftGrammarListener) EnterCallfuncins(ctx *CallfuncinsContext) {}
+
+// ExitCallfuncins is called when production callfuncins is exited.
+func (s *BaseSwiftGrammarListener) ExitCallfuncins(ctx *CallfuncinsContext) {}
+
 // EnterExpr is called when production expr is entered.
 func (s *BaseSwiftGrammarListener) EnterExpr(ctx *ExprContext) {}
 

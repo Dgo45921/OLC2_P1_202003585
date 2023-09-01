@@ -76,6 +76,7 @@ instruction returns [interfaces.Instruction inst]
 | structdef {$inst = $structdef.newstruct}
 | funcdec   {$inst = $funcdec.newfuncdec}
 | retturn PTOCOMA? {$inst = $retturn.newreturn}
+| callfuncins PTOCOMA? {$inst = $callfuncins.newcallfuncins}
 ;
 
 
@@ -158,7 +159,8 @@ RRETURN expr {$newreturn = instructions.NewReturn($RRETURN.line, $RRETURN.pos,$e
 
 
 funcdec returns [interfaces.Instruction newfuncdec]
-: RFUNC ID PARIZQ funcparameterlist  PARDER ARROW typpe=(RINT|RFLOAT|RBOOL|RSTRING|RCHARACTER|ID) LLAVEIZQ funcblock LLAVEDER {$newfuncdec = instructions.NewFuncDec($RFUNC.line, $RFUNC.pos,$ID.text ,$funcparameterlist.fplist, $typpe.text,$funcblock.blk )}
+: RFUNC ID PARIZQ funcparameterlist  PARDER ARROW typpe=(RINT|RFLOAT|RBOOL|RSTRING|RCHARACTER|ID) LLAVEIZQ block LLAVEDER {$newfuncdec = instructions.NewFuncDec($RFUNC.line, $RFUNC.pos,$ID.text ,$funcparameterlist.fplist, $typpe.text,$block.blk )}
+| RFUNC ID PARIZQ funcparameterlist  PARDER  LLAVEIZQ block LLAVEDER {$newfuncdec = instructions.NewFuncDec($RFUNC.line, $RFUNC.pos,$ID.text ,$funcparameterlist.fplist, nil,$block.blk )}
 
 
 
@@ -541,6 +543,11 @@ keyvalue returns [environment.KeyValue kv]
 
 callfuncexp returns [interfaces.Expression newcallfuncexp]
 : ID PARIZQ funcarglist PARDER { $newcallfuncexp = expressions.NewCallFuncExp($ID.line, $ID.pos, $ID.text, $funcarglist.fplist) }
+
+;
+
+callfuncins returns [interfaces.Instruction newcallfuncins]
+: ID PARIZQ funcarglist PARDER { $newcallfuncins = instructions.NewCallFuncInst($ID.line, $ID.pos, $ID.text, $funcarglist.fplist) }
 
 ;
 // EXPRESSIONS -----------------------------------------------------------------
