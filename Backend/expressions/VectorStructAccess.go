@@ -78,6 +78,8 @@ func (p VectorStructAccess) Execute(ast *environment.AST, env interface{}) envir
 								result, err := searchNestedValue(kv, p.Accesses)
 								if err != nil {
 									return environment.Symbol{Lin: p.Lin, Col: p.Col, Type: environment.NULL, Value: nil}
+								} else if _, isSymbol := result.(environment.Symbol); isSymbol {
+									return result.(environment.Symbol)
 								} else {
 									result = result.(interfaces.Expression).Execute(ast, env)
 									return environment.Symbol{Lin: p.Lin, Col: p.Col, Type: result.(environment.Symbol).Type, Value: result.(environment.Symbol).Value}

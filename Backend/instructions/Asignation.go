@@ -2,7 +2,6 @@ package instructions
 
 import (
 	"PY1/environment"
-	"PY1/expressions"
 	"PY1/interfaces"
 )
 
@@ -51,7 +50,7 @@ func (p Asignation) Execute(ast *environment.AST, env interface{}) interface{} {
 			}
 
 			if foundVar.Type == environment.VECTOR_STRUCT || foundVar.Type == environment.VECTOR_INT || foundVar.Type == environment.VECTOR_FLOAT || foundVar.Type == environment.VECTOR_STRING || foundVar.Type == environment.VECTOR_CHAR || foundVar.Type == environment.VECTOR_BOOLEAN || foundVar.Type == environment.MATRIX_INT || foundVar.Type == environment.MATRIX_FLOAT || foundVar.Type == environment.MATRIX_STRING || foundVar.Type == environment.MATRIX_CHAR || foundVar.Type == environment.MATRIX_BOOLEAN || foundVar.Type == environment.VECTOR {
-				foundVar.Value = expressions.DeepCopyArray(value.Value)
+				foundVar.Value = DeepCopyArray(value.Value)
 				env.(environment.Environment).UpdateVariable(p.Id, foundVar)
 				return nil
 			}
@@ -71,4 +70,17 @@ func (p Asignation) Execute(ast *environment.AST, env interface{}) interface{} {
 
 	return nil
 
+}
+
+func DeepCopyArray(source interface{}) interface{} {
+	switch source := source.(type) {
+	case []interface{}:
+		copyArray := make([]interface{}, len(source))
+		for i, val := range source {
+			copyArray[i] = DeepCopyArray(val)
+		}
+		return copyArray
+	default:
+		return source
+	}
 }

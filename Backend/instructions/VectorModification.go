@@ -2,7 +2,6 @@ package instructions
 
 import (
 	"PY1/environment"
-	"PY1/expressions"
 	"PY1/interfaces"
 	"fmt"
 	"reflect"
@@ -29,17 +28,17 @@ func (p VectorModification) Execute(ast *environment.AST, env interface{}) inter
 		return nil
 	}
 
-	var indexes = expressions.GetIndexes(p.Indexes, ast, env)
+	var indexes = GetIndexes(p.Indexes, ast, env)
 
-	if !expressions.AllNonNegativeIntegers(indexes) {
+	if !AllNonNegativeIntegers(indexes) {
 		ast.SetPrint("Error: el o los indices deben de ser un entero mayor o igual a 0!\n")
 		return nil
 	}
 
 	if _, isArray := foundVar.Value.([]interface{}); isArray {
-		if foundVar.Type == environment.VECTOR_STRUCT || foundVar.Type == environment.VECTOR_STRUCT || foundVar.Type == environment.VECTOR_STRING || foundVar.Type == environment.VECTOR_CHAR || foundVar.Type == environment.VECTOR_FLOAT || foundVar.Type == environment.VECTOR_BOOLEAN || foundVar.Type == environment.VECTOR_INT || foundVar.Type == environment.MATRIX_INT || foundVar.Type == environment.MATRIX_FLOAT || foundVar.Type == environment.MATRIX_STRING || foundVar.Type == environment.MATRIX_BOOLEAN || foundVar.Type == environment.MATRIX_CHAR {
+		if foundVar.Type == environment.VECTOR_STRUCT || foundVar.Type == environment.VECTOR_STRING || foundVar.Type == environment.VECTOR_CHAR || foundVar.Type == environment.VECTOR_FLOAT || foundVar.Type == environment.VECTOR_BOOLEAN || foundVar.Type == environment.VECTOR_INT || foundVar.Type == environment.MATRIX_INT || foundVar.Type == environment.MATRIX_FLOAT || foundVar.Type == environment.MATRIX_STRING || foundVar.Type == environment.MATRIX_BOOLEAN || foundVar.Type == environment.MATRIX_CHAR {
 
-			_, exists := expressions.GetIndexValue(foundVar.Value, indexes)
+			_, exists := GetIndexValue(foundVar.Value, indexes)
 
 			if !exists {
 				ast.SetPrint("Error: indice no existente!\n")
@@ -48,12 +47,14 @@ func (p VectorModification) Execute(ast *environment.AST, env interface{}) inter
 
 			fmt.Println(foundVar.Value)
 
-			if setIndexValue(foundVar.Value, targetValue.Value, indexes) {
-				ashkur := getCommonType(foundVar.Value)
+			newValue := DeepCopyArray(foundVar.Value)
+			if setIndexValue(newValue, targetValue.Value, indexes) {
+				ashkur := getCommonType(newValue)
 				if ashkur != nil {
+					foundVar.Value = newValue
 					env.(environment.Environment).UpdateVariable(p.DestinyID, foundVar)
 				} else {
-					ast.SetPrint("Error: la matriz debe de ser de un solo tipo!\n")
+					ast.SetPrint("Error: la matriz o vector debe de ser de un solo tipo!\n")
 					return nil
 				}
 
@@ -91,4 +92,41 @@ func setIndexValue(arr interface{}, newValue interface{}, indexes []int) bool {
 
 	nextLevel := reflect.ValueOf(arr).Index(index).Interface()
 	return setIndexValue(nextLevel, newValue, indexes[1:])
+}
+
+func GetIndexes(val []interface{}, ast *environment.AST, env interface{}) []int {
+	indexes := make([]int, len(val))
+	for i, index := range val {
+		var retrievedVal = index.(interfaces.Expression).Execute(ast, env).Value
+		indexes[i] = retrievedVal.(int)
+	}
+
+	return indexes
+}
+
+func AllNonNegativeIntegers(arr []int) bool {
+	for _, num := range arr {
+		if num < 0 {
+			return false
+		}
+	}
+	return true
+}
+
+func GetIndexValue(arr interface{}, indexes []int) (interface{}, bool) {
+	if len(indexes) == 0 || reflect.ValueOf(arr).Kind() != reflect.Slice {
+		return nil, false
+	}
+
+	index := indexes[0]
+	if index < 0 || index >= reflect.ValueOf(arr).Len() {
+		return nil, false
+	}
+
+	if len(indexes) == 1 {
+		return reflect.ValueOf(arr).Index(index).Interface(), true
+	}
+
+	nextLevel := reflect.ValueOf(arr).Index(index).Interface()
+	return GetIndexValue(nextLevel, indexes[1:])
 }

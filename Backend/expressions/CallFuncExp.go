@@ -2,6 +2,7 @@ package expressions
 
 import (
 	"PY1/environment"
+	"PY1/instructions"
 	"PY1/interfaces"
 	"strings"
 )
@@ -41,7 +42,7 @@ func (p CallFuncExp) Execute(ast *environment.AST, env interface{}) environment.
 	}
 	var newEnv = environment.NewEnvironment(env, environment.FUNC)
 	// check array of values and types
-	for index, _ := range p.Parameters {
+	for index := range p.Parameters {
 		valParameter := p.Parameters[index].Value.(interfaces.Expression).Execute(ast, env)
 		if foundFunc.Args[index].Id == "_" {
 			if getTypeByString(foundFunc.Args[index].Type, ast, env, p.Parameters[index].Value.(interfaces.Expression)) == valParameter.Type {
@@ -121,6 +122,9 @@ func (p CallFuncExp) Execute(ast *environment.AST, env interface{}) environment.
 
 		var response = inst.(interfaces.Instruction).Execute(ast, newEnv)
 
+		if _, isAsignation := inst.(instructions.Asignation); isAsignation {
+
+		}
 		if response != nil {
 			if _, isReturn := response.(environment.Symbol); isReturn {
 				valretorno := response.(environment.Symbol)

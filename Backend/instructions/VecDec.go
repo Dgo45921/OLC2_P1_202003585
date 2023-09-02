@@ -2,7 +2,6 @@ package instructions
 
 import (
 	"PY1/environment"
-	"PY1/expressions"
 	"PY1/interfaces"
 )
 
@@ -27,43 +26,7 @@ func (p VecDec) Execute(ast *environment.AST, env interface{}) interface{} {
 		return nil
 	}
 
-	if _, isArray := p.Exp.(expressions.VariableAccess); isArray {
-		var response = p.Exp.(interfaces.Expression).Execute(ast, env)
-		types := environment.VECTOR_INT
-		switch typo := p.Type; typo {
-		case "Int":
-			types = environment.VECTOR_INT
-		case "Float":
-			types = environment.VECTOR_FLOAT
-		case "Character":
-			types = environment.VECTOR_CHAR
-		case "Bool":
-			types = environment.VECTOR_BOOLEAN
-		case "String":
-			types = environment.VECTOR_STRING
-
-		}
-
-		if types == response.Type {
-
-			var symbol = environment.Symbol{
-				Lin:   p.Lin,
-				Col:   p.Col,
-				Type:  types,
-				Value: response.Value,
-				Const: false,
-			}
-			env.(environment.Environment).SaveVariable(p.Id, symbol)
-			return nil
-
-		} else {
-			ast.SetPrint("Error: variable no es del mismo tipo de vector definido!\n")
-		}
-
-		return nil
-	}
-
-	if _, isArray := p.Exp.(expressions.Vector); isArray {
+	if _, isArray := p.Exp.(interfaces.Expression); isArray {
 		types := environment.VECTOR_INT
 		switch typo := p.Type; typo {
 		case "Int":
@@ -141,42 +104,12 @@ func (p VecDec) Execute(ast *environment.AST, env interface{}) interface{} {
 
 func (p VecDec) GetVecDec(ast *environment.AST, env interface{}) interface{} {
 
-	if _, isArray := p.Exp.(expressions.VariableAccess); isArray {
-		var response = p.Exp.(interfaces.Expression).Execute(ast, env)
-		types := environment.VECTOR_INT
-		switch typo := p.Type; typo {
-		case "Int":
-			types = environment.VECTOR_INT
-		case "Float":
-			types = environment.VECTOR_FLOAT
-		case "Character":
-			types = environment.VECTOR_CHAR
-		case "Bool":
-			types = environment.VECTOR_BOOLEAN
-		case "String":
-			types = environment.VECTOR_STRING
-
-		}
-
-		if types == response.Type {
-
-			var symbol = environment.Symbol{
-				Lin:   p.Lin,
-				Col:   p.Col,
-				Type:  types,
-				Value: response.Value,
-				Const: false,
-			}
-			return symbol
-
-		} else {
-			ast.SetPrint("Error: variable no es del mismo tipo de vector definido!\n")
-		}
-
+	if env.(environment.Environment).VariableExists(p.Id) {
+		ast.SetPrint("Error, variable ya declarada!\n")
 		return nil
 	}
 
-	if _, isArray := p.Exp.(expressions.Vector); isArray {
+	if _, isArray := p.Exp.(interfaces.Expression); isArray {
 		types := environment.VECTOR_INT
 		switch typo := p.Type; typo {
 		case "Int":
@@ -189,6 +122,11 @@ func (p VecDec) GetVecDec(ast *environment.AST, env interface{}) interface{} {
 			types = environment.VECTOR_BOOLEAN
 		case "String":
 			types = environment.VECTOR_STRING
+		default:
+			res := env.(environment.Environment).FindVar(p.Type)
+			if res.Type == environment.STRUCT_DEF {
+				types = environment.VECTOR_STRUCT
+			}
 
 		}
 
@@ -206,8 +144,8 @@ func (p VecDec) GetVecDec(ast *environment.AST, env interface{}) interface{} {
 
 		} else {
 			ast.SetPrint("Error: elemento del arreglo, no coincide con el tipo!\n")
-			return nil
 		}
+		return nil
 	}
 
 	if p.DefType != nil && p.Exp == nil {
@@ -233,7 +171,6 @@ func (p VecDec) GetVecDec(ast *environment.AST, env interface{}) interface{} {
 			Value: emptyArray,
 			Const: false,
 		}
-
 		if p.DefType.(string) == p.Type {
 			return symbol
 		} else {
