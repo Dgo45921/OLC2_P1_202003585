@@ -68,7 +68,7 @@ func getReturnType(str string) environment.TipoExpresion {
 		return environment.BOOLEAN
 	} else if str == "Character" {
 		return environment.CHAR
+	} else {
+		return environment.STRUCT_IMP
 	}
-
-	return environment.NULL
 }

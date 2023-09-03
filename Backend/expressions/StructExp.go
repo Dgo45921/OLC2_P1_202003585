@@ -29,18 +29,25 @@ func (p StructExp) Execute(ast *environment.AST, env interface{}) environment.Sy
 			return environment.Symbol{Lin: p.Lin, Col: p.Col, Type: environment.NULL, Value: nil}
 		}
 
-		for index, kv := range p.Fields {
-			if _, isBreak := p.Fields[index].Value.(interfaces.Expression); isBreak {
-				p.Fields[index].Value = p.Fields[index].Value.(interfaces.Expression).Execute(ast, env)
-			}
+		newfields := make([]environment.KeyValue, len(p.Fields))
 
+		for index, _ := range p.Fields {
+			if _, isBreak := p.Fields[index].Value.(interfaces.Expression); isBreak {
+				vall := p.Fields[index].Value.(interfaces.Expression).Execute(ast, env)
+				keyy := p.Fields[index].Key
+				newfields[index].Key = keyy
+				newfields[index].Value = vall
+			}
+		}
+
+		for index, kv := range newfields {
 			if _, isBreak := kv.Value.(StructExp); isBreak {
 				skrr := kv.Value.(interfaces.Expression).Execute(ast, env)
 				if !valTypeOk(kv.Key, typeStruct.Value.([]environment.KeyValue), skrr.Type) {
 					ast.SetPrint("Error: Argumento pasado no coincide con el definido por el struct!\n")
 					return environment.Symbol{Lin: p.Lin, Col: p.Col, Type: environment.NULL, Value: nil}
 				}
-				p.Fields[index].Value = skrr
+				newfields[index].Value = skrr
 			} else if _, isBreak := kv.Value.(interfaces.Expression); isBreak {
 				skrr := kv.Value.(interfaces.Expression).Execute(ast, env)
 				if !valTypeOk(kv.Key, typeStruct.Value.([]environment.KeyValue), skrr.Type) {
@@ -50,7 +57,7 @@ func (p StructExp) Execute(ast *environment.AST, env interface{}) environment.Sy
 			}
 
 		}
-		xd := addDefaultValues(p.Fields, typeStruct.Value.([]environment.KeyValue))
+		xd := addDefaultValues(newfields, typeStruct.Value.([]environment.KeyValue))
 		finalStruct = append(finalStruct, xd...)
 		return environment.Symbol{Lin: p.Lin, Col: p.Col, Type: environment.STRUCT_IMP, Value: finalStruct, StructType: p.ID}
 
@@ -95,8 +102,16 @@ func valTypeOk(targetField string, fields []environment.KeyValue, typee environm
 	for _, kv := range fields {
 
 		if kv.Key == targetField {
-			if kv.Value.(environment.Symbol).Type != typee || kv.Value.(environment.Symbol).Const {
+			if kv.Value.(environment.Symbol).Type != typee {
 				return false
+			}
+
+			if kv.Value.(environment.Symbol).Const {
+				if kv.Value.(environment.Symbol).Value == nil {
+					return true
+				}
+				return false
+
 			}
 			return true
 

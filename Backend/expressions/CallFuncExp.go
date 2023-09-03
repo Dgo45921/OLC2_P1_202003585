@@ -39,7 +39,7 @@ func (p CallFuncExp) Execute(ast *environment.AST, env interface{}) environment.
 			Value: nil,
 		}
 	}
-	var newEnv = environment.NewEnvironment(env, environment.FUNC)
+	newEnv := environment.NewEnvironment(env, environment.FUNC)
 	// check array of values and types
 	for index := range p.Parameters {
 		valParameter := p.Parameters[index].Value.(interfaces.Expression).Execute(ast, env)
@@ -135,9 +135,32 @@ func (p CallFuncExp) Execute(ast *environment.AST, env interface{}) environment.
 			if _, isReturn := response.(environment.Symbol); isReturn {
 				valretorno := response.(environment.Symbol)
 				if valretorno.Type == foundFunc.ReturnType {
+					if valretorno.Type == environment.STRUCT_IMP {
+						founstructdef := newEnv.FindVar(valretorno.StructType)
+						if founstructdef.Type == environment.STRUCT_DEF && founstructdef.StructType == valretorno.StructType {
+							for index, parameter := range p.Parameters {
+								if parameter.Reference {
+									_, indexx := checkIfParameterExists(foundFunc.Args, p.Parameters[index].Id)
+									newEnv.SetReferenceValues(parameter.RealId, foundFunc.Args[indexx].SID)
+								}
+
+							}
+							return valretorno
+						} else {
+							ast.SetPrint("Error, el tipo de retorno no coincide con el definido con la funcion!\n")
+							return environment.Symbol{
+								Lin:   p.Lin,
+								Col:   p.Col,
+								Value: nil,
+							}
+						}
+					}
+
 					for index, parameter := range p.Parameters {
-						_, indexx := checkIfParameterExists(foundFunc.Args, p.Parameters[index].Id)
-						newEnv.SetReferenceValues(parameter.RealId, foundFunc.Args[indexx].SID)
+						if parameter.Reference {
+							_, indexx := checkIfParameterExists(foundFunc.Args, p.Parameters[index].Id)
+							newEnv.SetReferenceValues(parameter.RealId, foundFunc.Args[indexx].SID)
+						}
 					}
 
 					return valretorno

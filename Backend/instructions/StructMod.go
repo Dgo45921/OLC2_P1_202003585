@@ -68,14 +68,10 @@ func UpdateValueByArray(arr []string, symbol environment.Symbol, val environment
 								reflect.ValueOf(&kvArr[i]).Elem().FieldByName("Value").Set(newVal)
 								found = true
 							}
-
 						} else {
 							return errors.New("Invalid symbol type or constant")
 						}
-
 					}
-
-					break
 				}
 			}
 		}

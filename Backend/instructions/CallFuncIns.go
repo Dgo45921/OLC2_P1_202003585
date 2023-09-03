@@ -31,11 +31,11 @@ func (p CallFuncInst) Execute(ast *environment.AST, env interface{}) interface{}
 		ast.SetPrint("Error: Cantidad de parametros no coincide! \n")
 		return nil
 	}
-	var newEnv = environment.NewEnvironment(env, environment.FUNC)
+	newEnv := environment.NewEnvironment(env, environment.FUNC)
 	// check array of values and types
 	for index, _ := range p.Parameters {
 		valParameter := p.Parameters[index].Value.(interfaces.Expression).Execute(ast, env)
-		if valParameter.Type == environment.VECTOR_STRING || valParameter.Type == environment.VECTOR_STRUCT || valParameter.Type == environment.VECTOR_CHAR || valParameter.Type == environment.VECTOR_FLOAT || valParameter.Type == environment.VECTOR_BOOLEAN || valParameter.Type == environment.VECTOR_INT{
+		if valParameter.Type == environment.VECTOR_STRING || valParameter.Type == environment.VECTOR_STRUCT || valParameter.Type == environment.VECTOR_CHAR || valParameter.Type == environment.VECTOR_FLOAT || valParameter.Type == environment.VECTOR_BOOLEAN || valParameter.Type == environment.VECTOR_INT {
 			valParameter.Value = DeepCopyArray(valParameter.Value)
 		}
 		if foundFunc.Args[index].Id == "_" {
@@ -110,9 +110,26 @@ func (p CallFuncInst) Execute(ast *environment.AST, env interface{}) interface{}
 			if _, isReturn := response.(environment.Symbol); isReturn {
 				valretorno := response.(environment.Symbol)
 				if valretorno.Type == foundFunc.ReturnType {
+					if valretorno.Type == environment.STRUCT_IMP {
+						founstructdef := newEnv.FindVar(valretorno.StructType)
+						if founstructdef.Type == environment.STRUCT_DEF && founstructdef.StructType == valretorno.StructType {
+							for index, parameter := range p.Parameters {
+								if parameter.Reference {
+									_, indexx := checkIfParameterExists(foundFunc.Args, p.Parameters[index].Id)
+									newEnv.SetReferenceValues(parameter.RealId, foundFunc.Args[indexx].SID)
+								}
+							}
+						} else {
+							ast.SetPrint("Error, el tipo de retorno no coincide con el definido con la funcion!\n")
+							return nil
+						}
+					}
+
 					for index, parameter := range p.Parameters {
-						_, indexx := checkIfParameterExists(foundFunc.Args, p.Parameters[index].Id)
-						newEnv.SetReferenceValues(parameter.RealId, foundFunc.Args[indexx].SID)
+						if parameter.Reference {
+							_, indexx := checkIfParameterExists(foundFunc.Args, p.Parameters[index].Id)
+							newEnv.SetReferenceValues(parameter.RealId, foundFunc.Args[indexx].SID)
+						}
 					}
 
 					return nil
