@@ -101,10 +101,11 @@ func (p StructDef) Execute(ast *environment.AST, env interface{}) interface{} {
 	}
 
 	newstruct := environment.Symbol{
-		Lin:   p.Lin,
-		Col:   p.Col,
-		Value: structMap,
-		Type:  p.Type,
+		Lin:        p.Lin,
+		Col:        p.Col,
+		Value:      structMap,
+		Type:       p.Type,
+		StructType: p.Id,
 	}
 
 	env.(environment.Environment).SaveStruct(p.Id, newstruct)

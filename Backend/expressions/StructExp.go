@@ -95,7 +95,7 @@ func valTypeOk(targetField string, fields []environment.KeyValue, typee environm
 	for _, kv := range fields {
 
 		if kv.Key == targetField {
-			if kv.Value.(environment.Symbol).Type != typee {
+			if kv.Value.(environment.Symbol).Type != typee || kv.Value.(environment.Symbol).Const {
 				return false
 			}
 			return true

@@ -9,6 +9,10 @@ type Symbol struct {
 	StructType string
 }
 
+func (s Symbol) SetnewValue(value interface{}){
+	s.Value = value
+}
+
 func (s Symbol) GetType() string {
 	if s.Type == STRING {
 		return "STRING"

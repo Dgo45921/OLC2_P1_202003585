@@ -56,6 +56,12 @@ func (s *BaseSwiftGrammarListener) EnterStructinstruction(ctx *Structinstruction
 // ExitStructinstruction is called when production structinstruction is exited.
 func (s *BaseSwiftGrammarListener) ExitStructinstruction(ctx *StructinstructionContext) {}
 
+// EnterStructmodification is called when production structmodification is entered.
+func (s *BaseSwiftGrammarListener) EnterStructmodification(ctx *StructmodificationContext) {}
+
+// ExitStructmodification is called when production structmodification is exited.
+func (s *BaseSwiftGrammarListener) ExitStructmodification(ctx *StructmodificationContext) {}
+
 // EnterStructblock is called when production structblock is entered.
 func (s *BaseSwiftGrammarListener) EnterStructblock(ctx *StructblockContext) {}
 

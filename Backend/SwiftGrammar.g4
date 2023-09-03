@@ -77,6 +77,7 @@ instruction returns [interfaces.Instruction inst]
 | funcdec   {$inst = $funcdec.newfuncdec}
 | retturn PTOCOMA? {$inst = $retturn.newreturn}
 | callfuncins PTOCOMA? {$inst = $callfuncins.newcallfuncins}
+| structmodification PTOCOMA? {$inst = $structmodification.newstructmod}
 ;
 
 
@@ -89,6 +90,11 @@ structinstruction returns [interfaces.Instruction inst]
 | decmatrix PTOCOMA? {$inst = $decmatrix.newmatrix}
 ;
 
+
+structmodification returns [interfaces.Instruction newstructmod]
+: ID PTO attrlist IG expr  {$newstructmod = instructions.NewStructMod($ID.line, $ID.pos, $ID.text, $attrlist.atrlist, $expr.e)}
+
+;
 
 
 structblock returns [[]interface{} sblk]
@@ -161,8 +167,6 @@ RRETURN expr {$newreturn = instructions.NewReturn($RRETURN.line, $RRETURN.pos,$e
 funcdec returns [interfaces.Instruction newfuncdec]
 : RFUNC ID PARIZQ funcparameterlist  PARDER ARROW typpe=(RINT|RFLOAT|RBOOL|RSTRING|RCHARACTER|ID) LLAVEIZQ block LLAVEDER {$newfuncdec = instructions.NewFuncDec($RFUNC.line, $RFUNC.pos,$ID.text ,$funcparameterlist.fplist, $typpe.text,$block.blk )}
 | RFUNC ID PARIZQ funcparameterlist  PARDER  LLAVEIZQ block LLAVEDER {$newfuncdec = instructions.NewFuncDec($RFUNC.line, $RFUNC.pos,$ID.text ,$funcparameterlist.fplist, nil,$block.blk )}
-
-
 
 ;
 
