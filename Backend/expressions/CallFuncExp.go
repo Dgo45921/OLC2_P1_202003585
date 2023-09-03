@@ -2,7 +2,6 @@ package expressions
 
 import (
 	"PY1/environment"
-	"PY1/instructions"
 	"PY1/interfaces"
 	"strings"
 )
@@ -49,7 +48,11 @@ func (p CallFuncExp) Execute(ast *environment.AST, env interface{}) environment.
 				isByReference := foundFunc.Args[index].Reference
 				if isByReference == p.Parameters[index].Reference {
 					if isByReference {
-						newEnv.SaveVariable(foundFunc.Args[index].SID, valParameter)
+						if env.(environment.Environment).VariableExists(p.Parameters[index].RealId) {
+							newEnv.SaveReference(foundFunc.Args[index].SID, valParameter)
+						} else {
+							ast.SetPrint("Error:La referencia solo sirve con variables!\n")
+						}
 
 					} else {
 						pivote := valParameter
@@ -84,7 +87,11 @@ func (p CallFuncExp) Execute(ast *environment.AST, env interface{}) environment.
 					isByReference := foundFunc.Args[indexx].Reference
 					if isByReference == p.Parameters[index].Reference {
 						if isByReference {
-							newEnv.SaveVariable(foundFunc.Args[index].SID, valParameter)
+							if env.(environment.Environment).VariableExists(p.Parameters[index].RealId) {
+								newEnv.SaveReference(foundFunc.Args[index].SID, valParameter)
+							} else {
+								ast.SetPrint("Error:La referencia solo sirve con variables!\n")
+							}
 
 						} else {
 							pivote := valParameter
@@ -119,16 +126,17 @@ func (p CallFuncExp) Execute(ast *environment.AST, env interface{}) environment.
 
 	// setting up the function
 	for _, inst := range foundFunc.InsBlock {
-
+		// is not any of that cases
 		var response = inst.(interfaces.Instruction).Execute(ast, newEnv)
-
-		if _, isAsignation := inst.(instructions.Asignation); isAsignation {
-
-		}
 		if response != nil {
 			if _, isReturn := response.(environment.Symbol); isReturn {
 				valretorno := response.(environment.Symbol)
 				if valretorno.Type == foundFunc.ReturnType {
+					for index, parameter := range p.Parameters {
+						_, indexx := checkIfParameterExists(foundFunc.Args, p.Parameters[index].Id)
+						newEnv.SetReferenceValues(parameter.RealId, foundFunc.Args[indexx].SID)
+					}
+
 					return valretorno
 
 				} else {
@@ -147,6 +155,10 @@ func (p CallFuncExp) Execute(ast *environment.AST, env interface{}) environment.
 			continue
 		}
 
+	}
+	for index, parameter := range p.Parameters {
+		_, indexx := checkIfParameterExists(foundFunc.Args, p.Parameters[index].Id)
+		newEnv.SetReferenceValues(parameter.RealId, foundFunc.Args[indexx].SID)
 	}
 
 	return environment.Symbol{
@@ -170,6 +182,11 @@ func getTypeByString(val string, ast *environment.AST, env interface{}, expressi
 		return environment.CHAR
 	} else if strings.Contains(val, "[") {
 		structExp := expression.Execute(ast, env)
+		if _, isBreak := structExp.Value.([]interface{}); !isBreak {
+			ast.SetPrint("Error: el valor enviado no es un array!\n")
+			return environment.NULL
+
+		}
 		depth := GetDepth(structExp.Value.([]interface{}))
 
 		if depth == countCharOccurrences(val, '[') {
@@ -246,6 +263,17 @@ func GetDepth(arr []interface{}) int {
 func checkIfParameterExists(arr []environment.FuncParam, str string) (bool, int) {
 	for index, element := range arr {
 		if element.Id == str {
+			return true, index
+		}
+
+	}
+
+	return false, 0
+}
+
+func checkIfParameterReferenceExists(arr []environment.FuncParam, str string) (bool, int) {
+	for index, element := range arr {
+		if element.SID == str {
 			return true, index
 		}
 

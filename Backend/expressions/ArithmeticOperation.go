@@ -40,6 +40,11 @@ func (o ArithmeticOperation) Execute(ast *environment.AST, env interface{}) envi
 	op1 = o.LeftExp.Execute(ast, env)
 	op2 = o.RightExp.Execute(ast, env)
 
+	if op1.Type < 0 || int(op1.Type) >= len(tablaDominante) || op2.Type < 0 || int(op2.Type) >= len(tablaDominante) {
+		ast.SetPrint("Error: Tipo de operacion no valida!\n")
+		return environment.Symbol{Lin: o.Lin, Col: o.Col, Type: environment.NULL, Value: nil}
+	}
+
 	switch o.Operator {
 	case "+":
 		{

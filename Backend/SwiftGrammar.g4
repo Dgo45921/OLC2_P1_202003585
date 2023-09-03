@@ -153,7 +153,7 @@ funcinst returns [interfaces.Instruction inst]
 retturn returns [interfaces.Instruction newreturn] :
 
 RRETURN expr {$newreturn = instructions.NewReturn($RRETURN.line, $RRETURN.pos,$expr.e )}
-| RRETURN expr {$newreturn = instructions.NewReturn($RRETURN.line, $RRETURN.pos,nil)}
+| RRETURN  {$newreturn = instructions.NewReturn($RRETURN.line, $RRETURN.pos,nil)}
 
 ;
 
@@ -416,6 +416,7 @@ funcarg returns [environment.FuncArg fp]
 : ID DOSPTOS expr {
                     $fp = environment.FuncArg{
                         Id:   $ID.text,
+                        RealId: "",
                         Value: $expr.e,
                         Reference: false,
                     }
@@ -424,6 +425,7 @@ funcarg returns [environment.FuncArg fp]
 | expr {
                       $fp = environment.FuncArg{
                           Id:   "",
+                          RealId: "",
                           Value: $expr.e,
                           Reference: false,
                       }
@@ -432,6 +434,7 @@ funcarg returns [environment.FuncArg fp]
 | ID DOSPTOS AMPERSAND expr {
                       $fp = environment.FuncArg{
                           Id:   $ID.text,
+                          RealId: $expr.text,
                           Value: $expr.e,
                           Reference: true,
                       }
@@ -440,6 +443,7 @@ funcarg returns [environment.FuncArg fp]
 | AMPERSAND expr {
                         $fp = environment.FuncArg{
                             Id:   "",
+                            RealId: $expr.text,
                             Value: $expr.e,
                             Reference: true,
                         }
@@ -472,12 +476,72 @@ funcparameter returns [environment.FuncParam fp]
                         Reference: false,
                     }
                   }
+| p=(ID|UNDERSCORE) ID DOSPTOS  OBRA typpe=(RINT|RFLOAT|RBOOL|RSTRING|RCHARACTER) CBRA  {
+                        $fp = environment.FuncParam{
+                            Id:   $p.text,
+                            SID: $ID.text,
+                            Type: "[" + $typpe.text + "]",
+                            Reference: false,
+                        }
+                      }
+
+
+
 
 | p=(ID|UNDERSCORE) ID DOSPTOS RINOUT typpe=(RINT|RFLOAT|RBOOL|RSTRING|RCHARACTER|ID) {
                       $fp = environment.FuncParam{
                           Id:   $p.text,
                           SID: $ID.text,
                           Type: $typpe.text,
+                          Reference: true,
+                      }
+                    }
+
+| p=(ID|UNDERSCORE) ID DOSPTOS RINOUT OBRA typpe=(RINT|RFLOAT|RBOOL|RSTRING|RCHARACTER) CBRA  {
+                      $fp = environment.FuncParam{
+                          Id:   $p.text,
+                          SID: $ID.text,
+                          Type: "[" + $typpe.text + "]",
+                          Reference: true,
+                      }
+                    }
+
+//------------------------------------------
+
+ | ID DOSPTOS typpe=(RINT|RFLOAT|RBOOL|RSTRING|RCHARACTER|ID) {
+                    $fp = environment.FuncParam{
+                        Id:   "_",
+                        SID: $ID.text,
+                        Type: $typpe.text,
+                        Reference: false,
+                    }
+                  }
+|  ID DOSPTOS  OBRA typpe=(RINT|RFLOAT|RBOOL|RSTRING|RCHARACTER) CBRA  {
+                        $fp = environment.FuncParam{
+                            Id:   "_",
+                            SID: $ID.text,
+                            Type: "[" + $typpe.text + "]",
+                            Reference: false,
+                        }
+                      }
+
+
+
+
+|  ID DOSPTOS RINOUT typpe=(RINT|RFLOAT|RBOOL|RSTRING|RCHARACTER|ID) {
+                      $fp = environment.FuncParam{
+                          Id:   "_",
+                          SID: $ID.text,
+                          Type: $typpe.text,
+                          Reference: true,
+                      }
+                    }
+
+|  ID DOSPTOS RINOUT OBRA typpe=(RINT|RFLOAT|RBOOL|RSTRING|RCHARACTER) CBRA  {
+                      $fp = environment.FuncParam{
+                          Id:   "_",
+                          SID: $ID.text,
+                          Type: "[" + $typpe.text + "]",
                           Reference: true,
                       }
                     }

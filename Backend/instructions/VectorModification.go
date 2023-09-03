@@ -22,6 +22,11 @@ func NewVectorModification(lin int, col int, id string, indexes []interface{}, v
 
 func (p VectorModification) Execute(ast *environment.AST, env interface{}) interface{} {
 	foundVar := env.(environment.Environment).FindVar(p.DestinyID)
+	if foundVar.Const {
+		ast.SetPrint("Error: No se puede modificar un vector constante!\n")
+		return nil
+
+	}
 	targetValue := p.Expression.Execute(ast, env)
 	if foundVar.Type == environment.VECTOR {
 		ast.SetPrint("Error: vector vacío!\n")

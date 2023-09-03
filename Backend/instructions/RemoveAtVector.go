@@ -19,6 +19,11 @@ func NewRemoveAtVector(lin int, col int, id string, index interfaces.Expression)
 
 func (p RemoveAtVector) Execute(ast *environment.AST, env interface{}) interface{} {
 	foundVar := env.(environment.Environment).FindVar(p.Id)
+	if foundVar.Const {
+		ast.SetPrint("Error: No se puede modificar un vector constante!\n")
+		return nil
+
+	}
 	indexval := p.Index.Execute(ast, env)
 	if slice, isArray := foundVar.Value.([]interface{}); isArray {
 		if indexval.Type == environment.INTEGER {

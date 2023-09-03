@@ -17,6 +17,11 @@ func NewRemoveLastVector(lin int, col int, id string) RemoveLastVector {
 
 func (p RemoveLastVector) Execute(ast *environment.AST, env interface{}) interface{} {
 	foundVar := env.(environment.Environment).FindVar(p.Id)
+	if foundVar.Const {
+		ast.SetPrint("Error: No se puede modificar un vector constante!\n")
+		return nil
+
+	}
 	if _, isArray := foundVar.Value.([]interface{}); isArray {
 		if len(foundVar.Value.([]interface{})) == 0 {
 			ast.SetPrint("Error: Vector vacio!\n")

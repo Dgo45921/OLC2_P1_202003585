@@ -40,7 +40,11 @@ func (p CallFuncInst) Execute(ast *environment.AST, env interface{}) interface{}
 				isByReference := foundFunc.Args[index].Reference
 				if isByReference == p.Parameters[index].Reference {
 					if isByReference {
-						newEnv.SaveVariable(foundFunc.Args[index].SID, valParameter)
+						if env.(environment.Environment).VariableExists(p.Parameters[index].RealId) {
+							newEnv.SaveReference(foundFunc.Args[index].SID, valParameter)
+						} else {
+							ast.SetPrint("Error:La referencia solo sirve con variables!\n")
+						}
 
 					} else {
 						pivote := valParameter
@@ -56,7 +60,6 @@ func (p CallFuncInst) Execute(ast *environment.AST, env interface{}) interface{}
 			} else {
 				ast.SetPrint("Error: tipo de atributo no coincide con el argumento enviado!\n")
 				return nil
-
 			}
 
 		} else {
@@ -67,7 +70,11 @@ func (p CallFuncInst) Execute(ast *environment.AST, env interface{}) interface{}
 					isByReference := foundFunc.Args[indexx].Reference
 					if isByReference == p.Parameters[index].Reference {
 						if isByReference {
-							newEnv.SaveVariable(foundFunc.Args[index].SID, valParameter)
+							if env.(environment.Environment).VariableExists(p.Parameters[index].RealId) {
+								newEnv.SaveReference(foundFunc.Args[index].SID, valParameter)
+							} else {
+								ast.SetPrint("Error:La referencia solo sirve con variables!\n")
+							}
 
 						} else {
 							pivote := valParameter
@@ -94,13 +101,17 @@ func (p CallFuncInst) Execute(ast *environment.AST, env interface{}) interface{}
 
 	// setting up the function
 	for _, inst := range foundFunc.InsBlock {
-
+		// is not any of that cases
 		var response = inst.(interfaces.Instruction).Execute(ast, newEnv)
-
 		if response != nil {
 			if _, isReturn := response.(environment.Symbol); isReturn {
 				valretorno := response.(environment.Symbol)
 				if valretorno.Type == foundFunc.ReturnType {
+					for index, parameter := range p.Parameters {
+						_, indexx := checkIfParameterExists(foundFunc.Args, p.Parameters[index].Id)
+						newEnv.SetReferenceValues(parameter.RealId, foundFunc.Args[indexx].SID)
+					}
+
 					return valretorno
 
 				} else {
@@ -115,6 +126,11 @@ func (p CallFuncInst) Execute(ast *environment.AST, env interface{}) interface{}
 			continue
 		}
 
+	}
+
+	for index, parameter := range p.Parameters {
+		_, indexx := checkIfParameterExists(foundFunc.Args, p.Parameters[index].Id)
+		newEnv.SetReferenceValues(parameter.RealId, foundFunc.Args[indexx].SID)
 	}
 
 	return nil
