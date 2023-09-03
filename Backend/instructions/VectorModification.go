@@ -21,59 +21,116 @@ func NewVectorModification(lin int, col int, id string, indexes []interface{}, v
 }
 
 func (p VectorModification) Execute(ast *environment.AST, env interface{}) interface{} {
-	foundVar := env.(environment.Environment).FindVar(p.DestinyID)
-	if foundVar.Const {
-		ast.SetPrint("Error: No se puede modificar un vector constante!\n")
-		return nil
+	if env.(environment.Environment).VariableExists(p.DestinyID) {
+		foundVar := env.(environment.Environment).FindVar(p.DestinyID)
+		if foundVar.Const {
+			ast.SetPrint("Error: No se puede modificar un vector constante!\n")
+			return nil
 
-	}
-	targetValue := p.Expression.Execute(ast, env)
-	if foundVar.Type == environment.VECTOR {
-		ast.SetPrint("Error: vector vacío!\n")
-		return nil
-	}
+		}
+		targetValue := p.Expression.Execute(ast, env)
+		if foundVar.Type == environment.VECTOR {
+			ast.SetPrint("Error: vector vacío!\n")
+			return nil
+		}
 
-	var indexes = GetIndexes(p.Indexes, ast, env)
+		var indexes = GetIndexes(p.Indexes, ast, env)
 
-	if !AllNonNegativeIntegers(indexes) {
-		ast.SetPrint("Error: el o los indices deben de ser un entero mayor o igual a 0!\n")
-		return nil
-	}
+		if !AllNonNegativeIntegers(indexes) {
+			ast.SetPrint("Error: el o los indices deben de ser un entero mayor o igual a 0!\n")
+			return nil
+		}
 
-	if _, isArray := foundVar.Value.([]interface{}); isArray {
-		if foundVar.Type == environment.VECTOR_STRUCT || foundVar.Type == environment.VECTOR_STRING || foundVar.Type == environment.VECTOR_CHAR || foundVar.Type == environment.VECTOR_FLOAT || foundVar.Type == environment.VECTOR_BOOLEAN || foundVar.Type == environment.VECTOR_INT || foundVar.Type == environment.MATRIX_INT || foundVar.Type == environment.MATRIX_FLOAT || foundVar.Type == environment.MATRIX_STRING || foundVar.Type == environment.MATRIX_BOOLEAN || foundVar.Type == environment.MATRIX_CHAR {
+		if _, isArray := foundVar.Value.([]interface{}); isArray {
+			if foundVar.Type == environment.VECTOR_STRUCT || foundVar.Type == environment.VECTOR_STRING || foundVar.Type == environment.VECTOR_CHAR || foundVar.Type == environment.VECTOR_FLOAT || foundVar.Type == environment.VECTOR_BOOLEAN || foundVar.Type == environment.VECTOR_INT || foundVar.Type == environment.MATRIX_INT || foundVar.Type == environment.MATRIX_FLOAT || foundVar.Type == environment.MATRIX_STRING || foundVar.Type == environment.MATRIX_BOOLEAN || foundVar.Type == environment.MATRIX_CHAR {
 
-			_, exists := GetIndexValue(foundVar.Value, indexes)
+				_, exists := GetIndexValue(foundVar.Value, indexes)
 
-			if !exists {
-				ast.SetPrint("Error: indice no existente!\n")
-				return nil
-			}
-
-			fmt.Println(foundVar.Value)
-
-			newValue := DeepCopyArray(foundVar.Value)
-			if setIndexValue(newValue, targetValue.Value, indexes) {
-				ashkur := getCommonType(newValue)
-				if ashkur != nil {
-					foundVar.Value = newValue
-					env.(environment.Environment).UpdateVariable(p.DestinyID, foundVar)
-				} else {
-					ast.SetPrint("Error: la matriz o vector debe de ser de un solo tipo!\n")
+				if !exists {
+					ast.SetPrint("Error: indice no existente!\n")
 					return nil
 				}
+
+				fmt.Println(foundVar.Value)
+
+				newValue := DeepCopyArray(foundVar.Value)
+				if setIndexValue(newValue, targetValue.Value, indexes) {
+					ashkur := getCommonType(newValue)
+					if ashkur != nil {
+						foundVar.Value = newValue
+						env.(environment.Environment).UpdateVariable(p.DestinyID, foundVar)
+					} else {
+						ast.SetPrint("Error: la matriz o vector debe de ser de un solo tipo!\n")
+						return nil
+					}
+
+				}
+
+			} else {
+				ast.SetPrint("Error: el acceso [] solo funciona con vectores o matrices!\n")
+				return nil
 
 			}
 
 		} else {
-			ast.SetPrint("Error: el acceso [] solo funciona con vectores o matrices!\n")
+			ast.SetPrint("Error: este tipo de asignacion solo funciona en vectores o matrices! \n")
+			return nil
+		}
+	} else if env.(environment.Environment).ReferenceExists(p.DestinyID) {
+		foundVar := env.(environment.Environment).FindReference(p.DestinyID)
+		if foundVar.Const {
+			ast.SetPrint("Error: No se puede modificar un vector constante!\n")
 			return nil
 
 		}
+		targetValue := p.Expression.Execute(ast, env)
+		if foundVar.Type == environment.VECTOR {
+			ast.SetPrint("Error: vector vacío!\n")
+			return nil
+		}
 
-	} else {
-		ast.SetPrint("Error: este tipo de asignacion solo funciona en vectores o matrices! \n")
-		return nil
+		var indexes = GetIndexes(p.Indexes, ast, env)
+
+		if !AllNonNegativeIntegers(indexes) {
+			ast.SetPrint("Error: el o los indices deben de ser un entero mayor o igual a 0!\n")
+			return nil
+		}
+
+		if _, isArray := foundVar.Value.([]interface{}); isArray {
+			if foundVar.Type == environment.VECTOR_STRUCT || foundVar.Type == environment.VECTOR_STRING || foundVar.Type == environment.VECTOR_CHAR || foundVar.Type == environment.VECTOR_FLOAT || foundVar.Type == environment.VECTOR_BOOLEAN || foundVar.Type == environment.VECTOR_INT || foundVar.Type == environment.MATRIX_INT || foundVar.Type == environment.MATRIX_FLOAT || foundVar.Type == environment.MATRIX_STRING || foundVar.Type == environment.MATRIX_BOOLEAN || foundVar.Type == environment.MATRIX_CHAR {
+
+				_, exists := GetIndexValue(foundVar.Value, indexes)
+
+				if !exists {
+					ast.SetPrint("Error: indice no existente!\n")
+					return nil
+				}
+
+				fmt.Println(foundVar.Value)
+
+				newValue := DeepCopyArray(foundVar.Value)
+				if setIndexValue(newValue, targetValue.Value, indexes) {
+					ashkur := getCommonType(newValue)
+					if ashkur != nil {
+						foundVar.Value = newValue
+						env.(environment.Environment).UpdateReference(p.DestinyID, foundVar)
+					} else {
+						ast.SetPrint("Error: la matriz o vector debe de ser de un solo tipo!\n")
+						return nil
+					}
+
+				}
+
+			} else {
+				ast.SetPrint("Error: el acceso [] solo funciona con vectores o matrices!\n")
+				return nil
+
+			}
+
+		} else {
+			ast.SetPrint("Error: este tipo de asignacion solo funciona en vectores o matrices! \n")
+			return nil
+		}
 	}
 
 	return nil

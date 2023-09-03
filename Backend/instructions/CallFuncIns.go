@@ -35,6 +35,9 @@ func (p CallFuncInst) Execute(ast *environment.AST, env interface{}) interface{}
 	// check array of values and types
 	for index, _ := range p.Parameters {
 		valParameter := p.Parameters[index].Value.(interfaces.Expression).Execute(ast, env)
+		if valParameter.Type == environment.VECTOR_STRING || valParameter.Type == environment.VECTOR_STRUCT || valParameter.Type == environment.VECTOR_CHAR || valParameter.Type == environment.VECTOR_FLOAT || valParameter.Type == environment.VECTOR_BOOLEAN || valParameter.Type == environment.VECTOR_INT{
+			valParameter.Value = DeepCopyArray(valParameter.Value)
+		}
 		if foundFunc.Args[index].Id == "_" {
 			if getTypeByString(foundFunc.Args[index].Type, ast, env, p.Parameters[index].Value.(interfaces.Expression)) == valParameter.Type {
 				isByReference := foundFunc.Args[index].Reference
@@ -112,7 +115,7 @@ func (p CallFuncInst) Execute(ast *environment.AST, env interface{}) interface{}
 						newEnv.SetReferenceValues(parameter.RealId, foundFunc.Args[indexx].SID)
 					}
 
-					return valretorno
+					return nil
 
 				} else {
 					ast.SetPrint("Error: El tipo de retorno definido en la funcion no coincide con el valor del return\n")

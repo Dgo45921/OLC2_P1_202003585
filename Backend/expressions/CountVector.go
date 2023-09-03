@@ -16,26 +16,55 @@ func NewCountVector(lin int, col int, val string) CountVector {
 }
 
 func (p CountVector) Execute(ast *environment.AST, env interface{}) environment.Symbol {
-	foundVar := env.(environment.Environment).FindVar(p.Id)
-	if _, isArray := foundVar.Value.([]interface{}); isArray {
-		if foundVar.Type == environment.VECTOR_STRUCT || foundVar.Type == environment.VECTOR || foundVar.Type == environment.VECTOR_STRING || foundVar.Type == environment.VECTOR_CHAR || foundVar.Type == environment.VECTOR_FLOAT || foundVar.Type == environment.VECTOR_BOOLEAN || foundVar.Type == environment.VECTOR_INT {
-			long := len(foundVar.Value.([]interface{}))
-			return environment.Symbol{
-				Lin:   p.Lin,
-				Col:   p.Col,
-				Value: long,
-				Type:  environment.INTEGER,
-				Const: false,
+	if env.(environment.Environment).VariableExists(p.Id) {
+		foundVar := env.(environment.Environment).FindVar(p.Id)
+		if _, isArray := foundVar.Value.([]interface{}); isArray {
+			if foundVar.Type == environment.VECTOR_STRUCT || foundVar.Type == environment.VECTOR || foundVar.Type == environment.VECTOR_STRING || foundVar.Type == environment.VECTOR_CHAR || foundVar.Type == environment.VECTOR_FLOAT || foundVar.Type == environment.VECTOR_BOOLEAN || foundVar.Type == environment.VECTOR_INT {
+				long := len(foundVar.Value.([]interface{}))
+				return environment.Symbol{
+					Lin:   p.Lin,
+					Col:   p.Col,
+					Value: long,
+					Type:  environment.INTEGER,
+					Const: false,
+				}
+
 			}
 
 		}
+		ast.SetPrint("Error: la funcion count solo funciona con vectores!\n")
+		return environment.Symbol{
+			Lin:   p.Lin,
+			Col:   p.Col,
+			Value: nil,
+		}
+	} else if env.(environment.Environment).ReferenceExists(p.Id) {
+		foundVar := env.(environment.Environment).FindReference(p.Id)
+		if _, isArray := foundVar.Value.([]interface{}); isArray {
+			if foundVar.Type == environment.VECTOR_STRUCT || foundVar.Type == environment.VECTOR || foundVar.Type == environment.VECTOR_STRING || foundVar.Type == environment.VECTOR_CHAR || foundVar.Type == environment.VECTOR_FLOAT || foundVar.Type == environment.VECTOR_BOOLEAN || foundVar.Type == environment.VECTOR_INT {
+				long := len(foundVar.Value.([]interface{}))
+				return environment.Symbol{
+					Lin:   p.Lin,
+					Col:   p.Col,
+					Value: long,
+					Type:  environment.INTEGER,
+					Const: false,
+				}
+
+			}
+
+		}
+		ast.SetPrint("Error: la funcion count solo funciona con vectores!\n")
+		return environment.Symbol{
+			Lin:   p.Lin,
+			Col:   p.Col,
+			Value: nil,
+		}
 
 	}
-	ast.SetPrint("Error: la funcion count solo funciona con vectores!\n")
 	return environment.Symbol{
 		Lin:   p.Lin,
 		Col:   p.Col,
 		Value: nil,
 	}
-
 }
