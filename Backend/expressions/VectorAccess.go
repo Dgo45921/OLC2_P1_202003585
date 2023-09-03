@@ -19,82 +19,168 @@ func NewVectorAccess(lin int, col int, id string, index []interface{}) VectorAcc
 }
 
 func (p VectorAccess) Execute(ast *environment.AST, env interface{}) environment.Symbol {
-	foundVar := env.(environment.Environment).FindVar(p.Id)
-	if foundVar.Type == environment.VECTOR {
-		ast.SetPrint("Error: vector vacío!\n")
-		return environment.Symbol{
-			Lin:   p.Lin,
-			Col:   p.Col,
-			Value: nil,
-		}
-	}
-
-	var indexes = GetIndexes(p.Index, ast, env)
-
-	if !AllNonNegativeIntegers(indexes) {
-		ast.SetPrint("Error: el o los indices deben de ser un entero mayor o igual a 0!\n")
-		return environment.Symbol{
-			Lin:   p.Lin,
-			Col:   p.Col,
-			Value: nil,
-		}
-	}
-
-	if _, isArray := foundVar.Value.([]interface{}); isArray {
-		if foundVar.Type == environment.VECTOR_STRING || foundVar.Type == environment.VECTOR_STRUCT || foundVar.Type == environment.VECTOR_CHAR || foundVar.Type == environment.VECTOR_FLOAT || foundVar.Type == environment.VECTOR_BOOLEAN || foundVar.Type == environment.VECTOR_INT || foundVar.Type == environment.MATRIX_INT || foundVar.Type == environment.MATRIX_FLOAT || foundVar.Type == environment.MATRIX_STRING || foundVar.Type == environment.MATRIX_BOOLEAN || foundVar.Type == environment.MATRIX_CHAR {
-
-			val, exists := GetIndexValue(foundVar.Value, indexes)
-
-			if !exists {
-				ast.SetPrint("Error: indice no existente!\n")
-				return environment.Symbol{
-					Lin:   p.Lin,
-					Col:   p.Col,
-					Value: nil,
-				}
-			}
-
-			var accesstype = environment.INTEGER
-			if foundVar.Value == environment.VECTOR_INT || foundVar.Value == environment.MATRIX_INT {
-				accesstype = environment.INTEGER
-			} else if foundVar.Value == environment.VECTOR_FLOAT || foundVar.Value == environment.MATRIX_FLOAT {
-				accesstype = environment.FLOAT
-			} else if foundVar.Value == environment.VECTOR_STRING || foundVar.Value == environment.MATRIX_STRING {
-				accesstype = environment.STRING
-			} else if foundVar.Value == environment.VECTOR_CHAR || foundVar.Value == environment.MATRIX_CHAR {
-				accesstype = environment.CHAR
-			} else if foundVar.Value == environment.VECTOR_BOOLEAN || foundVar.Value == environment.MATRIX_BOOLEAN {
-				accesstype = environment.BOOLEAN
-			} else if foundVar.Value == environment.VECTOR_STRUCT {
-				accesstype = environment.STRUCT_IMP
-			}
-
-			return environment.Symbol{
-				Lin:   p.Lin,
-				Col:   p.Col,
-				Value: val,
-				Type:  accesstype,
-				Const: false,
-			}
-
-		} else {
-			ast.SetPrint("Error: el acceso [] solo funciona con vectores o matrices!\n")
+	if env.(environment.Environment).VariableExists(p.Id){
+		foundVar := env.(environment.Environment).FindVar(p.Id)
+		if foundVar.Type == environment.VECTOR {
+			ast.SetPrint("Error: vector vacío!\n")
 			return environment.Symbol{
 				Lin:   p.Lin,
 				Col:   p.Col,
 				Value: nil,
 			}
-
 		}
 
+		var indexes = GetIndexes(p.Index, ast, env)
+
+		if !AllNonNegativeIntegers(indexes) {
+			ast.SetPrint("Error: el o los indices deben de ser un entero mayor o igual a 0!\n")
+			return environment.Symbol{
+				Lin:   p.Lin,
+				Col:   p.Col,
+				Value: nil,
+			}
+		}
+
+		if _, isArray := foundVar.Value.([]interface{}); isArray {
+			if foundVar.Type == environment.VECTOR_STRING || foundVar.Type == environment.VECTOR_STRUCT || foundVar.Type == environment.VECTOR_CHAR || foundVar.Type == environment.VECTOR_FLOAT || foundVar.Type == environment.VECTOR_BOOLEAN || foundVar.Type == environment.VECTOR_INT || foundVar.Type == environment.MATRIX_INT || foundVar.Type == environment.MATRIX_FLOAT || foundVar.Type == environment.MATRIX_STRING || foundVar.Type == environment.MATRIX_BOOLEAN || foundVar.Type == environment.MATRIX_CHAR {
+
+				val, exists := GetIndexValue(foundVar.Value, indexes)
+
+				if !exists {
+					ast.SetPrint("Error: indice no existente!\n")
+					return environment.Symbol{
+						Lin:   p.Lin,
+						Col:   p.Col,
+						Value: nil,
+					}
+				}
+
+				var accesstype = environment.INTEGER
+				if foundVar.Value == environment.VECTOR_INT || foundVar.Value == environment.MATRIX_INT {
+					accesstype = environment.INTEGER
+				} else if foundVar.Value == environment.VECTOR_FLOAT || foundVar.Value == environment.MATRIX_FLOAT {
+					accesstype = environment.FLOAT
+				} else if foundVar.Value == environment.VECTOR_STRING || foundVar.Value == environment.MATRIX_STRING {
+					accesstype = environment.STRING
+				} else if foundVar.Value == environment.VECTOR_CHAR || foundVar.Value == environment.MATRIX_CHAR {
+					accesstype = environment.CHAR
+				} else if foundVar.Value == environment.VECTOR_BOOLEAN || foundVar.Value == environment.MATRIX_BOOLEAN {
+					accesstype = environment.BOOLEAN
+				} else if foundVar.Value == environment.VECTOR_STRUCT {
+					accesstype = environment.STRUCT_IMP
+				}
+
+				return environment.Symbol{
+					Lin:   p.Lin,
+					Col:   p.Col,
+					Value: val,
+					Type:  accesstype,
+					Const: false,
+				}
+
+			} else {
+				ast.SetPrint("Error: el acceso [] solo funciona con vectores o matrices!\n")
+				return environment.Symbol{
+					Lin:   p.Lin,
+					Col:   p.Col,
+					Value: nil,
+				}
+
+			}
+
+		}
+		ast.SetPrint("Error: el acceso [] solo funciona con vectores o matrices!\n")
+		return environment.Symbol{
+			Lin:   p.Lin,
+			Col:   p.Col,
+			Value: nil,
+		}
+
+
+	} else if env.(environment.Environment).ReferenceExists(p.Id){
+		foundVar := env.(environment.Environment).FindReference(p.Id)
+		if foundVar.Type == environment.VECTOR {
+			ast.SetPrint("Error: vector vacío!\n")
+			return environment.Symbol{
+				Lin:   p.Lin,
+				Col:   p.Col,
+				Value: nil,
+			}
+		}
+
+		var indexes = GetIndexes(p.Index, ast, env)
+
+		if !AllNonNegativeIntegers(indexes) {
+			ast.SetPrint("Error: el o los indices deben de ser un entero mayor o igual a 0!\n")
+			return environment.Symbol{
+				Lin:   p.Lin,
+				Col:   p.Col,
+				Value: nil,
+			}
+		}
+
+		if _, isArray := foundVar.Value.([]interface{}); isArray {
+			if foundVar.Type == environment.VECTOR_STRING || foundVar.Type == environment.VECTOR_STRUCT || foundVar.Type == environment.VECTOR_CHAR || foundVar.Type == environment.VECTOR_FLOAT || foundVar.Type == environment.VECTOR_BOOLEAN || foundVar.Type == environment.VECTOR_INT || foundVar.Type == environment.MATRIX_INT || foundVar.Type == environment.MATRIX_FLOAT || foundVar.Type == environment.MATRIX_STRING || foundVar.Type == environment.MATRIX_BOOLEAN || foundVar.Type == environment.MATRIX_CHAR {
+
+				val, exists := GetIndexValue(foundVar.Value, indexes)
+
+				if !exists {
+					ast.SetPrint("Error: indice no existente!\n")
+					return environment.Symbol{
+						Lin:   p.Lin,
+						Col:   p.Col,
+						Value: nil,
+					}
+				}
+
+				var accesstype = environment.INTEGER
+				if foundVar.Value == environment.VECTOR_INT || foundVar.Value == environment.MATRIX_INT {
+					accesstype = environment.INTEGER
+				} else if foundVar.Value == environment.VECTOR_FLOAT || foundVar.Value == environment.MATRIX_FLOAT {
+					accesstype = environment.FLOAT
+				} else if foundVar.Value == environment.VECTOR_STRING || foundVar.Value == environment.MATRIX_STRING {
+					accesstype = environment.STRING
+				} else if foundVar.Value == environment.VECTOR_CHAR || foundVar.Value == environment.MATRIX_CHAR {
+					accesstype = environment.CHAR
+				} else if foundVar.Value == environment.VECTOR_BOOLEAN || foundVar.Value == environment.MATRIX_BOOLEAN {
+					accesstype = environment.BOOLEAN
+				} else if foundVar.Value == environment.VECTOR_STRUCT {
+					accesstype = environment.STRUCT_IMP
+				}
+
+				return environment.Symbol{
+					Lin:   p.Lin,
+					Col:   p.Col,
+					Value: val,
+					Type:  accesstype,
+					Const: false,
+				}
+
+			} else {
+				ast.SetPrint("Error: el acceso [] solo funciona con vectores o matrices!\n")
+				return environment.Symbol{
+					Lin:   p.Lin,
+					Col:   p.Col,
+					Value: nil,
+				}
+
+			}
+
+		}
+		ast.SetPrint("Error: el acceso [] solo funciona con vectores o matrices!\n")
+		return environment.Symbol{
+			Lin:   p.Lin,
+			Col:   p.Col,
+			Value: nil,
+		}
 	}
-	ast.SetPrint("Error: el acceso [] solo funciona con vectores o matrices!\n")
+
+
 	return environment.Symbol{
 		Lin:   p.Lin,
 		Col:   p.Col,
 		Value: nil,
 	}
-
 }
 
 func GetIndexValue(arr interface{}, indexes []int) (interface{}, bool) {

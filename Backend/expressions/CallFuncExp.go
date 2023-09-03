@@ -183,8 +183,10 @@ func (p CallFuncExp) Execute(ast *environment.AST, env interface{}) environment.
 
 	}
 	for index, parameter := range p.Parameters {
-		_, indexx := checkIfParameterExists(foundFunc.Args, p.Parameters[index].Id)
-		newEnv.SetReferenceValues(parameter.RealId, foundFunc.Args[indexx].SID)
+		if parameter.Reference {
+			_, indexx := checkIfParameterExists(foundFunc.Args, p.Parameters[index].Id)
+			newEnv.SetReferenceValues(parameter.RealId, foundFunc.Args[indexx].SID)
+		}
 	}
 
 	return environment.Symbol{

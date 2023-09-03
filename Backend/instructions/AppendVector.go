@@ -63,11 +63,15 @@ func (p AppendVector) Execute(ast *environment.AST, env interface{}) interface{}
 					}
 					env.(environment.Environment).UpdateVariable(p.Id, foundVar)
 				} else if value.Type == environment.STRUCT_IMP {
-					foundVar.Type = environment.VECTOR_STRUCT
-					if _, isArray := foundVar.Value.([]interface{}); isArray {
-						foundVar.Value = append(foundVar.Value.([]interface{}), value.Value)
+					if foundVar.StructType == value.StructType {
+						if _, isArray := foundVar.Value.([]interface{}); isArray {
+							foundVar.Value = append(foundVar.Value.([]interface{}), value.Value)
+						}
+						env.(environment.Environment).UpdateVariable(p.Id, foundVar)
+					} else {
+						ast.SetPrint("Error, append de struct distinto!\n")
 					}
-					env.(environment.Environment).UpdateVariable(p.Id, foundVar)
+
 				} else {
 					ast.SetPrint("Error: tipo de concatenacion incompatible! \n")
 				}
@@ -98,10 +102,15 @@ func (p AppendVector) Execute(ast *environment.AST, env interface{}) interface{}
 					}
 					env.(environment.Environment).UpdateVariable(p.Id, foundVar)
 				} else if value.Type == environment.STRUCT_IMP && foundVar.Type == environment.VECTOR_STRUCT {
-					if _, isArray := foundVar.Value.([]interface{}); isArray {
-						foundVar.Value = append(foundVar.Value.([]interface{}), value.Value)
+					if foundVar.StructType == value.StructType {
+						if _, isArray := foundVar.Value.([]interface{}); isArray {
+							foundVar.Value = append(foundVar.Value.([]interface{}), value.Value)
+						}
+						env.(environment.Environment).UpdateVariable(p.Id, foundVar)
+					} else {
+						ast.SetPrint("Error, append de struct distinto!\n")
 					}
-					env.(environment.Environment).UpdateVariable(p.Id, foundVar)
+
 				} else {
 					ast.SetPrint("Error: tipo de concatenacion incompatible! \n")
 				}
@@ -155,9 +164,13 @@ func (p AppendVector) Execute(ast *environment.AST, env interface{}) interface{}
 					}
 
 				} else if value.Type == environment.STRUCT_IMP {
-					foundVar.Type = environment.VECTOR_STRUCT
-					if _, isArray := foundVar.Value.([]interface{}); isArray {
-						foundVar.Value = append(foundVar.Value.([]interface{}), value.Value)
+					if foundVar.StructType == value.StructType {
+						if _, isArray := foundVar.Value.([]interface{}); isArray {
+							foundVar.Value = append(foundVar.Value.([]interface{}), value.Value)
+						}
+						env.(environment.Environment).UpdateVariable(p.Id, foundVar)
+					} else {
+						ast.SetPrint("Error, append de struct distinto!\n")
 					}
 
 				} else {
@@ -190,8 +203,13 @@ func (p AppendVector) Execute(ast *environment.AST, env interface{}) interface{}
 					}
 
 				} else if value.Type == environment.STRUCT_IMP && foundVar.Type == environment.VECTOR_STRUCT {
-					if _, isArray := foundVar.Value.([]interface{}); isArray {
-						foundVar.Value = append(foundVar.Value.([]interface{}), value.Value)
+					if foundVar.StructType == value.StructType {
+						if _, isArray := foundVar.Value.([]interface{}); isArray {
+							foundVar.Value = append(foundVar.Value.([]interface{}), value.Value)
+						}
+						env.(environment.Environment).UpdateVariable(p.Id, foundVar)
+					} else {
+						ast.SetPrint("Error, append de struct distinto!\n")
 					}
 
 				} else {

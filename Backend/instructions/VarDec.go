@@ -177,6 +177,7 @@ func (p VarDec) GetVarDec(ast *environment.AST, env interface{}) interface{} {
 				value.Value = val
 				return value
 			}
+			return value
 
 		}
 	}
