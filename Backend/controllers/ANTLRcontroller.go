@@ -17,6 +17,8 @@ import (
 )
 
 var lastGivencode = ""
+var lexerErrors = &CustomLexicalErrorListener{}
+var parserErrors = &CustomSyntaxErrorListener{}
 
 type TreeShapeListener struct {
 	*parser.BaseSwiftGrammarListener
@@ -30,6 +32,9 @@ func IndexRoute(w http.ResponseWriter, r *http.Request) {
 	}
 }
 func Parse(w http.ResponseWriter, r *http.Request) {
+	lexerErrors = &CustomLexicalErrorListener{}
+	parserErrors = &CustomSyntaxErrorListener{}
+
 	// newCode is responsible to save the given input
 	var newCode models.SourceCode
 	// consoleResponse is responsible of returning all of the console logs
@@ -56,9 +61,14 @@ func Parse(w http.ResponseWriter, r *http.Request) {
 	//Leyendo entrada
 	input := antlr.NewInputStream(code)
 	lexer := parser.NewSwiftLexer(input)
+	lexer.RemoveErrorListeners()
+	lexer.AddErrorListener(lexerErrors)
 	tokens := antlr.NewCommonTokenStream(lexer, antlr.TokenDefaultChannel)
+
 	//creacion de parser
 	p := parser.NewSwiftGrammarParser(tokens)
+	p.RemoveErrorListeners()
+	p.AddErrorListener(parserErrors)
 	p.BuildParseTrees = true
 	tree := p.S()
 	//listener
@@ -112,4 +122,47 @@ func GetCST(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		log.Fatal(err)
 	}
+}
+
+func GetErrors(w http.ResponseWriter, r *http.Request) {
+
+	vzcode := getVizCode()
+	fmt.Println(vzcode)
+
+}
+
+type CustomSyntaxError struct {
+	line, column int
+	msg          string
+	ttype        string
+}
+
+type CustomLexicalErrorListener struct {
+	*antlr.DefaultErrorListener // Embed default which ensures we fit the interface
+	Errors                      []CustomSyntaxError
+}
+
+func (c *CustomLexicalErrorListener) SyntaxError(recognizer antlr.Recognizer, offendingSymbol interface{}, line, column int, msg string, e antlr.RecognitionException) {
+	newError := CustomSyntaxError{
+		line:   line,
+		column: column,
+		msg:    msg,
+		ttype:  "Lexico",
+	}
+	c.Errors = append(c.Errors, newError)
+}
+
+type CustomSyntaxErrorListener struct {
+	*antlr.DefaultErrorListener // Embed default which ensures we fit the interface
+	Errors                      []CustomSyntaxError
+}
+
+func (c *CustomSyntaxErrorListener) SyntaxError(recognizer antlr.Recognizer, offendingSymbol interface{}, line, column int, msg string, e antlr.RecognitionException) {
+	newError := CustomSyntaxError{
+		line:   line,
+		column: column,
+		msg:    msg,
+		ttype:  "Sintactico",
+	}
+	c.Errors = append(c.Errors, newError)
 }

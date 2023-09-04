@@ -31,7 +31,7 @@ func (o BooleanOperation) Execute(ast *environment.AST, env interface{}) environ
 			if (op1.Type == environment.BOOLEAN) && (op2.Type == environment.BOOLEAN) {
 				return environment.Symbol{Lin: o.Lin, Col: o.Col, Type: environment.BOOLEAN, Value: op1.Value.(bool) || op2.Value.(bool)}
 			} else {
-				ast.SetError("ERROR: tipo no compatible &&")
+				ast.SetError(o.Lin, o.Col, "Operacion solo funciona con operandos booleanos")
 			}
 		}
 	case "&&":
@@ -39,7 +39,7 @@ func (o BooleanOperation) Execute(ast *environment.AST, env interface{}) environ
 			if (op1.Type == environment.BOOLEAN) && (op2.Type == environment.BOOLEAN) {
 				return environment.Symbol{Lin: o.Lin, Col: o.Col, Type: environment.BOOLEAN, Value: op1.Value.(bool) && op2.Value.(bool)}
 			} else {
-				ast.SetError("ERROR: tipo no compatible &&")
+				ast.SetError(o.Lin, o.Col, "Operacion solo funciona con operandos booleanos")
 			}
 		}
 

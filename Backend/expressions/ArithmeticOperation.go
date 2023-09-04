@@ -62,7 +62,7 @@ func (o ArithmeticOperation) Execute(ast *environment.AST, env interface{}) envi
 				r2 := fmt.Sprintf("%v", op2.Value)
 				return environment.Symbol{Lin: o.Lin, Col: o.Col, Type: dominante, Value: r1 + r2}
 			} else {
-				ast.SetError("ERROR: No es posible sumar")
+				ast.SetError(o.Lin, o.Col, "No es posible realizar operacion")
 			}
 		}
 	case "-":
@@ -76,7 +76,7 @@ func (o ArithmeticOperation) Execute(ast *environment.AST, env interface{}) envi
 				val2, _ := strconv.ParseFloat(fmt.Sprintf("%v", op2.Value), 64)
 				return environment.Symbol{Lin: o.Lin, Col: o.Col, Type: dominante, Value: val1 - val2}
 			} else {
-				ast.SetError("ERROR: No es posible restar")
+				ast.SetError(o.Lin, o.Col, "No es posible realizar operacion")
 			}
 		}
 	case "*":
@@ -89,7 +89,7 @@ func (o ArithmeticOperation) Execute(ast *environment.AST, env interface{}) envi
 				val2, _ := strconv.ParseFloat(fmt.Sprintf("%v", op2.Value), 64)
 				return environment.Symbol{Lin: o.Lin, Col: o.Col, Type: dominante, Value: val1 * val2}
 			} else {
-				ast.SetError("ERROR: No es posible Multiplicar")
+				ast.SetError(o.Lin, o.Col, "No es posible realizar operacion")
 			}
 		}
 	case "/":
@@ -99,7 +99,7 @@ func (o ArithmeticOperation) Execute(ast *environment.AST, env interface{}) envi
 				if op2.Value.(int) != 0 {
 					return environment.Symbol{Lin: o.Lin, Col: o.Col, Type: dominante, Value: op1.Value.(int) / op2.Value.(int)}
 				} else {
-					ast.SetError("ERROR: No es posible dividir en cero")
+					ast.SetError(o.Lin, o.Col, "No es posible dividir entre 0")
 				}
 
 			} else if dominante == environment.FLOAT {
@@ -108,10 +108,10 @@ func (o ArithmeticOperation) Execute(ast *environment.AST, env interface{}) envi
 				if val2 != 0 {
 					return environment.Symbol{Lin: o.Lin, Col: o.Col, Type: dominante, Value: val1 / val2}
 				} else {
-					ast.SetError("ERROR: No es posible dividir en cero")
+					ast.SetError(o.Lin, o.Col, "No es posible dividir entre 0")
 				}
 			} else {
-				ast.SetError("ERROR: No es posible Dividir")
+				ast.SetError(o.Lin, o.Col, "No es posible dividir")
 			}
 
 		}
@@ -123,11 +123,11 @@ func (o ArithmeticOperation) Execute(ast *environment.AST, env interface{}) envi
 				if op2.Value.(int) != 0 {
 					return environment.Symbol{Lin: o.Lin, Col: o.Col, Type: dominante, Value: op1.Value.(int) % op2.Value.(int)}
 				} else {
-					ast.SetError("ERROR: No es obtener modulo")
+					ast.SetError(o.Lin, o.Col, "No es posible hacer el modulo con los operandos dados")
 				}
 
 			} else {
-				ast.SetError("ERROR: No es posible obtener modulo")
+				ast.SetError(o.Lin, o.Col, "No es posible hacer el modulo con los operandos dados")
 			}
 
 		}

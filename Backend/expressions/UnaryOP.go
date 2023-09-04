@@ -29,18 +29,18 @@ func (o UnaryOp) Execute(ast *environment.AST, env interface{}) environment.Symb
 				return environment.Symbol{Lin: o.Lin, Col: o.Col, Type: environment.BOOLEAN, Value: !op1.Value.(bool)}
 
 			} else {
-				ast.SetError("ERROR: No es posible restar")
+				ast.SetError(o.Lin, o.Col, "No es restar con operador -=")
 			}
 		}
 	case "-":
 		{
 			if op1.Type == environment.INTEGER {
-				return environment.Symbol{Lin: o.Lin, Col: o.Col, Type: environment.INTEGER, Value: -1*op1.Value.(int)}
+				return environment.Symbol{Lin: o.Lin, Col: o.Col, Type: environment.INTEGER, Value: -1 * op1.Value.(int)}
 
 			} else if op1.Type == environment.FLOAT {
-				return environment.Symbol{Lin: o.Lin, Col: o.Col, Type: environment.INTEGER, Value: -1*op1.Value.(float64)}
-			} else{
-				ast.SetError("ERROR: No es posible usar negativo en: " + returnString(int(op1.Type)))
+				return environment.Symbol{Lin: o.Lin, Col: o.Col, Type: environment.INTEGER, Value: -1 * op1.Value.(float64)}
+			} else {
+				ast.SetError(o.Lin, o.Col, "No es posible usar negativo en: "+returnString(int(op1.Type)))
 			}
 
 		}
@@ -51,16 +51,16 @@ func (o UnaryOp) Execute(ast *environment.AST, env interface{}) environment.Symb
 	return environment.Symbol{Lin: o.Lin, Col: o.Col, Type: environment.NULL, Value: result}
 }
 func returnString(val int) string {
-	if val == 0{
+	if val == 0 {
 		return "INTEGER"
 
-	} else if val == 1{
+	} else if val == 1 {
 		return "FLOAT"
 
-	} else if val == 2{
+	} else if val == 2 {
 		return "STRING"
 
-	} else if val == 3{
+	} else if val == 3 {
 		return "BOOLEAN"
 	}
 
