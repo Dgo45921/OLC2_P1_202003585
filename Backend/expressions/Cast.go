@@ -82,6 +82,14 @@ func (p Cast) Execute(ast *environment.AST, env interface{}) environment.Symbol 
 				}
 			}
 
+		} else if val.Type == environment.INTEGER {
+			return environment.Symbol{
+				Lin:   p.Lin,
+				Col:   p.Col,
+				Type:  environment.FLOAT,
+				Value: float64(val.Value.(int)),
+			}
+
 		} else {
 			return environment.Symbol{
 				Lin:   p.Lin,

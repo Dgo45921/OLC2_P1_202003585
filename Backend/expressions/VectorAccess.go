@@ -19,7 +19,7 @@ func NewVectorAccess(lin int, col int, id string, index []interface{}) VectorAcc
 }
 
 func (p VectorAccess) Execute(ast *environment.AST, env interface{}) environment.Symbol {
-	if env.(environment.Environment).VariableExists(p.Id){
+	if env.(environment.Environment).VariableExists(p.Id) {
 		foundVar := env.(environment.Environment).FindVar(p.Id)
 		if foundVar.Type == environment.VECTOR {
 			ast.SetPrint("Error: vector vacío!\n")
@@ -56,18 +56,84 @@ func (p VectorAccess) Execute(ast *environment.AST, env interface{}) environment
 				}
 
 				var accesstype = environment.INTEGER
-				if foundVar.Value == environment.VECTOR_INT || foundVar.Value == environment.MATRIX_INT {
+				if foundVar.Type == environment.VECTOR_INT {
 					accesstype = environment.INTEGER
-				} else if foundVar.Value == environment.VECTOR_FLOAT || foundVar.Value == environment.MATRIX_FLOAT {
+				} else if foundVar.Type == environment.VECTOR_FLOAT {
 					accesstype = environment.FLOAT
-				} else if foundVar.Value == environment.VECTOR_STRING || foundVar.Value == environment.MATRIX_STRING {
+				} else if foundVar.Type == environment.VECTOR_STRING {
 					accesstype = environment.STRING
-				} else if foundVar.Value == environment.VECTOR_CHAR || foundVar.Value == environment.MATRIX_CHAR {
+				} else if foundVar.Type == environment.VECTOR_CHAR {
 					accesstype = environment.CHAR
-				} else if foundVar.Value == environment.VECTOR_BOOLEAN || foundVar.Value == environment.MATRIX_BOOLEAN {
+				} else if foundVar.Type == environment.VECTOR_BOOLEAN {
 					accesstype = environment.BOOLEAN
-				} else if foundVar.Value == environment.VECTOR_STRUCT {
+				} else if foundVar.Type == environment.VECTOR_STRUCT {
 					accesstype = environment.STRUCT_IMP
+					//sasasa
+				} else if foundVar.Type == environment.MATRIX_INT {
+					if _, isBreak := val.([]interface{}); isBreak {
+						depth := GetDepth(val.([]interface{}))
+						if depth == 1 {
+							accesstype = environment.VECTOR_INT
+						} else {
+							accesstype = environment.MATRIX_INT
+						}
+
+					} else {
+						accesstype = environment.INTEGER
+					}
+
+				} else if foundVar.Type == environment.MATRIX_FLOAT {
+					if _, isBreak := val.([]interface{}); isBreak {
+						depth := GetDepth(val.([]interface{}))
+						if depth == 1 {
+							accesstype = environment.VECTOR_FLOAT
+						} else {
+							accesstype = environment.MATRIX_FLOAT
+						}
+
+					} else {
+						accesstype = environment.FLOAT
+					}
+
+				} else if foundVar.Type == environment.MATRIX_STRING {
+					if _, isBreak := val.([]interface{}); isBreak {
+						depth := GetDepth(val.([]interface{}))
+						if depth == 1 {
+							accesstype = environment.VECTOR_STRING
+						} else {
+							accesstype = environment.MATRIX_STRING
+						}
+
+					} else {
+						accesstype = environment.STRING
+					}
+
+				} else if foundVar.Type == environment.MATRIX_CHAR {
+					if _, isBreak := val.([]interface{}); isBreak {
+						depth := GetDepth(val.([]interface{}))
+						if depth == 1 {
+							accesstype = environment.VECTOR_CHAR
+						} else {
+							accesstype = environment.MATRIX_CHAR
+						}
+
+					} else {
+						accesstype = environment.CHAR
+					}
+
+				} else if foundVar.Type == environment.MATRIX_BOOLEAN {
+					if _, isBreak := val.([]interface{}); isBreak {
+						depth := GetDepth(val.([]interface{}))
+						if depth == 1 {
+							accesstype = environment.VECTOR_BOOLEAN
+						} else {
+							accesstype = environment.MATRIX_BOOLEAN
+						}
+
+					} else {
+						accesstype = environment.BOOLEAN
+					}
+
 				}
 
 				return environment.Symbol{
@@ -96,8 +162,7 @@ func (p VectorAccess) Execute(ast *environment.AST, env interface{}) environment
 			Value: nil,
 		}
 
-
-	} else if env.(environment.Environment).ReferenceExists(p.Id){
+	} else if env.(environment.Environment).ReferenceExists(p.Id) {
 		foundVar := env.(environment.Environment).FindReference(p.Id)
 		if foundVar.Type == environment.VECTOR {
 			ast.SetPrint("Error: vector vacío!\n")
@@ -134,18 +199,84 @@ func (p VectorAccess) Execute(ast *environment.AST, env interface{}) environment
 				}
 
 				var accesstype = environment.INTEGER
-				if foundVar.Value == environment.VECTOR_INT || foundVar.Value == environment.MATRIX_INT {
+				if foundVar.Type == environment.VECTOR_INT {
 					accesstype = environment.INTEGER
-				} else if foundVar.Value == environment.VECTOR_FLOAT || foundVar.Value == environment.MATRIX_FLOAT {
+				} else if foundVar.Type == environment.VECTOR_FLOAT {
 					accesstype = environment.FLOAT
-				} else if foundVar.Value == environment.VECTOR_STRING || foundVar.Value == environment.MATRIX_STRING {
+				} else if foundVar.Type == environment.VECTOR_STRING {
 					accesstype = environment.STRING
-				} else if foundVar.Value == environment.VECTOR_CHAR || foundVar.Value == environment.MATRIX_CHAR {
+				} else if foundVar.Type == environment.VECTOR_CHAR {
 					accesstype = environment.CHAR
-				} else if foundVar.Value == environment.VECTOR_BOOLEAN || foundVar.Value == environment.MATRIX_BOOLEAN {
+				} else if foundVar.Type == environment.VECTOR_BOOLEAN {
 					accesstype = environment.BOOLEAN
-				} else if foundVar.Value == environment.VECTOR_STRUCT {
+				} else if foundVar.Type == environment.VECTOR_STRUCT {
 					accesstype = environment.STRUCT_IMP
+					//sasasa
+				} else if foundVar.Type == environment.MATRIX_INT {
+					if _, isBreak := val.([]interface{}); isBreak {
+						depth := GetDepth(val.([]interface{}))
+						if depth == 1 {
+							accesstype = environment.VECTOR_INT
+						} else {
+							accesstype = environment.MATRIX_INT
+						}
+
+					} else {
+						accesstype = environment.INTEGER
+					}
+
+				} else if foundVar.Type == environment.MATRIX_FLOAT {
+					if _, isBreak := val.([]interface{}); isBreak {
+						depth := GetDepth(val.([]interface{}))
+						if depth == 1 {
+							accesstype = environment.VECTOR_FLOAT
+						} else {
+							accesstype = environment.MATRIX_FLOAT
+						}
+
+					} else {
+						accesstype = environment.FLOAT
+					}
+
+				} else if foundVar.Type == environment.MATRIX_STRING {
+					if _, isBreak := val.([]interface{}); isBreak {
+						depth := GetDepth(val.([]interface{}))
+						if depth == 1 {
+							accesstype = environment.VECTOR_STRING
+						} else {
+							accesstype = environment.MATRIX_STRING
+						}
+
+					} else {
+						accesstype = environment.STRING
+					}
+
+				} else if foundVar.Type == environment.MATRIX_CHAR {
+					if _, isBreak := val.([]interface{}); isBreak {
+						depth := GetDepth(val.([]interface{}))
+						if depth == 1 {
+							accesstype = environment.VECTOR_CHAR
+						} else {
+							accesstype = environment.MATRIX_CHAR
+						}
+
+					} else {
+						accesstype = environment.CHAR
+					}
+
+				} else if foundVar.Type == environment.MATRIX_BOOLEAN {
+					if _, isBreak := val.([]interface{}); isBreak {
+						depth := GetDepth(val.([]interface{}))
+						if depth == 1 {
+							accesstype = environment.VECTOR_BOOLEAN
+						} else {
+							accesstype = environment.MATRIX_BOOLEAN
+						}
+
+					} else {
+						accesstype = environment.BOOLEAN
+					}
+
 				}
 
 				return environment.Symbol{
@@ -174,7 +305,6 @@ func (p VectorAccess) Execute(ast *environment.AST, env interface{}) environment
 			Value: nil,
 		}
 	}
-
 
 	return environment.Symbol{
 		Lin:   p.Lin,

@@ -481,11 +481,12 @@ funcparameter returns [environment.FuncParam fp]
                         Reference: false,
                     }
                   }
-| p=(ID|UNDERSCORE) ID DOSPTOS  OBRA typpe=(RINT|RFLOAT|RBOOL|RSTRING|RCHARACTER) CBRA  {
+// TODO ADD MATRIX
+| p=(ID|UNDERSCORE) ID DOSPTOS  matrix_type  {
                         $fp = environment.FuncParam{
                             Id:   $p.text,
                             SID: $ID.text,
-                            Type: "[" + $typpe.text + "]",
+                            Type: $matrix_type.text,
                             Reference: false,
                         }
                       }
@@ -502,11 +503,11 @@ funcparameter returns [environment.FuncParam fp]
                       }
                     }
 
-| p=(ID|UNDERSCORE) ID DOSPTOS RINOUT OBRA typpe=(RINT|RFLOAT|RBOOL|RSTRING|RCHARACTER) CBRA  {
+| p=(ID|UNDERSCORE) ID DOSPTOS RINOUT matrix_type  {
                       $fp = environment.FuncParam{
                           Id:   $p.text,
                           SID: $ID.text,
-                          Type: "[" + $typpe.text + "]",
+                          Type: $matrix_type.text,
                           Reference: true,
                       }
                     }
@@ -521,11 +522,11 @@ funcparameter returns [environment.FuncParam fp]
                         Reference: false,
                     }
                   }
-|  ID DOSPTOS  OBRA typpe=(RINT|RFLOAT|RBOOL|RSTRING|RCHARACTER) CBRA  {
+|  ID DOSPTOS  matrix_type  {
                         $fp = environment.FuncParam{
                             Id:   "_",
                             SID: $ID.text,
-                            Type: "[" + $typpe.text + "]",
+                            Type: $matrix_type.text,
                             Reference: false,
                         }
                       }
@@ -542,11 +543,11 @@ funcparameter returns [environment.FuncParam fp]
                       }
                     }
 
-|  ID DOSPTOS RINOUT OBRA typpe=(RINT|RFLOAT|RBOOL|RSTRING|RCHARACTER) CBRA  {
+|  ID DOSPTOS RINOUT matrix_type  {
                       $fp = environment.FuncParam{
                           Id:   "_",
                           SID: $ID.text,
-                          Type: "[" + $typpe.text + "]",
+                          Type: $matrix_type.text,
                           Reference: true,
                       }
                     }
