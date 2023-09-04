@@ -42,7 +42,6 @@ func (o ArithmeticOperation) Execute(ast *environment.AST, env interface{}) envi
 
 	if op1.Type < 0 || int(op1.Type) >= len(tablaDominante) || op2.Type < 0 || int(op2.Type) >= len(tablaDominante) {
 		ast.SetPrint("Error: Tipo de operacion no valida!\n")
-		op1 = o.LeftExp.Execute(ast, env)
 		return environment.Symbol{Lin: o.Lin, Col: o.Col, Type: environment.NULL, Value: nil}
 	}
 

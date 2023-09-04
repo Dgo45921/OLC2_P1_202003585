@@ -9,8 +9,14 @@ import (
 	"fmt"
 	"github.com/antlr4-go/antlr/v4"
 	"io/ioutil"
+	"log"
 	"net/http"
+	"os"
+	"os/exec"
+	"path/filepath"
 )
+
+var lastGivencode = ""
 
 type TreeShapeListener struct {
 	*parser.BaseSwiftGrammarListener
@@ -38,7 +44,13 @@ func Parse(w http.ResponseWriter, r *http.Request) {
 	json.Unmarshal(reqBody, &newCode)
 	// printing the input
 	fmt.Println(newCode.Code)
-	// TODO antlr parser here
+	lastGivencode = newCode.Code
+
+	err = writeSourceCodeFile("source.txt", lastGivencode)
+	if err != nil {
+		fmt.Println("Error:", err)
+	}
+
 	//Entrada
 	var code string = newCode.Code
 	//Leyendo entrada
@@ -73,4 +85,31 @@ func NewTreeShapeListener() *TreeShapeListener {
 
 func (this *TreeShapeListener) ExitS(ctx *parser.SContext) {
 	this.Code = ctx.GetCode()
+}
+
+func writeSourceCodeFile(filename, content string) error {
+	err := ioutil.WriteFile(filename, []byte(content), 0644)
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
+func GetCST(w http.ResponseWriter, r *http.Request) {
+
+	exePath, errr := os.Executable()
+	if errr != nil {
+		log.Fatal(errr)
+	}
+
+	currentDir := filepath.Dir(exePath)
+	cmd := exec.Command("antlr4-parse", "CG.g4", "s", "-gui", "source.txt")
+	cmd.Dir = currentDir
+	cmd.Stdout = os.Stdout
+	cmd.Stderr = os.Stderr
+	err := cmd.Run()
+
+	if err != nil {
+		log.Fatal(err)
+	}
 }
