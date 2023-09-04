@@ -20,7 +20,7 @@ func NewFuncDec(lin int, col int, id string, args []environment.FuncParam, ret i
 func (p FuncDec) Execute(ast *environment.AST, env interface{}) interface{} {
 
 	if env.(environment.Environment).FuncExists(p.Id) {
-		ast.SetPrint("Error, funcion ya declarada!\n")
+		ast.SetError(p.Lin, p.Col, "Funcion ya declarada")
 		return nil
 
 	}
@@ -29,7 +29,7 @@ func (p FuncDec) Execute(ast *environment.AST, env interface{}) interface{} {
 		for i := 1; i < len(p.Args); i++ {
 			currentName := p.Args[i].SID
 			if firstName == currentName {
-				ast.SetPrint("Error: nombre de parametro repetido!\n")
+				ast.SetError(p.Lin, p.Col, "nombre de parametro repetido")
 				return nil
 			}
 		}

@@ -32,7 +32,7 @@ func (p CountVector) Execute(ast *environment.AST, env interface{}) environment.
 			}
 
 		}
-		ast.SetPrint("Error: la funcion count solo funciona con vectores!\n")
+		ast.SetError(p.Lin, p.Col, "la funcion count solo funciona con vectores")
 		return environment.Symbol{
 			Lin:   p.Lin,
 			Col:   p.Col,
@@ -54,7 +54,7 @@ func (p CountVector) Execute(ast *environment.AST, env interface{}) environment.
 			}
 
 		}
-		ast.SetPrint("Error: la funcion count solo funciona con vectores!\n")
+		ast.SetError(p.Lin, p.Col, "la funcion count solo funciona con vectores")
 		return environment.Symbol{
 			Lin:   p.Lin,
 			Col:   p.Col,

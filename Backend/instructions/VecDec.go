@@ -22,7 +22,7 @@ func NewVecDec(lin int, col int, id string, tyype string, deftype interface{}, e
 func (p VecDec) Execute(ast *environment.AST, env interface{}) interface{} {
 
 	if env.(environment.Environment).VariableExists(p.Id) {
-		ast.SetPrint("Error, variable ya declarada!\n")
+		ast.SetError(p.Lin, p.Col, "Variable ya declarada")
 		return nil
 	}
 
@@ -44,7 +44,7 @@ func (p VecDec) Execute(ast *environment.AST, env interface{}) interface{} {
 			if res.Type == environment.STRUCT_DEF {
 				types = environment.VECTOR_STRUCT
 			} else {
-				ast.SetPrint("Error, vector de tipo struct no valido!\n")
+				ast.SetError(p.Lin, p.Col, "vector de tipo struct no valido")
 			}
 
 		}
@@ -63,7 +63,7 @@ func (p VecDec) Execute(ast *environment.AST, env interface{}) interface{} {
 			return nil
 
 		} else {
-			ast.SetPrint("Error: elemento del arreglo, no coincide con el tipo!\n")
+			ast.SetError(p.Lin, p.Col, "elemento del arreglo, no coincide con el tipo")
 		}
 		return nil
 	}
@@ -86,7 +86,7 @@ func (p VecDec) Execute(ast *environment.AST, env interface{}) interface{} {
 			if res.Type == environment.STRUCT_DEF {
 				typesVector = environment.VECTOR_STRUCT
 			} else {
-				ast.SetPrint("Error, vector de tipo struct no valido!\n")
+				ast.SetError(p.Lin, p.Col, "vector de tipo struct no valido")
 			}
 
 		}
@@ -101,7 +101,7 @@ func (p VecDec) Execute(ast *environment.AST, env interface{}) interface{} {
 		if p.DefType.(string) == p.Type {
 			env.(environment.Environment).SaveVariable(p.Id, symbol)
 		} else {
-			ast.SetPrint("Error: El tipo definido al inicio no es igual al definido por el ultimo\n")
+			ast.SetError(p.Lin, p.Col, "El tipo definido al inicio no es igual al definido por el ultimo")
 		}
 
 		return nil
@@ -114,7 +114,7 @@ func (p VecDec) Execute(ast *environment.AST, env interface{}) interface{} {
 		if res.Type == environment.STRUCT_DEF {
 			typesVector = environment.VECTOR_STRUCT
 		} else {
-			ast.SetPrint("Error, vector de tipo struct no valido!\n")
+			ast.SetError(p.Lin, p.Col, "vector de tipo struct no valido")
 		}
 		var emptyArray []interface{} = []interface{}{}
 		var symbol = environment.Symbol{
@@ -128,7 +128,7 @@ func (p VecDec) Execute(ast *environment.AST, env interface{}) interface{} {
 		if res.StructType == p.Type {
 			env.(environment.Environment).SaveVariable(p.Id, symbol)
 		} else {
-			ast.SetPrint("Error: vector de struct no existente\n")
+			ast.SetError(p.Lin, p.Col, "vector de struct no existente")
 		}
 
 		return nil
@@ -140,7 +140,7 @@ func (p VecDec) Execute(ast *environment.AST, env interface{}) interface{} {
 
 func (p VecDec) GetVecDec(ast *environment.AST, env interface{}) interface{} {
 	if env.(environment.Environment).VariableExists(p.Id) {
-		ast.SetPrint("Error, variable ya declarada!\n")
+		ast.SetError(p.Lin, p.Col, "variable ya declarada")
 		return nil
 	}
 
@@ -162,7 +162,7 @@ func (p VecDec) GetVecDec(ast *environment.AST, env interface{}) interface{} {
 			if res.Type == environment.STRUCT_DEF {
 				types = environment.VECTOR_STRUCT
 			} else {
-				ast.SetPrint("Error, vector de tipo struct no valido!\n")
+				ast.SetError(p.Lin, p.Col, "vector de tipo struct no valido")
 			}
 
 		}
@@ -180,7 +180,7 @@ func (p VecDec) GetVecDec(ast *environment.AST, env interface{}) interface{} {
 			return symbol
 
 		} else {
-			ast.SetPrint("Error: elemento del arreglo, no coincide con el tipo!\n")
+			ast.SetError(p.Lin, p.Col, "elemento del arreglo, no coincide con el tipo")
 		}
 		return nil
 	}
@@ -203,7 +203,7 @@ func (p VecDec) GetVecDec(ast *environment.AST, env interface{}) interface{} {
 			if res.Type == environment.STRUCT_DEF {
 				typesVector = environment.VECTOR_STRUCT
 			} else {
-				ast.SetPrint("Error, vector de tipo struct no valido!\n")
+				ast.SetError(p.Lin, p.Col, "vector de tipo struct no valido")
 			}
 
 		}
@@ -218,7 +218,7 @@ func (p VecDec) GetVecDec(ast *environment.AST, env interface{}) interface{} {
 		if p.DefType.(string) == p.Type {
 			return symbol
 		} else {
-			ast.SetPrint("Error: El tipo definido al inicio no es igual al definido por el ultimo\n")
+			ast.SetError(p.Lin, p.Col, "El tipo definido al inicio no es igual al definido por el ultimo")
 		}
 
 		return nil
@@ -231,7 +231,7 @@ func (p VecDec) GetVecDec(ast *environment.AST, env interface{}) interface{} {
 		if res.Type == environment.STRUCT_DEF {
 			typesVector = environment.VECTOR_STRUCT
 		} else {
-			ast.SetPrint("Error, vector de tipo struct no valido!\n")
+			ast.SetError(p.Lin, p.Col, "vector de tipo struct no valido")
 		}
 		var emptyArray []interface{} = []interface{}{}
 		var symbol = environment.Symbol{
@@ -245,7 +245,7 @@ func (p VecDec) GetVecDec(ast *environment.AST, env interface{}) interface{} {
 		if res.StructType == p.Type {
 			return symbol
 		} else {
-			ast.SetPrint("Error: vector de struct no existente\n")
+			ast.SetError(p.Lin, p.Col, "vector de struct no existente")
 		}
 
 		return nil

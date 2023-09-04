@@ -23,7 +23,7 @@ func NewMatrixDec(lin int, col int, id string, tyype interface{}, def interfaces
 func (p MatrixDec) Execute(ast *environment.AST, env interface{}) interface{} {
 
 	if env.(environment.Environment).VariableExists(p.Id) {
-		ast.SetPrint("Error, variable ya declarada!\n")
+		ast.SetError(p.Lin, p.Col, "Variable ya declarada")
 		return nil
 	}
 
@@ -51,18 +51,18 @@ func (p MatrixDec) Execute(ast *environment.AST, env interface{}) interface{} {
 				} else if arrayType == reflect.TypeOf(false) && strings.Contains(p.Type.(string), "Bool") {
 					value.Type = environment.MATRIX_BOOLEAN
 				} else {
-					ast.SetPrint("Error: Matriz no coincide con tipo de dato definido!\n")
+					ast.SetError(p.Lin, p.Col, "matriz no coincide con tipo de dato definido")
 					return nil
 				}
 				env.(environment.Environment).SaveVariable(p.Id, value)
 				return nil
 			} else {
-				ast.SetPrint("Error: Matriz con varios tipos de dato!\n")
+				ast.SetError(p.Lin, p.Col, "matriz con varios tipos de dato")
 				return nil
 			}
 
 		} else {
-			ast.SetPrint("Error: El tamaño con el que se inicializa la matriz no consiste con el tamaño definido\n")
+			ast.SetError(p.Lin, p.Col, "Error: El tamaño con el que se inicializa la matriz no consiste con el tamaño definido")
 			return nil
 		}
 	} else {
@@ -79,13 +79,13 @@ func (p MatrixDec) Execute(ast *environment.AST, env interface{}) interface{} {
 			} else if arrayType == reflect.TypeOf(false) {
 				value.Type = environment.MATRIX_BOOLEAN
 			} else {
-				ast.SetPrint("Error: Matriz no coincide con tipo de dato definido!\n")
+				ast.SetError(p.Lin, p.Col, "matriz no coincide con tipo de dato definido")
 				return nil
 			}
 			env.(environment.Environment).SaveVariable(p.Id, value)
 			return nil
 		} else {
-			ast.SetPrint("Error: Matriz con varios tipos de dato!\n")
+			ast.SetError(p.Lin, p.Col, "matriz con varios tipos de dato")
 			return nil
 		}
 
@@ -119,18 +119,18 @@ func (p MatrixDec) GetMatrixDec(ast *environment.AST, env interface{}) interface
 				} else if arrayType == reflect.TypeOf(false) && strings.Contains(p.Type.(string), "Bool") {
 					value.Type = environment.MATRIX_BOOLEAN
 				} else {
-					ast.SetPrint("Error: Matriz no coincide con tipo de dato definido!\n")
+					ast.SetError(p.Lin, p.Col, "matriz no coincide con tipo de dato definido")
 					return nil
 				}
 				return value
 
 			} else {
-				ast.SetPrint("Error: Matriz con varios tipos de dato!\n")
+				ast.SetError(p.Lin, p.Col, "matriz con varios tipos de dato")
 				return nil
 			}
 
 		} else {
-			ast.SetPrint("Error: El tamaño con el que se inicializa la matriz no consiste con el tamaño definido\n")
+			ast.SetError(p.Lin, p.Col, "Error: El tamaño con el que se inicializa la matriz no consiste con el tamaño definido")
 			return nil
 		}
 	} else {
@@ -147,13 +147,13 @@ func (p MatrixDec) GetMatrixDec(ast *environment.AST, env interface{}) interface
 			} else if arrayType == reflect.TypeOf(false) {
 				value.Type = environment.MATRIX_BOOLEAN
 			} else {
-				ast.SetPrint("Error: Matriz no coincide con tipo de dato definido!\n")
+				ast.SetError(p.Lin, p.Col, "matriz no coincide con tipo de dato definido")
 				return nil
 			}
 			return value
 
 		} else {
-			ast.SetPrint("Error: Matriz con varios tipos de dato!\n")
+			ast.SetError(p.Lin, p.Col, "matriz con varios tipos de dato")
 			return nil
 		}
 

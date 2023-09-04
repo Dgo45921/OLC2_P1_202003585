@@ -21,7 +21,8 @@ func NewVarDec(lin int, col int, id string, tyype interface{}, val interface{}) 
 func (p VarDec) Execute(ast *environment.AST, env interface{}) interface{} {
 
 	if env.(environment.Environment).VariableExists(p.Id) {
-		ast.SetPrint("Error, variable ya declarada!\n")
+		ast.SetError(p.Lin, p.Col, "Error, variable ya declarada")
+
 		return nil
 	}
 
@@ -65,7 +66,7 @@ func (p VarDec) Execute(ast *environment.AST, env interface{}) interface{} {
 					env.(environment.Environment).SaveVariable(p.Id, value)
 
 				} else {
-					ast.SetPrint("Error: Tipo de variable no valida!\n")
+					ast.SetError(p.Lin, p.Col, "Tipo de variable no valida")
 				}
 
 			}
@@ -115,12 +116,12 @@ func (p VarDec) Execute(ast *environment.AST, env interface{}) interface{} {
 					env.(environment.Environment).SaveVariable(p.Id, value)
 					return nil
 				} else {
-					ast.SetPrint("Error: Tipo de struct distinto al definido!\n")
+					ast.SetError(p.Lin, p.Col, "Tipo de struct distinto al definido")
 					return nil
 				}
 
 			} else {
-				ast.SetPrint("Error: Tipo de variable no valida!\n")
+				ast.SetError(p.Lin, p.Col, "Tipo de variable no valida")
 			}
 
 		}
@@ -155,7 +156,7 @@ func (p VarDec) Execute(ast *environment.AST, env interface{}) interface{} {
 				env.(environment.Environment).SaveVariable(p.Id, value)
 
 			} else {
-				ast.SetPrint("Error: Tipo de variable no valida!\n")
+				ast.SetError(p.Lin, p.Col, "Tipo de variable no valida")
 			}
 
 		}
@@ -204,7 +205,7 @@ func (p VarDec) GetVarDec(ast *environment.AST, env interface{}) interface{} {
 					return value
 
 				} else {
-					ast.SetPrint("Error: Tipo de variable no valida!\n")
+					ast.SetError(p.Lin, p.Col, "Tipo de variable no valida")
 				}
 
 			}
@@ -245,12 +246,12 @@ func (p VarDec) GetVarDec(ast *environment.AST, env interface{}) interface{} {
 					value = environment.Symbol{Lin: p.Lin, Col: p.Col, Type: environment.STRUCT_IMP, Value: value.Value, StructType: p.Type.(string)}
 					return value
 				} else {
-					ast.SetPrint("Error: Tipo de struct distinto al definido!\n")
+					ast.SetError(p.Lin, p.Col, "Tipo de struct distinto al definido")
 					return nil
 				}
 
 			} else {
-				ast.SetPrint("Error: Tipo de variable no valida!\n")
+				ast.SetError(p.Lin, p.Col, "Tipo de variable no valida")
 			}
 
 		}
@@ -280,7 +281,7 @@ func (p VarDec) GetVarDec(ast *environment.AST, env interface{}) interface{} {
 				return value
 
 			} else {
-				ast.SetPrint("Error: Tipo de variable no valida!\n")
+				ast.SetError(p.Lin, p.Col, "Tipo de variable no valida")
 			}
 
 		}

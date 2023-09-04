@@ -43,7 +43,7 @@ func (p Range) Execute(ast *environment.AST, env interface{}) environment.Symbol
 			}
 
 		} else {
-			ast.SetPrint("Error: indice inicial es mas grande que el indice final!\n")
+			ast.SetError(p.Lin, p.Col, "indice inicial es mas grande que el indice final")
 			return environment.Symbol{
 				Lin:   p.Lin,
 				Col:   p.Col,
@@ -52,7 +52,7 @@ func (p Range) Execute(ast *environment.AST, env interface{}) environment.Symbol
 		}
 
 	} else {
-		ast.SetPrint("Error: Los indices deben de ser enteros!\n")
+		ast.SetError(p.Lin, p.Col, "los indices deben de ser enteros")
 		return environment.Symbol{
 			Lin:   p.Lin,
 			Col:   p.Col,

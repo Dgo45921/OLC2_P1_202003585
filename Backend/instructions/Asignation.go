@@ -42,7 +42,7 @@ func (p Asignation) Execute(ast *environment.AST, env interface{}) interface{} {
 						foundVar.Value = value.Value
 						env.(environment.Environment).UpdateVariable(p.Id, foundVar)
 					} else {
-						ast.SetPrint("Error: Variable de struct no compatible con la asignacion dada!\n")
+						ast.SetError(p.Lin, p.Col, "Variable de struct no compatible con la asignacion dada")
 						return nil
 					}
 				}
@@ -56,14 +56,14 @@ func (p Asignation) Execute(ast *environment.AST, env interface{}) interface{} {
 				env.(environment.Environment).UpdateVariable(p.Id, foundVar)
 
 			} else {
-				ast.SetPrint("Error:No se puede asignar valor: " + value.GetType() + " a variable " + foundVar.GetType() + "\n")
+				ast.SetError(p.Lin, p.Col, "No se puede asignar valor: "+value.GetType()+" a variable "+foundVar.GetType())
 				foundVar.Value = nil
 				env.(environment.Environment).UpdateVariable(p.Id, foundVar)
 
 			}
 
 		} else {
-			ast.SetPrint("Error: el valor de una constante no puede ser cambiado\n")
+			ast.SetError(p.Lin, p.Col, "valor de una constante no puede ser cambiado")
 		}
 
 		return nil
@@ -91,7 +91,7 @@ func (p Asignation) Execute(ast *environment.AST, env interface{}) interface{} {
 						foundVar.Value = value.Value
 						env.(environment.Environment).UpdateReference(p.Id, foundVar)
 					} else {
-						ast.SetPrint("Error: Variable de struct no compatible con la asignacion dada!\n")
+						ast.SetError(p.Lin, p.Col, "Variable de struct no compatible con la asignacion dada")
 						return nil
 					}
 				}
@@ -105,14 +105,15 @@ func (p Asignation) Execute(ast *environment.AST, env interface{}) interface{} {
 				env.(environment.Environment).UpdateReference(p.Id, foundVar)
 
 			} else {
-				ast.SetPrint("Error:No se puede asignar valor: " + value.GetType() + " a variable " + foundVar.GetType() + "\n")
+				ast.SetError(p.Lin, p.Col, "No se puede asignar valor: "+value.GetType()+" a variable "+foundVar.GetType())
+
 				foundVar.Value = nil
 				env.(environment.Environment).UpdateReference(p.Id, foundVar)
 
 			}
 
 		} else {
-			ast.SetPrint("Error: el valor de una constante no puede ser cambiado\n")
+			ast.SetError(p.Lin, p.Col, "valor de una constante no puede ser cambiado")
 		}
 
 		return nil

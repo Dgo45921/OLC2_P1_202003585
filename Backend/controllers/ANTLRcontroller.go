@@ -20,6 +20,9 @@ var lastGivencode = ""
 var lexerErrors = &CustomLexicalErrorListener{}
 var parserErrors = &CustomSyntaxErrorListener{}
 
+// Ast create ast
+var Ast environment.AST
+
 type TreeShapeListener struct {
 	*parser.BaseSwiftGrammarListener
 	Code []interface{}
@@ -32,9 +35,7 @@ func IndexRoute(w http.ResponseWriter, r *http.Request) {
 	}
 }
 func Parse(w http.ResponseWriter, r *http.Request) {
-	lexerErrors = &CustomLexicalErrorListener{}
-	parserErrors = &CustomSyntaxErrorListener{}
-
+	Ast = environment.AST{}
 	// newCode is responsible to save the given input
 	var newCode models.SourceCode
 	// consoleResponse is responsible of returning all of the console logs
@@ -75,8 +76,7 @@ func Parse(w http.ResponseWriter, r *http.Request) {
 	var listener *TreeShapeListener = NewTreeShapeListener()
 	antlr.ParseTreeWalkerDefault.Walk(listener, tree)
 	Code := listener.Code
-	//create ast
-	var Ast environment.AST
+
 	// creating env
 	var newEnv = environment.NewEnvironment(nil, environment.GLOBAL)
 	//ejecución
@@ -126,8 +126,8 @@ func GetCST(w http.ResponseWriter, r *http.Request) {
 
 func GetErrors(w http.ResponseWriter, r *http.Request) {
 
-	vzcode := getVizCode()
-	fmt.Println(vzcode)
+	getVizCode(lexerErrors, parserErrors)
+	fmt.Println(Ast.GetErrors())
 
 }
 

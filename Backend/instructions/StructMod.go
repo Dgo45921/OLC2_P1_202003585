@@ -29,7 +29,7 @@ func (p StructMod) Execute(ast *environment.AST, env interface{}) interface{} {
 		err := UpdateValueByArray(p.Accesses, foundVar, newvalue, env)
 
 		if err != nil {
-			ast.SetPrint("Error, no se pudo modificar el atributo!\n")
+			ast.SetError(p.Lin, p.Col, "no se pudo modificar el atributo")
 		}
 
 		return nil

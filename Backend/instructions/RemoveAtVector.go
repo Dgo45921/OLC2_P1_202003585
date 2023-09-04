@@ -18,10 +18,10 @@ func NewRemoveAtVector(lin int, col int, id string, index interfaces.Expression)
 }
 
 func (p RemoveAtVector) Execute(ast *environment.AST, env interface{}) interface{} {
-	if env.(environment.Environment).VariableExists(p.Id){
+	if env.(environment.Environment).VariableExists(p.Id) {
 		foundVar := env.(environment.Environment).FindVar(p.Id)
 		if foundVar.Const {
-			ast.SetPrint("Error: No se puede modificar un vector constante!\n")
+			ast.SetError(p.Lin, p.Col, "No se puede modificar un vector constante")
 			return nil
 
 		}
@@ -32,21 +32,20 @@ func (p RemoveAtVector) Execute(ast *environment.AST, env interface{}) interface
 					foundVar.Value = append(slice[:indexval.Value.(int)], slice[indexval.Value.(int)+1:]...)
 					env.(environment.Environment).UpdateVariable(p.Id, foundVar)
 				} else {
-					ast.SetPrint("Error: Indice no disponible en el vector!\n")
+					ast.SetError(p.Lin, p.Col, "Indice no disponible en el vector")
 				}
 			} else {
-				ast.SetPrint("Error: el indice luego de 'at:' debe ser un entero!\n")
+				ast.SetError(p.Lin, p.Col, "el indice luego de 'at:' debe ser un entero")
 			}
 		} else {
-			ast.SetPrint("Error: la funcion remove(at) solo funciona en vectores!\n")
+			ast.SetError(p.Lin, p.Col, "la funcion remove(at) solo funciona en vectores")
 		}
 		return nil
-
 
 	} else if env.(environment.Environment).ReferenceExists(p.Id) {
 		foundVar := env.(environment.Environment).FindReference(p.Id)
 		if foundVar.Const {
-			ast.SetPrint("Error: No se puede modificar un vector constante!\n")
+			ast.SetError(p.Lin, p.Col, "No se puede modificar un vector constante")
 			return nil
 
 		}
@@ -57,16 +56,15 @@ func (p RemoveAtVector) Execute(ast *environment.AST, env interface{}) interface
 					foundVar.Value = append(slice[:indexval.Value.(int)], slice[indexval.Value.(int)+1:]...)
 					env.(environment.Environment).UpdateReference(p.Id, foundVar)
 				} else {
-					ast.SetPrint("Error: Indice no disponible en el vector!\n")
+					ast.SetError(p.Lin, p.Col, "Indice no disponible en el vector")
 				}
 			} else {
-				ast.SetPrint("Error: el indice luego de 'at:' debe ser un entero!\n")
+				ast.SetError(p.Lin, p.Col, "el indice luego de 'at:' debe ser un entero")
 			}
 		} else {
-			ast.SetPrint("Error: la funcion remove(at) solo funciona en vectores!\n")
+			ast.SetError(p.Lin, p.Col, "la funcion remove(at) solo funciona en vectores")
 		}
 		return nil
-
 
 	}
 	return nil

@@ -18,7 +18,7 @@ func NewStructDef(lin int, col int, id string, insBlock []interface{}) StructDef
 
 func (p StructDef) Execute(ast *environment.AST, env interface{}) interface{} {
 	if env.(environment.Environment).Prev != nil {
-		ast.SetPrint("Error: Los structs solo pueden ser declarados en el ambito global!\n")
+		ast.SetError(p.Lin, p.Col, "Los structs solo pueden ser declarados en el ambito global")
 		return nil
 	}
 
@@ -33,13 +33,13 @@ func (p StructDef) Execute(ast *environment.AST, env interface{}) interface{} {
 					newKeyValuePair := environment.KeyValue{inst.(VarDec).Id, response}
 					structMap = append(structMap, newKeyValuePair)
 				} else {
-					ast.SetPrint("Error: atributo var en struct repetido!\n")
+					ast.SetError(p.Lin, p.Col, "atributo var en struct repetido")
 					return nil
 
 				}
 
 			} else {
-				ast.SetPrint("Error: El tipo de asignacion a un atributo var no fue válida!\n")
+				ast.SetError(p.Lin, p.Col, "El tipo de asignacion a un atributo var no fue válida")
 				return nil
 
 			}
@@ -52,11 +52,11 @@ func (p StructDef) Execute(ast *environment.AST, env interface{}) interface{} {
 					newKeyValuePair := environment.KeyValue{inst.(ConstDec).Id, response}
 					structMap = append(structMap, newKeyValuePair)
 				} else {
-					ast.SetPrint("Error: atributo const en struct repetido!\n")
+					ast.SetError(p.Lin, p.Col, "atributo const en struct repetido")
 					return nil
 				}
 			} else {
-				ast.SetPrint("Error: El tipo de asignacion a un atributo const no fue válida!\n")
+				ast.SetError(p.Lin, p.Col, "El tipo de asignacion a un atributo const no fue válida")
 				return nil
 
 			}
@@ -68,12 +68,12 @@ func (p StructDef) Execute(ast *environment.AST, env interface{}) interface{} {
 					newKeyValuePair := environment.KeyValue{inst.(VecDec).Id, response}
 					structMap = append(structMap, newKeyValuePair)
 				} else {
-					ast.SetPrint("Error: atributo const en struct repetido!\n")
+					ast.SetError(p.Lin, p.Col, "atributo const en struct repetido")
 					return nil
 
 				}
 			} else {
-				ast.SetPrint("Error: El tipo de asignacion a un atributo vector no fue válida!\n")
+				ast.SetError(p.Lin, p.Col, "El tipo de asignacion a un atributo vector no fue válida")
 				return nil
 
 			}
@@ -86,12 +86,12 @@ func (p StructDef) Execute(ast *environment.AST, env interface{}) interface{} {
 					newKeyValuePair := environment.KeyValue{inst.(MatrixDec).Id, response}
 					structMap = append(structMap, newKeyValuePair)
 				} else {
-					ast.SetPrint("Error: atributo const en struct repetido!\n")
+					ast.SetError(p.Lin, p.Col, "atributo const en struct repetido")
 					return nil
 
 				}
 			} else {
-				ast.SetPrint("Error: El tipo de asignacion a un atributo matriz no fue válida!\n")
+				ast.SetError(p.Lin, p.Col, "Tipo de asignacion a matriz no fue valida")
 				return nil
 
 			}

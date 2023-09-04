@@ -21,7 +21,7 @@ func NewConstDec(lin int, col int, id string, tyype interface{}, val interface{}
 func (p ConstDec) Execute(ast *environment.AST, env interface{}) interface{} {
 
 	if env.(environment.Environment).VariableExists(p.Id) {
-		ast.SetPrint("Error, constante ya declarada!\n")
+		ast.SetError(p.Lin, p.Col, "constante ya declarada")
 		return nil
 	}
 	if p.Type == nil {
@@ -71,7 +71,7 @@ func (p ConstDec) Execute(ast *environment.AST, env interface{}) interface{} {
 			env.(environment.Environment).SaveVariable(p.Id, value)
 			return nil
 		} else {
-			ast.SetPrint("Error: declaración de constante no coincide con el tipo definido!\n")
+			ast.SetError(p.Lin, p.Col, "declaración de constante no coincide con el tipo definido")
 		}
 	}
 

@@ -34,7 +34,7 @@ func (p RepeatingVector) Execute(ast *environment.AST, env interface{}) environm
 			// check count, it must be an integer
 			var count = p.Count.Execute(ast, env)
 			if count.Type != environment.INTEGER {
-				ast.SetPrint("Error: el atributo 'count' debe de ser un entero! \n")
+				ast.SetError(p.Lin, p.Col, "el atributo count debe de ser un entero")
 				return environment.Symbol{
 					Lin:   p.Lin,
 					Col:   p.Col,
@@ -62,7 +62,7 @@ func (p RepeatingVector) Execute(ast *environment.AST, env interface{}) environm
 				// i should be adding the response vector
 
 			} else {
-				ast.SetPrint("Error: no coincide el tipo definido con el 'repeating'\n")
+				ast.SetError(p.Lin, p.Col, "no coincide el tipo definido con el 'repeating'")
 				return environment.Symbol{
 					Lin:   p.Lin,
 					Col:   p.Col,
@@ -71,7 +71,9 @@ func (p RepeatingVector) Execute(ast *environment.AST, env interface{}) environm
 			}
 
 		} else {
-			ast.SetPrint("Error: Una array de dimensión: " + strconv.Itoa(currentdimension) + " no puede almacenar uno de dimensión: " + strconv.Itoa(nextdimension) + " \n")
+			ast.SetError(p.Lin, p.Col, "Un array de dimensión: " + strconv.Itoa(currentdimension) + " no puede almacenar uno de dimensión: " + strconv.Itoa(nextdimension))
+
+
 			return environment.Symbol{
 				Lin:   p.Lin,
 				Col:   p.Col,
@@ -83,7 +85,8 @@ func (p RepeatingVector) Execute(ast *environment.AST, env interface{}) environm
 		// check count, it must be an integer
 		var count = p.Count.Execute(ast, env)
 		if count.Type != environment.INTEGER {
-			ast.SetPrint("Error: el atributo 'count' debe de ser un entero! \n")
+
+			ast.SetError(p.Lin, p.Col, "el atributo count debe de ser un entero")
 			return environment.Symbol{
 				Lin:   p.Lin,
 				Col:   p.Col,
@@ -125,7 +128,7 @@ func (p RepeatingVector) Execute(ast *environment.AST, env interface{}) environm
 				Type:  typesVector,
 			}
 		} else {
-			ast.SetPrint("Error: no coincide el tipo definido con el 'repeating'\n")
+			ast.SetError(p.Lin, p.Col, "no coincide el tipo definido con el repeating")
 
 			return environment.Symbol{
 				Lin:   p.Lin,

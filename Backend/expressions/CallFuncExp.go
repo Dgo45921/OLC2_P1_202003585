@@ -22,7 +22,7 @@ func (p CallFuncExp) Execute(ast *environment.AST, env interface{}) environment.
 	foundFunc, exists := env.(environment.Environment).FindFunc(p.Id)
 
 	if !exists {
-		ast.SetPrint("Error, funcion no existente! \n")
+		ast.SetError(p.Lin, p.Col, "Funcion no existente")
 		return environment.Symbol{
 			Lin:   p.Lin,
 			Col:   p.Col,
@@ -32,7 +32,7 @@ func (p CallFuncExp) Execute(ast *environment.AST, env interface{}) environment.
 	}
 	// checking length of parameters and arguments
 	if len(p.Parameters) != len(foundFunc.Args) {
-		ast.SetPrint("Error: Cantidad de parametros no coincide! \n")
+		ast.SetError(p.Lin, p.Col, "Cantidad de argumentos no coincide con la cantidad de parametros")
 		return environment.Symbol{
 			Lin:   p.Lin,
 			Col:   p.Col,
@@ -51,18 +51,18 @@ func (p CallFuncExp) Execute(ast *environment.AST, env interface{}) environment.
 	// check array of values and types
 	for index := range p.Parameters {
 		valParameter := p.Parameters[index].Value.(interfaces.Expression).Execute(ast, env)
-		if valParameter.Type == environment.VECTOR_STRING || valParameter.Type == environment.VECTOR_STRUCT || valParameter.Type == environment.VECTOR_CHAR || valParameter.Type == environment.VECTOR_FLOAT || valParameter.Type == environment.VECTOR_BOOLEAN || valParameter.Type == environment.VECTOR_INT || valParameter.Type == environment.VECTOR ||  valParameter.Type == environment.MATRIX_INT  || valParameter.Type == environment.MATRIX_FLOAT || valParameter.Type == environment.MATRIX_BOOLEAN || valParameter.Type == environment.MATRIX_CHAR{
+		if valParameter.Type == environment.VECTOR_STRING || valParameter.Type == environment.VECTOR_STRUCT || valParameter.Type == environment.VECTOR_CHAR || valParameter.Type == environment.VECTOR_FLOAT || valParameter.Type == environment.VECTOR_BOOLEAN || valParameter.Type == environment.VECTOR_INT || valParameter.Type == environment.VECTOR || valParameter.Type == environment.MATRIX_INT || valParameter.Type == environment.MATRIX_FLOAT || valParameter.Type == environment.MATRIX_BOOLEAN || valParameter.Type == environment.MATRIX_CHAR {
 			valParameter.Value = DeepCopyArray(valParameter.Value)
 		}
 		if foundFunc.Args[index].Id == "_" {
-			if getTypeByString(foundFunc.Args[index].Type, ast, env, p.Parameters[index].Value.(interfaces.Expression)) == valParameter.Type {
+			if getTypeByString(p.Lin, p.Col, foundFunc.Args[index].Type, ast, env, p.Parameters[index].Value.(interfaces.Expression)) == valParameter.Type {
 				isByReference := foundFunc.Args[index].Reference
 				if isByReference == p.Parameters[index].Reference {
 					if isByReference {
 						if env.(environment.Environment).VariableExists(p.Parameters[index].RealId) || env.(environment.Environment).ReferenceExists(p.Parameters[index].RealId) {
 							newEnv.SaveReference(foundFunc.Args[index].SID, valParameter)
 						} else {
-							ast.SetPrint("Error:La referencia solo sirve con variables!\n")
+							ast.SetError(p.Lin, p.Col, "La referencia solo funciona con variables")
 						}
 
 					} else {
@@ -72,7 +72,7 @@ func (p CallFuncExp) Execute(ast *environment.AST, env interface{}) environment.
 					}
 
 				} else {
-					ast.SetPrint("Error: atributos definidos como valor por ref o por valor, no coinciden!\n")
+					ast.SetError(p.Lin, p.Col, "atributos definidos como valor por ref o por valor, no coinciden")
 					return environment.Symbol{
 						Lin:   p.Lin,
 						Col:   p.Col,
@@ -81,7 +81,7 @@ func (p CallFuncExp) Execute(ast *environment.AST, env interface{}) environment.
 				}
 
 			} else {
-				ast.SetPrint("Error: tipo de atributo no coincide con el argumento enviado!\n")
+				ast.SetError(p.Lin, p.Col, "tipo de parametro no coincide con el argumento enviado")
 				return environment.Symbol{
 					Lin:   p.Lin,
 					Col:   p.Col,
@@ -94,14 +94,14 @@ func (p CallFuncExp) Execute(ast *environment.AST, env interface{}) environment.
 			exists, indexx := checkIfParameterExists(foundFunc.Args, p.Parameters[index].Id)
 			if exists {
 
-				if getTypeByString(foundFunc.Args[indexx].Type, ast, env, p.Parameters[index].Value.(interfaces.Expression)) == valParameter.Type {
+				if getTypeByString(p.Lin, p.Col, foundFunc.Args[indexx].Type, ast, env, p.Parameters[index].Value.(interfaces.Expression)) == valParameter.Type {
 					isByReference := foundFunc.Args[indexx].Reference
 					if isByReference == p.Parameters[index].Reference {
 						if isByReference {
 							if env.(environment.Environment).VariableExists(p.Parameters[index].RealId) || env.(environment.Environment).ReferenceExists(p.Parameters[index].RealId) {
 								newEnv.SaveReference(foundFunc.Args[index].SID, valParameter)
 							} else {
-								ast.SetPrint("Error:La referencia solo sirve con variables!\n")
+								ast.SetError(p.Lin, p.Col, "la referencia solo funciona con variables")
 							}
 
 						} else {
@@ -111,7 +111,7 @@ func (p CallFuncExp) Execute(ast *environment.AST, env interface{}) environment.
 						}
 
 					} else {
-						ast.SetPrint("Error: atributos definidos como valor por ref o por valor, no coinciden!\n")
+						ast.SetError(p.Lin, p.Col, "atributos definidos como valor por ref o por valor, no coinciden")
 						return environment.Symbol{
 							Lin:   p.Lin,
 							Col:   p.Col,
@@ -120,7 +120,7 @@ func (p CallFuncExp) Execute(ast *environment.AST, env interface{}) environment.
 					}
 
 				} else {
-					ast.SetPrint("Error: tipo de atributo no coincide con el argumento enviado!\n")
+					ast.SetError(p.Lin, p.Col, "tipo de parametro no coincide con el argumento enviado")
 					return environment.Symbol{
 						Lin:   p.Lin,
 						Col:   p.Col,
@@ -155,7 +155,7 @@ func (p CallFuncExp) Execute(ast *environment.AST, env interface{}) environment.
 							}
 							return valretorno
 						} else {
-							ast.SetPrint("Error, el tipo de retorno no coincide con el definido con la funcion!\n")
+							ast.SetError(p.Lin, p.Col, "tipo de retorno no coincide por el definido para la funcion")
 							return environment.Symbol{
 								Lin:   p.Lin,
 								Col:   p.Col,
@@ -174,8 +174,7 @@ func (p CallFuncExp) Execute(ast *environment.AST, env interface{}) environment.
 					return valretorno
 
 				} else {
-					ast.SetPrint("Error: El tipo de retorno definido en la funcion no coincide con el valor del return\n")
-
+					ast.SetError(p.Lin, p.Col, "El tipo de retorno definido en la funcion no coincide con el valor del return")
 					return environment.Symbol{
 						Lin:   p.Lin,
 						Col:   p.Col,
@@ -205,7 +204,7 @@ func (p CallFuncExp) Execute(ast *environment.AST, env interface{}) environment.
 
 }
 
-func getTypeByString(val string, ast *environment.AST, env interface{}, expression interfaces.Expression) environment.TipoExpresion {
+func getTypeByString(lin int, col int, val string, ast *environment.AST, env interface{}, expression interfaces.Expression) environment.TipoExpresion {
 	if val == "Int" {
 		return environment.INTEGER
 	} else if val == "Float" {
@@ -219,7 +218,7 @@ func getTypeByString(val string, ast *environment.AST, env interface{}, expressi
 	} else if strings.Contains(val, "[") {
 		structExp := expression.Execute(ast, env)
 		if _, isBreak := structExp.Value.([]interface{}); !isBreak {
-			ast.SetPrint("Error: el valor enviado no es un array!\n")
+			ast.SetError(lin, col, "tipo de parametro no coincide con el argumento enviado")
 			return environment.NULL
 
 		}

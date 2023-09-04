@@ -19,10 +19,10 @@ func NewVectorStructAccess(lin int, col int, id string, index []interface{}, acc
 }
 
 func (p VectorStructAccess) Execute(ast *environment.AST, env interface{}) environment.Symbol {
-	if  env.(environment.Environment).VariableExists(p.IDvector){
+	if env.(environment.Environment).VariableExists(p.IDvector) {
 		foundVec := env.(environment.Environment).FindVar(p.IDvector)
 		if foundVec.Type == environment.VECTOR {
-			ast.SetPrint("Error: vector vacío!\n")
+			ast.SetError(p.Lin, p.Col, "Vector vacio")
 			return environment.Symbol{
 				Lin:   p.Lin,
 				Col:   p.Col,
@@ -33,7 +33,7 @@ func (p VectorStructAccess) Execute(ast *environment.AST, env interface{}) envir
 		var indexes = GetIndexes(p.Index, ast, env)
 
 		if !AllNonNegativeIntegers(indexes) {
-			ast.SetPrint("Error: el o los indices deben de ser un entero mayor o igual a 0!\n")
+			ast.SetError(p.Lin, p.Col, "indices deben de ser enteros mayores o iguales a 0")
 			return environment.Symbol{
 				Lin:   p.Lin,
 				Col:   p.Col,
@@ -47,7 +47,7 @@ func (p VectorStructAccess) Execute(ast *environment.AST, env interface{}) envir
 				val, exists := GetIndexValue(foundVec.Value, indexes)
 
 				if !exists {
-					ast.SetPrint("Error: indice no existente!\n")
+					ast.SetError(p.Lin, p.Col, "indice no existente")
 					return environment.Symbol{
 						Lin:   p.Lin,
 						Col:   p.Col,
@@ -106,7 +106,7 @@ func (p VectorStructAccess) Execute(ast *environment.AST, env interface{}) envir
 				}
 
 			} else {
-				ast.SetPrint("Error: el acceso [] solo funciona con vectores o matrices!\n")
+				ast.SetError(p.Lin, p.Col, "el acceso [] solo funciona con vectores o matrices")
 				return environment.Symbol{
 					Lin:   p.Lin,
 					Col:   p.Col,
@@ -116,17 +116,17 @@ func (p VectorStructAccess) Execute(ast *environment.AST, env interface{}) envir
 			}
 
 		}
-		ast.SetPrint("Error: el acceso [] solo funciona con vectores o matrices!\n")
+		ast.SetError(p.Lin, p.Col, "el acceso [] solo funciona con vectores o matrices")
 		return environment.Symbol{
 			Lin:   p.Lin,
 			Col:   p.Col,
 			Value: nil,
 		}
 
-	} else if  env.(environment.Environment).ReferenceExists(p.IDvector){
+	} else if env.(environment.Environment).ReferenceExists(p.IDvector) {
 		foundVec := env.(environment.Environment).FindReference(p.IDvector)
 		if foundVec.Type == environment.VECTOR {
-			ast.SetPrint("Error: vector vacío!\n")
+			ast.SetError(p.Lin, p.Col, "Vector vacio")
 			return environment.Symbol{
 				Lin:   p.Lin,
 				Col:   p.Col,
@@ -137,7 +137,7 @@ func (p VectorStructAccess) Execute(ast *environment.AST, env interface{}) envir
 		var indexes = GetIndexes(p.Index, ast, env)
 
 		if !AllNonNegativeIntegers(indexes) {
-			ast.SetPrint("Error: el o los indices deben de ser un entero mayor o igual a 0!\n")
+			ast.SetError(p.Lin, p.Col, "indices deben de ser enteros mayores o iguales a 0")
 			return environment.Symbol{
 				Lin:   p.Lin,
 				Col:   p.Col,
@@ -151,7 +151,7 @@ func (p VectorStructAccess) Execute(ast *environment.AST, env interface{}) envir
 				val, exists := GetIndexValue(foundVec.Value, indexes)
 
 				if !exists {
-					ast.SetPrint("Error: indice no existente!\n")
+					ast.SetError(p.Lin, p.Col, "indice no existente")
 					return environment.Symbol{
 						Lin:   p.Lin,
 						Col:   p.Col,
@@ -210,7 +210,7 @@ func (p VectorStructAccess) Execute(ast *environment.AST, env interface{}) envir
 				}
 
 			} else {
-				ast.SetPrint("Error: el acceso [] solo funciona con vectores o matrices!\n")
+				ast.SetError(p.Lin, p.Col, "el acceso [] solo funciona con vectores o matrices")
 				return environment.Symbol{
 					Lin:   p.Lin,
 					Col:   p.Col,
@@ -220,14 +220,13 @@ func (p VectorStructAccess) Execute(ast *environment.AST, env interface{}) envir
 			}
 
 		}
-		ast.SetPrint("Error: el acceso [] solo funciona con vectores o matrices!\n")
+		ast.SetError(p.Lin, p.Col, "el acceso [] solo funciona con vectores o matrices")
 		return environment.Symbol{
 			Lin:   p.Lin,
 			Col:   p.Col,
 			Value: nil,
 		}
 	}
-
 
 	return environment.Symbol{
 		Lin:   p.Lin,

@@ -22,13 +22,13 @@ func (p CallFuncInst) Execute(ast *environment.AST, env interface{}) interface{}
 	foundFunc, exists := env.(environment.Environment).FindFunc(p.Id)
 
 	if !exists {
-		ast.SetPrint("Error, funcion no existente! \n")
+		ast.SetError(p.Lin, p.Col, "Funcion no existente")
 		return nil
 
 	}
 	// checking length of parameters and arguments
 	if len(p.Parameters) != len(foundFunc.Args) {
-		ast.SetPrint("Error: Cantidad de parametros no coincide! \n")
+		ast.SetError(p.Lin, p.Col, "Cantidad de argumentos no coincide con la cantidad de parametros")
 		return nil
 	}
 	newEnv := environment.NewEnvironment(env, environment.FUNC)
@@ -46,14 +46,14 @@ func (p CallFuncInst) Execute(ast *environment.AST, env interface{}) interface{}
 			valParameter.Value = DeepCopyArray(valParameter.Value)
 		}
 		if foundFunc.Args[index].Id == "_" {
-			if getTypeByString(foundFunc.Args[index].Type, ast, env, p.Parameters[index].Value.(interfaces.Expression)) == valParameter.Type {
+			if getTypeByString(p.Lin, p.Col,foundFunc.Args[index].Type, ast, env, p.Parameters[index].Value.(interfaces.Expression)) == valParameter.Type {
 				isByReference := foundFunc.Args[index].Reference
 				if isByReference == p.Parameters[index].Reference {
 					if isByReference {
 						if env.(environment.Environment).VariableExists(p.Parameters[index].RealId) || env.(environment.Environment).ReferenceExists(p.Parameters[index].RealId) {
 							newEnv.SaveReference(foundFunc.Args[index].SID, valParameter)
 						} else {
-							ast.SetPrint("Error:La referencia solo sirve con variables!\n")
+							ast.SetError(p.Lin, p.Col, "La referencia solo funciona con variables")
 						}
 
 					} else {
@@ -63,12 +63,12 @@ func (p CallFuncInst) Execute(ast *environment.AST, env interface{}) interface{}
 					}
 
 				} else {
-					ast.SetPrint("Error: atributos definidos como valor por ref o por valor, no coinciden!\n")
+					ast.SetError(p.Lin, p.Col, "atributos definidos como valor por ref o por valor, no coinciden")
 					return nil
 				}
 
 			} else {
-				ast.SetPrint("Error: tipo de atributo no coincide con el argumento enviado!\n")
+				ast.SetError(p.Lin, p.Col, "tipo de parametro no coincide con el argumento enviado")
 				return nil
 			}
 
@@ -76,14 +76,14 @@ func (p CallFuncInst) Execute(ast *environment.AST, env interface{}) interface{}
 			exists, indexx := checkIfParameterExists(foundFunc.Args, p.Parameters[index].Id)
 			if exists {
 
-				if getTypeByString(foundFunc.Args[indexx].Type, ast, env, p.Parameters[index].Value.(interfaces.Expression)) == valParameter.Type {
+				if getTypeByString(p.Lin, p.Col, foundFunc.Args[indexx].Type, ast, env, p.Parameters[index].Value.(interfaces.Expression)) == valParameter.Type {
 					isByReference := foundFunc.Args[indexx].Reference
 					if isByReference == p.Parameters[index].Reference {
 						if isByReference {
 							if env.(environment.Environment).VariableExists(p.Parameters[index].RealId) || env.(environment.Environment).ReferenceExists(p.Parameters[index].RealId) {
 								newEnv.SaveReference(foundFunc.Args[index].SID, valParameter)
 							} else {
-								ast.SetPrint("Error:La referencia solo sirve con variables!\n")
+								ast.SetError(p.Lin, p.Col, "la referencia solo funciona con variables")
 							}
 
 						} else {
@@ -93,12 +93,12 @@ func (p CallFuncInst) Execute(ast *environment.AST, env interface{}) interface{}
 						}
 
 					} else {
-						ast.SetPrint("Error: atributos definidos como valor por ref o por valor, no coinciden!\n")
+						ast.SetError(p.Lin, p.Col, "atributos definidos como valor por ref o por valor, no coinciden")
 						return nil
 					}
 
 				} else {
-					ast.SetPrint("Error: tipo de atributo no coincide con el argumento enviado!\n")
+					ast.SetError(p.Lin, p.Col, "tipo de parametro no coincide con el argumento enviado")
 					return nil
 
 				}
@@ -127,7 +127,7 @@ func (p CallFuncInst) Execute(ast *environment.AST, env interface{}) interface{}
 								}
 							}
 						} else {
-							ast.SetPrint("Error, el tipo de retorno no coincide con el definido con la funcion!\n")
+							ast.SetError(p.Lin, p.Col, "tipo de retorno no coincide por el definido para la funcion")
 							return nil
 						}
 					}
@@ -142,8 +142,7 @@ func (p CallFuncInst) Execute(ast *environment.AST, env interface{}) interface{}
 					return nil
 
 				} else {
-					ast.SetPrint("Error: El tipo de retorno definido en la funcion no coincide con el valor del return\n")
-
+					ast.SetError(p.Lin, p.Col, "El tipo de retorno definido en la funcion no coincide con el valor del return")
 					return nil
 
 				}
@@ -166,7 +165,7 @@ func (p CallFuncInst) Execute(ast *environment.AST, env interface{}) interface{}
 
 }
 
-func getTypeByString(val string, ast *environment.AST, env interface{}, expression interfaces.Expression) environment.TipoExpresion {
+func getTypeByString(lin int, col int, val string, ast *environment.AST, env interface{}, expression interfaces.Expression) environment.TipoExpresion {
 	if val == "Int" {
 		return environment.INTEGER
 	} else if val == "Float" {
@@ -179,6 +178,11 @@ func getTypeByString(val string, ast *environment.AST, env interface{}, expressi
 		return environment.CHAR
 	} else if strings.Contains(val, "[") {
 		structExp := expression.Execute(ast, env)
+		if _, isBreak := structExp.Value.([]interface{}); !isBreak {
+			ast.SetError(lin, col, "tipo de parametro no coincide con el argumento enviado")
+			return environment.NULL
+
+		}
 		depth := GetDepth(structExp.Value.([]interface{}))
 
 		if depth == countCharOccurrences(val, '[') {
@@ -218,7 +222,6 @@ func getTypeByString(val string, ast *environment.AST, env interface{}, expressi
 				} else {
 					return environment.NULL
 				}
-
 			}
 
 		}

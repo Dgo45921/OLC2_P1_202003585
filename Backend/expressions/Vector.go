@@ -62,7 +62,7 @@ func (p Vector) Execute(ast *environment.AST, env interface{}) environment.Symbo
 		}
 
 	} else {
-		ast.SetPrint("Error: Vector no valido, debe de ser solo de un tipo\n")
+		ast.SetError(p.Lin, p.Col, "Vector no valido, debe de ser solo de un tipo")
 		return environment.Symbol{
 			Lin:   p.Lin,
 			Col:   p.Col,

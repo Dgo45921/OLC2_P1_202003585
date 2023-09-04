@@ -2,12 +2,11 @@ package instructions
 
 import (
 	"PY1/environment"
-
 )
 
 type Continue struct {
-	Lin        int
-	Col        int
+	Lin int
+	Col int
 }
 
 func NewContinue(lin int, col int) Continue {
@@ -17,7 +16,7 @@ func NewContinue(lin int, col int) Continue {
 
 func (p Continue) Execute(ast *environment.AST, env interface{}) interface{} {
 	if !env.(environment.Environment).InsideLoop() {
-		ast.SetPrint("Error: sentencia continue debe de estar dentro de un ciclo!\n")
+		ast.SetError(p.Lin, p.Col, "sentencia continue debe de estar dentro de un ciclo")
 	}
 	return p
 }

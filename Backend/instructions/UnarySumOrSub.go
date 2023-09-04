@@ -24,7 +24,7 @@ func (p UnarySum) Execute(ast *environment.AST, env interface{}) interface{} {
 		value := p.Expression.Execute(ast, env)
 
 		if foundVar.Const {
-			ast.SetPrint("Error: No se puede actualizar el valor de una constante\n")
+			ast.SetError(p.Lin, p.Col, "No se puede actualizar el valor de una constante")
 			foundVar.Value = nil
 			env.(environment.Environment).UpdateVariable(p.ID, foundVar)
 			return nil
@@ -57,7 +57,7 @@ func (p UnarySum) Execute(ast *environment.AST, env interface{}) interface{} {
 					env.(environment.Environment).UpdateVariable(p.ID, foundVar)
 					return nil
 				} else {
-					ast.SetPrint("Error: No se puede sumar valor: " + value.GetType() + " a variable " + foundVar.GetType() + "\n")
+					ast.SetError(p.Lin, p.Col, "No se puede sumar valor: " + value.GetType() + " a variable " + foundVar.GetType())
 					foundVar.Value = nil
 					env.(environment.Environment).UpdateVariable(p.ID, foundVar)
 					return nil
@@ -82,7 +82,7 @@ func (p UnarySum) Execute(ast *environment.AST, env interface{}) interface{} {
 					env.(environment.Environment).UpdateVariable(p.ID, foundVar)
 					return nil
 				} else {
-					ast.SetPrint("Error: No se puede restar valor: " + value.GetType() + " a variable " + foundVar.GetType() + "\n")
+					ast.SetError(p.Lin, p.Col, "No se puede sumar valor: " + value.GetType() + " a variable " + foundVar.GetType())
 					foundVar.Value = nil
 					env.(environment.Environment).UpdateVariable(p.ID, foundVar)
 					return nil
@@ -96,7 +96,7 @@ func (p UnarySum) Execute(ast *environment.AST, env interface{}) interface{} {
 		value := p.Expression.Execute(ast, env)
 
 		if foundVar.Const {
-			ast.SetPrint("Error: No se puede actualizar el valor de una constante\n")
+			ast.SetError(p.Lin, p.Col, "No se puede actualizar el valor de una constante")
 			foundVar.Value = nil
 			env.(environment.Environment).UpdateReference(p.ID, foundVar)
 			return nil
@@ -129,7 +129,8 @@ func (p UnarySum) Execute(ast *environment.AST, env interface{}) interface{} {
 					env.(environment.Environment).UpdateReference(p.ID, foundVar)
 					return nil
 				} else {
-					ast.SetPrint("Error: No se puede sumar valor: " + value.GetType() + " a variable " + foundVar.GetType() + "\n")
+
+					ast.SetError(p.Lin, p.Col, "No se puede sumar valor: " + value.GetType() + " a variable " + foundVar.GetType())
 					foundVar.Value = nil
 					env.(environment.Environment).UpdateReference(p.ID, foundVar)
 					return nil
@@ -154,7 +155,7 @@ func (p UnarySum) Execute(ast *environment.AST, env interface{}) interface{} {
 					env.(environment.Environment).UpdateReference(p.ID, foundVar)
 					return nil
 				} else {
-					ast.SetPrint("Error: No se puede restar valor: " + value.GetType() + " a variable " + foundVar.GetType() + "\n")
+					ast.SetError(p.Lin, p.Col, "No se puede restar valor: " + value.GetType() + " a variable " + foundVar.GetType())
 					foundVar.Value = nil
 					env.(environment.Environment).UpdateReference(p.ID, foundVar)
 					return nil

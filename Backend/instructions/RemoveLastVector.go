@@ -19,13 +19,13 @@ func (p RemoveLastVector) Execute(ast *environment.AST, env interface{}) interfa
 	if env.(environment.Environment).VariableExists(p.Id) {
 		foundVar := env.(environment.Environment).FindVar(p.Id)
 		if foundVar.Const {
-			ast.SetPrint("Error: No se puede modificar un vector constante!\n")
+			ast.SetError(p.Lin, p.Col, "No se puede modificar un vector constante")
 			return nil
 
 		}
 		if _, isArray := foundVar.Value.([]interface{}); isArray {
 			if len(foundVar.Value.([]interface{})) == 0 {
-				ast.SetPrint("Error: Vector vacio!\n")
+				ast.SetError(p.Lin, p.Col, "Vector vacio")
 				return nil
 			}
 
@@ -34,18 +34,18 @@ func (p RemoveLastVector) Execute(ast *environment.AST, env interface{}) interfa
 			foundVar.Value = newSlice
 			env.(environment.Environment).UpdateVariable(p.Id, foundVar)
 		} else {
-			ast.SetPrint("Error: la funcion removelast solo funciona en vectores!\n")
+			ast.SetError(p.Lin, p.Col, "la funcion removeLast solo funciona en vectores")
 		}
-	}else if env.(environment.Environment).ReferenceExists(p.Id) {
+	} else if env.(environment.Environment).ReferenceExists(p.Id) {
 		foundVar := env.(environment.Environment).FindReference(p.Id)
 		if foundVar.Const {
-			ast.SetPrint("Error: No se puede modificar un vector constante!\n")
+			ast.SetError(p.Lin, p.Col, "No se puede modificar un vector constante")
 			return nil
 
 		}
 		if _, isArray := foundVar.Value.([]interface{}); isArray {
 			if len(foundVar.Value.([]interface{})) == 0 {
-				ast.SetPrint("Error: Vector vacio!\n")
+				ast.SetError(p.Lin, p.Col, "Vector vacio")
 				return nil
 			}
 
@@ -54,7 +54,7 @@ func (p RemoveLastVector) Execute(ast *environment.AST, env interface{}) interfa
 			foundVar.Value = newSlice
 			env.(environment.Environment).UpdateReference(p.Id, foundVar)
 		} else {
-			ast.SetPrint("Error: la funcion removelast solo funciona en vectores!\n")
+			ast.SetError(p.Lin, p.Col, "la funcion removeLast solo funciona en vectores")
 		}
 	}
 

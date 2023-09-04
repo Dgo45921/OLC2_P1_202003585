@@ -24,7 +24,7 @@ func (p AppendVector) Execute(ast *environment.AST, env interface{}) interface{}
 		foundVar := env.(environment.Environment).FindVar(p.Id)
 		if foundVar.Type == environment.VECTOR_STRUCT || foundVar.Type == environment.VECTOR_INT || foundVar.Type == environment.VECTOR_FLOAT || foundVar.Type == environment.VECTOR_CHAR || foundVar.Type == environment.VECTOR_STRING || foundVar.Type == environment.VECTOR_BOOLEAN || foundVar.Type == environment.VECTOR {
 			if foundVar.Const {
-				ast.SetPrint("Error: No se puede modificar un vector constante!\n")
+				ast.SetError(p.Lin, p.Col, "No se puede modificar un vector constante")
 				return nil
 
 			}
@@ -69,11 +69,12 @@ func (p AppendVector) Execute(ast *environment.AST, env interface{}) interface{}
 						}
 						env.(environment.Environment).UpdateVariable(p.Id, foundVar)
 					} else {
-						ast.SetPrint("Error, append de struct distinto!\n")
+						ast.SetError(p.Lin, p.Col, "append de struct distinto")
+
 					}
 
 				} else {
-					ast.SetPrint("Error: tipo de concatenacion incompatible! \n")
+					ast.SetError(p.Lin, p.Col, "tipo de concatenacion incompatible")
 				}
 			} else {
 				if value.Type == environment.INTEGER && foundVar.Type == environment.VECTOR_INT {
@@ -108,16 +109,16 @@ func (p AppendVector) Execute(ast *environment.AST, env interface{}) interface{}
 						}
 						env.(environment.Environment).UpdateVariable(p.Id, foundVar)
 					} else {
-						ast.SetPrint("Error, append de struct distinto!\n")
+						ast.SetError(p.Lin, p.Col, "append de struct distinto")
 					}
 
 				} else {
-					ast.SetPrint("Error: tipo de concatenacion incompatible! \n")
+					ast.SetError(p.Lin, p.Col, "tipo de concatenacion incompatible")
 				}
 			}
 
 		} else {
-			ast.SetPrint("Error: La función append solo funciona con vectores! \n")
+			ast.SetError(p.Lin, p.Col, "funcion append solo funciona con vectores")
 		}
 
 		return nil
@@ -125,7 +126,7 @@ func (p AppendVector) Execute(ast *environment.AST, env interface{}) interface{}
 		foundVar := env.(environment.Environment).FindReference(p.Id)
 		if foundVar.Type == environment.VECTOR_STRUCT || foundVar.Type == environment.VECTOR_INT || foundVar.Type == environment.VECTOR_FLOAT || foundVar.Type == environment.VECTOR_CHAR || foundVar.Type == environment.VECTOR_STRING || foundVar.Type == environment.VECTOR_BOOLEAN || foundVar.Type == environment.VECTOR {
 			if foundVar.Const {
-				ast.SetPrint("Error: No se puede modificar un vector constante!\n")
+				ast.SetError(p.Lin, p.Col, "No se puede modificar un vector constante")
 				return nil
 
 			}
@@ -170,11 +171,11 @@ func (p AppendVector) Execute(ast *environment.AST, env interface{}) interface{}
 						}
 						env.(environment.Environment).UpdateVariable(p.Id, foundVar)
 					} else {
-						ast.SetPrint("Error, append de struct distinto!\n")
+						ast.SetError(p.Lin, p.Col, "append de struct distinto")
 					}
 
 				} else {
-					ast.SetPrint("Error: tipo de concatenacion incompatible! \n")
+					ast.SetError(p.Lin, p.Col, "tipo de concatenacion incompatible")
 				}
 			} else {
 				if value.Type == environment.INTEGER && foundVar.Type == environment.VECTOR_INT {
@@ -209,16 +210,16 @@ func (p AppendVector) Execute(ast *environment.AST, env interface{}) interface{}
 						}
 						env.(environment.Environment).UpdateVariable(p.Id, foundVar)
 					} else {
-						ast.SetPrint("Error, append de struct distinto!\n")
+						ast.SetError(p.Lin, p.Col, "append de struct distinto")
 					}
 
 				} else {
-					ast.SetPrint("Error: tipo de concatenacion incompatible! \n")
+					ast.SetError(p.Lin, p.Col, "tipo de concatenacion incompatible")
 				}
 			}
 
 		} else {
-			ast.SetPrint("Error: La función append solo funciona con vectores! \n")
+			ast.SetError(p.Lin, p.Col, "funcion append solo funciona con vectores")
 		}
 
 		return nil

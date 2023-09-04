@@ -24,20 +24,20 @@ func (p VectorModification) Execute(ast *environment.AST, env interface{}) inter
 	if env.(environment.Environment).VariableExists(p.DestinyID) {
 		foundVar := env.(environment.Environment).FindVar(p.DestinyID)
 		if foundVar.Const {
-			ast.SetPrint("Error: No se puede modificar un vector constante!\n")
+			ast.SetError(p.Lin, p.Col, "No se puede modificar un vector constante")
 			return nil
 
 		}
 		targetValue := p.Expression.Execute(ast, env)
 		if foundVar.Type == environment.VECTOR {
-			ast.SetPrint("Error: vector vacío!\n")
+			ast.SetError(p.Lin, p.Col, "vector vacio")
 			return nil
 		}
 
 		var indexes = GetIndexes(p.Indexes, ast, env)
 
 		if !AllNonNegativeIntegers(indexes) {
-			ast.SetPrint("Error: el o los indices deben de ser un entero mayor o igual a 0!\n")
+			ast.SetError(p.Lin, p.Col, "indices deben de ser enteros mayores o iguales a 0")
 			return nil
 		}
 
@@ -47,7 +47,7 @@ func (p VectorModification) Execute(ast *environment.AST, env interface{}) inter
 				_, exists := GetIndexValue(foundVar.Value, indexes)
 
 				if !exists {
-					ast.SetPrint("Error: indice no existente!\n")
+					ast.SetError(p.Lin, p.Col, "indice no existente")
 					return nil
 				}
 
@@ -60,39 +60,39 @@ func (p VectorModification) Execute(ast *environment.AST, env interface{}) inter
 						foundVar.Value = newValue
 						env.(environment.Environment).UpdateVariable(p.DestinyID, foundVar)
 					} else {
-						ast.SetPrint("Error: la matriz o vector debe de ser de un solo tipo!\n")
+						ast.SetError(p.Lin, p.Col, "Vector o matriz no valido, debe de ser solo de un tipo")
 						return nil
 					}
 
 				}
 
 			} else {
-				ast.SetPrint("Error: el acceso [] solo funciona con vectores o matrices!\n")
+				ast.SetError(p.Lin, p.Col, "el acceso [] solo funciona con vectores o matrices")
 				return nil
 
 			}
 
 		} else {
-			ast.SetPrint("Error: este tipo de asignacion solo funciona en vectores o matrices! \n")
+			ast.SetError(p.Lin, p.Col, "este tipo de asignacion solo funciona en vectores o matrices")
 			return nil
 		}
 	} else if env.(environment.Environment).ReferenceExists(p.DestinyID) {
 		foundVar := env.(environment.Environment).FindReference(p.DestinyID)
 		if foundVar.Const {
-			ast.SetPrint("Error: No se puede modificar un vector constante!\n")
+			ast.SetError(p.Lin, p.Col, "No se puede modificar un vector constante")
 			return nil
 
 		}
 		targetValue := p.Expression.Execute(ast, env)
 		if foundVar.Type == environment.VECTOR {
-			ast.SetPrint("Error: vector vacío!\n")
+			ast.SetError(p.Lin, p.Col, "vector vacio")
 			return nil
 		}
 
 		var indexes = GetIndexes(p.Indexes, ast, env)
 
 		if !AllNonNegativeIntegers(indexes) {
-			ast.SetPrint("Error: el o los indices deben de ser un entero mayor o igual a 0!\n")
+			ast.SetError(p.Lin, p.Col, "indices deben de ser enteros mayores o iguales a 0")
 			return nil
 		}
 
@@ -102,7 +102,7 @@ func (p VectorModification) Execute(ast *environment.AST, env interface{}) inter
 				_, exists := GetIndexValue(foundVar.Value, indexes)
 
 				if !exists {
-					ast.SetPrint("Error: indice no existente!\n")
+					ast.SetError(p.Lin, p.Col, "indice no existente")
 					return nil
 				}
 
@@ -115,20 +115,20 @@ func (p VectorModification) Execute(ast *environment.AST, env interface{}) inter
 						foundVar.Value = newValue
 						env.(environment.Environment).UpdateReference(p.DestinyID, foundVar)
 					} else {
-						ast.SetPrint("Error: la matriz o vector debe de ser de un solo tipo!\n")
+						ast.SetError(p.Lin, p.Col, "Vector o matriz no valido, debe de ser solo de un tipo")
 						return nil
 					}
 
 				}
 
 			} else {
-				ast.SetPrint("Error: el acceso [] solo funciona con vectores o matrices!\n")
+				ast.SetError(p.Lin, p.Col, "el acceso [] solo funciona con vectores o matrices")
 				return nil
 
 			}
 
 		} else {
-			ast.SetPrint("Error: este tipo de asignacion solo funciona en vectores o matrices! \n")
+			ast.SetError(p.Lin, p.Col, "este tipo de asignacion solo funciona en vectores o matrices")
 			return nil
 		}
 	}

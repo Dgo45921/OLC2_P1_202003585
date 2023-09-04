@@ -20,7 +20,7 @@ func (p While) Execute(ast *environment.AST, env interface{}) interface{} {
 
 	var conditionResult = p.Condition.Execute(ast, env)
 	if conditionResult.Type != environment.BOOLEAN {
-		ast.SetPrint("La condicion debe de ser booleana!\n")
+		ast.SetError(p.Lin, p.Col, "La epresion del while debe ser booleana")
 	} else {
 		contador := 0
 	outerloop:

@@ -22,7 +22,7 @@ func (p VectorAccess) Execute(ast *environment.AST, env interface{}) environment
 	if env.(environment.Environment).VariableExists(p.Id) {
 		foundVar := env.(environment.Environment).FindVar(p.Id)
 		if foundVar.Type == environment.VECTOR {
-			ast.SetPrint("Error: vector vacío!\n")
+			ast.SetError(p.Lin, p.Col, "Vector vacio")
 			return environment.Symbol{
 				Lin:   p.Lin,
 				Col:   p.Col,
@@ -33,7 +33,7 @@ func (p VectorAccess) Execute(ast *environment.AST, env interface{}) environment
 		var indexes = GetIndexes(p.Index, ast, env)
 
 		if !AllNonNegativeIntegers(indexes) {
-			ast.SetPrint("Error: el o los indices deben de ser un entero mayor o igual a 0!\n")
+			ast.SetError(p.Lin, p.Col, "indices deben de ser enteros mayores o iguales a 0")
 			return environment.Symbol{
 				Lin:   p.Lin,
 				Col:   p.Col,
@@ -47,7 +47,7 @@ func (p VectorAccess) Execute(ast *environment.AST, env interface{}) environment
 				val, exists := GetIndexValue(foundVar.Value, indexes)
 
 				if !exists {
-					ast.SetPrint("Error: indice no existente!\n")
+					ast.SetError(p.Lin, p.Col, "indice no existente")
 					return environment.Symbol{
 						Lin:   p.Lin,
 						Col:   p.Col,
@@ -145,7 +145,8 @@ func (p VectorAccess) Execute(ast *environment.AST, env interface{}) environment
 				}
 
 			} else {
-				ast.SetPrint("Error: el acceso [] solo funciona con vectores o matrices!\n")
+				ast.SetError(p.Lin, p.Col, "el acceso [] solo funciona con vectores o matrices")
+
 				return environment.Symbol{
 					Lin:   p.Lin,
 					Col:   p.Col,
@@ -155,7 +156,7 @@ func (p VectorAccess) Execute(ast *environment.AST, env interface{}) environment
 			}
 
 		}
-		ast.SetPrint("Error: el acceso [] solo funciona con vectores o matrices!\n")
+		ast.SetError(p.Lin, p.Col, "el acceso [] solo funciona con vectores o matrices")
 		return environment.Symbol{
 			Lin:   p.Lin,
 			Col:   p.Col,
@@ -165,7 +166,7 @@ func (p VectorAccess) Execute(ast *environment.AST, env interface{}) environment
 	} else if env.(environment.Environment).ReferenceExists(p.Id) {
 		foundVar := env.(environment.Environment).FindReference(p.Id)
 		if foundVar.Type == environment.VECTOR {
-			ast.SetPrint("Error: vector vacío!\n")
+			ast.SetError(p.Lin, p.Col, "Vector vacio")
 			return environment.Symbol{
 				Lin:   p.Lin,
 				Col:   p.Col,
@@ -176,7 +177,7 @@ func (p VectorAccess) Execute(ast *environment.AST, env interface{}) environment
 		var indexes = GetIndexes(p.Index, ast, env)
 
 		if !AllNonNegativeIntegers(indexes) {
-			ast.SetPrint("Error: el o los indices deben de ser un entero mayor o igual a 0!\n")
+			ast.SetError(p.Lin, p.Col, "indices deben de ser enteros mayores o iguales a 0")
 			return environment.Symbol{
 				Lin:   p.Lin,
 				Col:   p.Col,
@@ -190,7 +191,7 @@ func (p VectorAccess) Execute(ast *environment.AST, env interface{}) environment
 				val, exists := GetIndexValue(foundVar.Value, indexes)
 
 				if !exists {
-					ast.SetPrint("Error: indice no existente!\n")
+					ast.SetError(p.Lin, p.Col, "indice no existente")
 					return environment.Symbol{
 						Lin:   p.Lin,
 						Col:   p.Col,
@@ -288,7 +289,7 @@ func (p VectorAccess) Execute(ast *environment.AST, env interface{}) environment
 				}
 
 			} else {
-				ast.SetPrint("Error: el acceso [] solo funciona con vectores o matrices!\n")
+				ast.SetError(p.Lin, p.Col, "el acceso [] solo funciona con vectores o matrices")
 				return environment.Symbol{
 					Lin:   p.Lin,
 					Col:   p.Col,
@@ -298,7 +299,7 @@ func (p VectorAccess) Execute(ast *environment.AST, env interface{}) environment
 			}
 
 		}
-		ast.SetPrint("Error: el acceso [] solo funciona con vectores o matrices!\n")
+		ast.SetError(p.Lin, p.Col, "el acceso [] solo funciona con vectores o matrices")
 		return environment.Symbol{
 			Lin:   p.Lin,
 			Col:   p.Col,

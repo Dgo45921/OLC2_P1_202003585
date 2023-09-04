@@ -59,7 +59,7 @@ func (p For) Execute(ast *environment.AST, env interface{}) interface{} {
 
 				if as, isasignation := inst.(Asignation); isasignation {
 					if as.Id == p.Id {
-						ast.SetPrint("Error, no se puede cambiar el valor del iterable!\n")
+						ast.SetError(p.Lin, p.Col, "no se puede cambiar el valor del iterable")
 						return nil
 					}
 				}
@@ -97,7 +97,7 @@ func (p For) Execute(ast *environment.AST, env interface{}) interface{} {
 
 				if as, isasignation := inst.(Asignation); isasignation {
 					if as.Id == p.Id {
-						ast.SetPrint("Error, no se puede cambiar el valor del iterable!\n")
+						ast.SetError(p.Lin, p.Col, "no se puede cambiar el valor del iterable")
 						return nil
 					}
 				}
@@ -114,7 +114,7 @@ func (p For) Execute(ast *environment.AST, env interface{}) interface{} {
 			}
 		}
 	} else {
-		ast.SetPrint("Error, no se recibió un iterable!\n")
+		ast.SetError(p.Lin, p.Col, "no se recibio un iterable")
 		return nil
 	}
 

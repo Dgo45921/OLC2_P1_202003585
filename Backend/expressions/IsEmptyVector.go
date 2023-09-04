@@ -43,7 +43,7 @@ func (p IsEmptyVector) Execute(ast *environment.AST, env interface{}) environmen
 			}
 
 		}
-		ast.SetPrint("Error: la funcion isEmpty solo funciona con vectores!\n")
+		ast.SetError(p.Lin, p.Col, "la funcion isEmpty solo funciona con vectores")
 
 	}else if env.(environment.Environment).ReferenceExists(p.Id){
 
@@ -73,7 +73,7 @@ func (p IsEmptyVector) Execute(ast *environment.AST, env interface{}) environmen
 			}
 
 		}
-		ast.SetPrint("Error: la funcion isEmpty solo funciona con vectores!\n")
+		ast.SetError(p.Lin, p.Col, "la funcion isEmpty solo funciona con vectores")
 
 	}
 
