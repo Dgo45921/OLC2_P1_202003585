@@ -33,6 +33,13 @@ func (p CallFuncInst) Execute(ast *environment.AST, env interface{}) interface{}
 	}
 	newEnv := environment.NewEnvironment(env, environment.FUNC)
 	// check array of values and types
+	for index, val := range p.Parameters {
+		if val.Id == "" && val.Reference == true && val.RealId != "" {
+			val.Id = foundFunc.Args[index].SID
+			p.Parameters[index] = val
+		}
+
+	}
 	for index, _ := range p.Parameters {
 		valParameter := p.Parameters[index].Value.(interfaces.Expression).Execute(ast, env)
 		if valParameter.Type == environment.VECTOR_STRING || valParameter.Type == environment.VECTOR_STRUCT || valParameter.Type == environment.VECTOR_CHAR || valParameter.Type == environment.VECTOR_FLOAT || valParameter.Type == environment.VECTOR_BOOLEAN || valParameter.Type == environment.VECTOR_INT {
@@ -43,7 +50,7 @@ func (p CallFuncInst) Execute(ast *environment.AST, env interface{}) interface{}
 				isByReference := foundFunc.Args[index].Reference
 				if isByReference == p.Parameters[index].Reference {
 					if isByReference {
-						if env.(environment.Environment).VariableExists(p.Parameters[index].RealId) {
+						if env.(environment.Environment).VariableExists(p.Parameters[index].RealId) || env.(environment.Environment).ReferenceExists(p.Parameters[index].RealId) {
 							newEnv.SaveReference(foundFunc.Args[index].SID, valParameter)
 						} else {
 							ast.SetPrint("Error:La referencia solo sirve con variables!\n")
@@ -73,7 +80,7 @@ func (p CallFuncInst) Execute(ast *environment.AST, env interface{}) interface{}
 					isByReference := foundFunc.Args[indexx].Reference
 					if isByReference == p.Parameters[index].Reference {
 						if isByReference {
-							if env.(environment.Environment).VariableExists(p.Parameters[index].RealId) {
+							if env.(environment.Environment).VariableExists(p.Parameters[index].RealId) || env.(environment.Environment).ReferenceExists(p.Parameters[index].RealId) {
 								newEnv.SaveReference(foundFunc.Args[index].SID, valParameter)
 							} else {
 								ast.SetPrint("Error:La referencia solo sirve con variables!\n")

@@ -128,10 +128,13 @@ func (env Environment) UpdateVariable(id string, value Symbol) {
 }
 
 func (env Environment) SetReferenceValues(realid string, secondaryID string) {
-	env.UpdateValue(realid, env.ReferenceTable[secondaryID])
+	result := env.UpdateValue(realid, env.ReferenceTable[secondaryID])
+	if result == false {
+		env.UpdateValueReference(realid, env.ReferenceTable[secondaryID])
+	}
 }
 
-func (env Environment) UpdateValue(id string, value Symbol) {
+func (env Environment) UpdateValue(id string, value Symbol) bool {
 	var envTemporal = env
 	for {
 		for key, _ := range envTemporal.SymbolTable {
@@ -141,6 +144,29 @@ func (env Environment) UpdateValue(id string, value Symbol) {
 				pivote.Value = val.Value
 
 				envTemporal.SymbolTable[key] = pivote
+				return true
+			}
+		}
+		if envTemporal.Prev != nil {
+			envTemporal = envTemporal.Prev.(Environment)
+			continue
+		}
+		break
+
+	}
+	return false
+}
+
+func (env Environment) UpdateValueReference(id string, value Symbol) {
+	var envTemporal = env
+	for {
+		for key, _ := range envTemporal.ReferenceTable {
+			if key == id {
+				val := value
+				pivote := envTemporal.ReferenceTable[key]
+				pivote.Value = val.Value
+
+				envTemporal.ReferenceTable[key] = pivote
 				return
 			}
 		}
