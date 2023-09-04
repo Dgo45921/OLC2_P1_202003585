@@ -24,6 +24,16 @@ func (p FuncDec) Execute(ast *environment.AST, env interface{}) interface{} {
 		return nil
 
 	}
+	if len(p.Args) > 1 {
+		firstName := p.Args[0].SID
+		for i := 1; i < len(p.Args); i++ {
+			currentName := p.Args[i].SID
+			if firstName == currentName {
+				ast.SetPrint("Error: nombre de parametro repetido!\n")
+				return nil
+			}
+		}
+	}
 
 	// has a return type
 	if p.ReturnType != nil {
@@ -54,8 +64,6 @@ func (p FuncDec) Execute(ast *environment.AST, env interface{}) interface{} {
 
 	return nil
 }
-
-
 
 func getReturnType(str string) environment.TipoExpresion {
 	if str == "String" {

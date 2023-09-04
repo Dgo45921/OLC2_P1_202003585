@@ -620,9 +620,17 @@ callfuncins returns [interfaces.Instruction newcallfuncins]
 
 ;
 // EXPRESSIONS -----------------------------------------------------------------
+
+cast returns [interfaces.Expression newcast]
+: RINT PARIZQ expr PARDER {$newcast = expressions.NewCast($RINT.line, $RINT.pos, "Int", $expr.e)}
+| RSTRING PARIZQ expr PARDER {$newcast =expressions.NewCast( $RSTRING.line, $RSTRING.pos, "String", $expr.e)}
+| RFLOAT PARIZQ expr PARDER {$newcast = expressions.NewCast($RFLOAT.line, $RFLOAT.pos, "Float", $expr.e)}
+;
+
+
 expr returns [interfaces.Expression e]
-:
- PARIZQ expr PARDER { $e = $expr.e }
+: cast  { $e = $cast.newcast }
+|PARIZQ expr PARDER { $e = $expr.e }
 | op=(SUB | NOT) left=expr { $e = expressions.NewUnaryOperation($left.start.GetLine(), $left.start.GetColumn(), $left.e, $op.text) }
 | left=expr op=(MUL|DIV|MODULE) right=expr { $e = expressions.NewArithmeticOperation($left.start.GetLine(), $left.start.GetColumn(), $left.e, $op.text, $right.e) }//TODO ACA DEBERIA IR EL MODULO
 | left=expr op=(ADD|SUB) right=expr { $e = expressions.NewArithmeticOperation($left.start.GetLine(), $left.start.GetColumn(), $left.e, $op.text, $right.e) }

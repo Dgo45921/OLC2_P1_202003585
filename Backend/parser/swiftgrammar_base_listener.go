@@ -392,6 +392,12 @@ func (s *BaseSwiftGrammarListener) EnterCallfuncins(ctx *CallfuncinsContext) {}
 // ExitCallfuncins is called when production callfuncins is exited.
 func (s *BaseSwiftGrammarListener) ExitCallfuncins(ctx *CallfuncinsContext) {}
 
+// EnterCast is called when production cast is entered.
+func (s *BaseSwiftGrammarListener) EnterCast(ctx *CastContext) {}
+
+// ExitCast is called when production cast is exited.
+func (s *BaseSwiftGrammarListener) ExitCast(ctx *CastContext) {}
+
 // EnterExpr is called when production expr is entered.
 func (s *BaseSwiftGrammarListener) EnterExpr(ctx *ExprContext) {}
 

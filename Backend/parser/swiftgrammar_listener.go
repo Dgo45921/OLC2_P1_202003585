@@ -193,6 +193,9 @@ type SwiftGrammarListener interface {
 	// EnterCallfuncins is called when entering the callfuncins production.
 	EnterCallfuncins(c *CallfuncinsContext)
 
+	// EnterCast is called when entering the cast production.
+	EnterCast(c *CastContext)
+
 	// EnterExpr is called when entering the expr production.
 	EnterExpr(c *ExprContext)
 
@@ -381,6 +384,9 @@ type SwiftGrammarListener interface {
 
 	// ExitCallfuncins is called when exiting the callfuncins production.
 	ExitCallfuncins(c *CallfuncinsContext)
+
+	// ExitCast is called when exiting the cast production.
+	ExitCast(c *CastContext)
 
 	// ExitExpr is called when exiting the expr production.
 	ExitExpr(c *ExprContext)

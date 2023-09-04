@@ -27,7 +27,7 @@ func (p Range) Execute(ast *environment.AST, env interface{}) environment.Symbol
 		start := findex.Value.(int)
 		end := lindex.Value.(int)
 
-		if start < end {
+		if start <= end {
 			size := end - start + 1
 
 			numbers := make([]interface{}, size)

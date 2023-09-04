@@ -142,7 +142,7 @@ function InputArea() {
                 <input
                     id="file-input"
                     type="file"
-                    accept=".tw"
+                    accept=".swift"
                     style={{ display: "none" }}
                     onChange={(event) => {
                         const file = event.target.files?.[0];
