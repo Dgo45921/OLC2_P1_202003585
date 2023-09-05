@@ -19,6 +19,11 @@ func NewFuncDec(lin int, col int, id string, args []environment.FuncParam, ret i
 
 func (p FuncDec) Execute(ast *environment.AST, env interface{}) interface{} {
 
+	if env.(environment.Environment).Prev != nil {
+		ast.SetError(p.Lin, p.Col, "Los structs solo pueden ser declarados en el ambito global")
+		return nil
+	}
+
 	if env.(environment.Environment).FuncExists(p.Id) {
 		ast.SetError(p.Lin, p.Col, "Funcion ya declarada")
 		return nil

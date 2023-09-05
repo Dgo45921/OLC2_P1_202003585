@@ -77,6 +77,8 @@ func (s Symbol) GetScopeType() string {
 		return "ELSE"
 	} else if s.Scope == ELSEIF {
 		return "ELSE-IF"
+	} else if s.Scope == GUARD {
+		return "GUARD"
 	}
 
 	return "NULL"

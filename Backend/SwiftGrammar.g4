@@ -53,6 +53,12 @@ argument returns [interface{} e]
     : expr { $e = $expr.e; }
     ;
 
+guardstatement returns [interfaces.Instruction newguard]
+: RGUARD expr RELSE LLAVEIZQ block LLAVEDER {$newguard = instructions.NewGuard($RGUARD.line, $RGUARD.pos,$expr.e, $block.blk )}
+;
+
+
+
 // INSTRUCTIONS
 instruction returns [interfaces.Instruction inst]
 : printstmt PTOCOMA?  { $inst = $printstmt.prnt}
@@ -78,6 +84,7 @@ instruction returns [interfaces.Instruction inst]
 | retturn PTOCOMA? {$inst = $retturn.newreturn}
 | callfuncins PTOCOMA? {$inst = $callfuncins.newcallfuncins}
 | structmodification PTOCOMA? {$inst = $structmodification.newstructmod}
+| guardstatement  {$inst = $guardstatement.newguard}
 ;
 
 

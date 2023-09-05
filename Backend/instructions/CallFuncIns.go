@@ -158,13 +158,17 @@ func (p CallFuncInst) Execute(ast *environment.AST, env interface{}) interface{}
 
 	}
 
-	for index, parameter := range p.Parameters {
-		if parameter.Reference {
-			_, indexx := checkIfParameterExists(foundFunc.Args, p.Parameters[index].Id)
-			newEnv.SetReferenceValues(parameter.RealId, foundFunc.Args[indexx].SID)
+	if foundFunc.ReturnType == environment.NULL {
+		for index, parameter := range p.Parameters {
+			if parameter.Reference {
+				_, indexx := checkIfParameterExists(foundFunc.Args, p.Parameters[index].Id)
+				newEnv.SetReferenceValues(parameter.RealId, foundFunc.Args[indexx].SID)
+			}
 		}
-	}
 
+	} else{
+		ast.SetError(p.Lin, p.Col, "La funcion no tiene un return con el tipo de dato definido")
+	}
 	return nil
 
 }

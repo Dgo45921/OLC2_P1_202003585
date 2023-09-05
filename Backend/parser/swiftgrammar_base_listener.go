@@ -44,6 +44,12 @@ func (s *BaseSwiftGrammarListener) EnterArgument(ctx *ArgumentContext) {}
 // ExitArgument is called when production argument is exited.
 func (s *BaseSwiftGrammarListener) ExitArgument(ctx *ArgumentContext) {}
 
+// EnterGuardstatement is called when production guardstatement is entered.
+func (s *BaseSwiftGrammarListener) EnterGuardstatement(ctx *GuardstatementContext) {}
+
+// ExitGuardstatement is called when production guardstatement is exited.
+func (s *BaseSwiftGrammarListener) ExitGuardstatement(ctx *GuardstatementContext) {}
+
 // EnterInstruction is called when production instruction is entered.
 func (s *BaseSwiftGrammarListener) EnterInstruction(ctx *InstructionContext) {}
 

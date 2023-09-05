@@ -19,6 +19,9 @@ type SwiftGrammarListener interface {
 	// EnterArgument is called when entering the argument production.
 	EnterArgument(c *ArgumentContext)
 
+	// EnterGuardstatement is called when entering the guardstatement production.
+	EnterGuardstatement(c *GuardstatementContext)
+
 	// EnterInstruction is called when entering the instruction production.
 	EnterInstruction(c *InstructionContext)
 
@@ -210,6 +213,9 @@ type SwiftGrammarListener interface {
 
 	// ExitArgument is called when exiting the argument production.
 	ExitArgument(c *ArgumentContext)
+
+	// ExitGuardstatement is called when exiting the guardstatement production.
+	ExitGuardstatement(c *GuardstatementContext)
 
 	// ExitInstruction is called when exiting the instruction production.
 	ExitInstruction(c *InstructionContext)

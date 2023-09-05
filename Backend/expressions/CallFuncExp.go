@@ -62,7 +62,7 @@ func (p CallFuncExp) Execute(ast *environment.AST, env interface{}) environment.
 					if isByReference {
 						if env.(environment.Environment).VariableExists(p.Parameters[index].RealId) || env.(environment.Environment).ReferenceExists(p.Parameters[index].RealId) {
 							newEnv.SaveReference(foundFunc.Args[index].SID, valParameter)
-							ast.SaveSymbol(foundFunc.Args[index].SID,valParameter)
+							ast.SaveSymbol(foundFunc.Args[index].SID, valParameter)
 						} else {
 							ast.SetError(p.Lin, p.Col, "La referencia solo funciona con variables")
 						}
@@ -194,11 +194,16 @@ func (p CallFuncExp) Execute(ast *environment.AST, env interface{}) environment.
 		}
 
 	}
-	for index, parameter := range p.Parameters {
-		if parameter.Reference {
-			_, indexx := checkIfParameterExists(foundFunc.Args, p.Parameters[index].Id)
-			newEnv.SetReferenceValues(parameter.RealId, foundFunc.Args[indexx].SID)
+	if foundFunc.ReturnType == environment.NULL {
+		for index, parameter := range p.Parameters {
+			if parameter.Reference {
+				_, indexx := checkIfParameterExists(foundFunc.Args, p.Parameters[index].Id)
+				newEnv.SetReferenceValues(parameter.RealId, foundFunc.Args[indexx].SID)
+			}
 		}
+
+	} else {
+		ast.SetError(p.Lin, p.Col, "La funcion no tiene un return con el tipo de dato definido")
 	}
 
 	return environment.Symbol{

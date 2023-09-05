@@ -115,7 +115,7 @@ func GetCST(w http.ResponseWriter, r *http.Request) {
 	}
 
 	currentDir := filepath.Dir(exePath)
-	cmd := exec.Command("antlr4-parse", "CG.g4", "s", "-gui", "source.txt")
+	cmd := exec.Command("antlr4-parse", currentDir+"/grammarforcst/Grammar.g4", "s", "-gui", "source.txt")
 	cmd.Dir = currentDir
 	cmd.Stdout = os.Stdout
 	cmd.Stderr = os.Stderr
