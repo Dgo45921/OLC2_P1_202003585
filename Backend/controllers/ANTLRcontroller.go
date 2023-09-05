@@ -126,8 +126,10 @@ func GetCST(w http.ResponseWriter, r *http.Request) {
 
 func GetErrors(w http.ResponseWriter, r *http.Request) {
 
-	getVizCode(lexerErrors, parserErrors)
-	fmt.Println(Ast.GetErrors())
+	var consoleResponse models.DotResponse
+
+	consoleResponse.DotCode = getVizCode(lexerErrors, parserErrors, Ast.GetErrors())
+	json.NewEncoder(w).Encode(consoleResponse)
 
 }
 

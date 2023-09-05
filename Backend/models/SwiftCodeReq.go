@@ -7,3 +7,7 @@ type SourceCode struct {
 type ConsoleResponse struct {
 	Console string `json:"console"`
 }
+
+type DotResponse struct {
+	DotCode string `json:"dotCode"`
+}

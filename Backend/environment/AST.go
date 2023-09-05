@@ -1,5 +1,10 @@
 package environment
 
+import (
+	"html"
+	"strconv"
+)
+
 type CustomSemanticError struct {
 	line, column int
 	msg          string
@@ -26,8 +31,13 @@ func (a *AST) SetPrint(ToPrint string) {
 	a.Print = a.Print + ToPrint
 }
 
-func (a *AST) GetErrors() []CustomSemanticError {
-	return a.Errors
+func (a *AST) GetErrors() string {
+	response := "<tr><td colspan=\"4\" bgcolor=\"lightgrey\"><b>Semanticos</b></td></tr>"
+	for _, err := range a.Errors {
+		response += "<tr><td>Semantico</td><td>" + html.EscapeString(err.msg) + "</td><td>" + strconv.Itoa(err.line) + "</td><td>" + strconv.Itoa(err.column) + "</td></tr>"
+	}
+
+	return response
 }
 
 func (a *AST) SetError(line int, col int, des string) {
