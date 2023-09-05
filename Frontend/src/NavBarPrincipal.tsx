@@ -46,11 +46,11 @@ async function SymbolTableReport() {
 
   // Create a new div element to serve as the container for the graph
   const graphContainer = document.createElement("div");
-  console.log(jsonbody.vizcode)
+  console.log(jsonbody.dotCode)
 
   // Render the graph using d3-graphviz
   d3.graphviz(graphContainer)
-    .renderDot(jsonbody.vizcode)
+    .renderDot(jsonbody.dotCode)
     .on("end", () => {
       // Create a new HTML document for the new tab
       const newTab = window.open("", "_blank");

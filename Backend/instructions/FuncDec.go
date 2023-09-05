@@ -47,6 +47,7 @@ func (p FuncDec) Execute(ast *environment.AST, env interface{}) interface{} {
 			StructType: "",
 		}
 		env.(environment.Environment).SaveFunc(p.Id, funcval)
+		ast.SaveFunction(p.Id, funcval)
 
 	} else {
 
@@ -59,6 +60,7 @@ func (p FuncDec) Execute(ast *environment.AST, env interface{}) interface{} {
 			StructType: "",
 		}
 		env.(environment.Environment).SaveFunc(p.Id, funcval)
+		ast.SaveFunction(p.Id, funcval)
 
 	}
 

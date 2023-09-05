@@ -42,16 +42,18 @@ func (p CallFuncInst) Execute(ast *environment.AST, env interface{}) interface{}
 	}
 	for index, _ := range p.Parameters {
 		valParameter := p.Parameters[index].Value.(interfaces.Expression).Execute(ast, env)
+		valParameter.Scope =env.(environment.Environment).Scope
 		if valParameter.Type == environment.VECTOR_STRING || valParameter.Type == environment.VECTOR_STRUCT || valParameter.Type == environment.VECTOR_CHAR || valParameter.Type == environment.VECTOR_FLOAT || valParameter.Type == environment.VECTOR_BOOLEAN || valParameter.Type == environment.VECTOR_INT || valParameter.Type == environment.VECTOR || valParameter.Type == environment.MATRIX_INT || valParameter.Type == environment.MATRIX_FLOAT || valParameter.Type == environment.MATRIX_BOOLEAN || valParameter.Type == environment.MATRIX_CHAR {
 			valParameter.Value = DeepCopyArray(valParameter.Value)
 		}
 		if foundFunc.Args[index].Id == "_" {
-			if getTypeByString(p.Lin, p.Col,foundFunc.Args[index].Type, ast, env, p.Parameters[index].Value.(interfaces.Expression)) == valParameter.Type {
+			if getTypeByString(p.Lin, p.Col, foundFunc.Args[index].Type, ast, env, p.Parameters[index].Value.(interfaces.Expression)) == valParameter.Type {
 				isByReference := foundFunc.Args[index].Reference
 				if isByReference == p.Parameters[index].Reference {
 					if isByReference {
 						if env.(environment.Environment).VariableExists(p.Parameters[index].RealId) || env.(environment.Environment).ReferenceExists(p.Parameters[index].RealId) {
 							newEnv.SaveReference(foundFunc.Args[index].SID, valParameter)
+							ast.SaveSymbol(foundFunc.Args[index].SID, valParameter)
 						} else {
 							ast.SetError(p.Lin, p.Col, "La referencia solo funciona con variables")
 						}
@@ -59,7 +61,7 @@ func (p CallFuncInst) Execute(ast *environment.AST, env interface{}) interface{}
 					} else {
 						pivote := valParameter
 						newEnv.SaveVariable(foundFunc.Args[index].SID, pivote)
-
+						ast.SaveSymbol(foundFunc.Args[index].SID, pivote)
 					}
 
 				} else {
@@ -82,6 +84,7 @@ func (p CallFuncInst) Execute(ast *environment.AST, env interface{}) interface{}
 						if isByReference {
 							if env.(environment.Environment).VariableExists(p.Parameters[index].RealId) || env.(environment.Environment).ReferenceExists(p.Parameters[index].RealId) {
 								newEnv.SaveReference(foundFunc.Args[index].SID, valParameter)
+								ast.SaveSymbol(foundFunc.Args[index].SID,valParameter)
 							} else {
 								ast.SetError(p.Lin, p.Col, "la referencia solo funciona con variables")
 							}
@@ -89,6 +92,7 @@ func (p CallFuncInst) Execute(ast *environment.AST, env interface{}) interface{}
 						} else {
 							pivote := valParameter
 							newEnv.SaveVariable(foundFunc.Args[index].SID, pivote)
+							ast.SaveSymbol(foundFunc.Args[index].SID,pivote)
 
 						}
 

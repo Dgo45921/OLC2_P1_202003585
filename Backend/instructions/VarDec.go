@@ -31,14 +31,17 @@ func (p VarDec) Execute(ast *environment.AST, env interface{}) interface{} {
 		if _, ok := p.Expression.(interfaces.Expression); ok {
 			expression := p.Expression.(interfaces.Expression)
 			value := expression.Execute(ast, env)
+			value.Scope = env.(environment.Environment).Scope
 			if value.Type == environment.VECTOR_INT || value.Type == environment.VECTOR_FLOAT || value.Type == environment.VECTOR_STRING || value.Type == environment.VECTOR_CHAR || value.Type == environment.VECTOR_BOOLEAN || value.Type == environment.MATRIX_INT || value.Type == environment.MATRIX_FLOAT || value.Type == environment.MATRIX_STRING || value.Type == environment.MATRIX_CHAR || value.Type == environment.MATRIX_BOOLEAN || value.Type == environment.VECTOR {
 				val := DeepCopyArray(value.Value)
 				value.Value = val
 				env.(environment.Environment).SaveVariable(p.Id, value)
+				ast.SaveSymbol(p.Id, value)
 				return nil
 			}
 
 			env.(environment.Environment).SaveVariable(p.Id, value)
+			ast.SaveSymbol(p.Id, value)
 			return nil
 
 		}
@@ -48,6 +51,7 @@ func (p VarDec) Execute(ast *environment.AST, env interface{}) interface{} {
 
 		expression := p.Expression.(interfaces.Expression)
 		value := expression.Execute(ast, env)
+		value.Scope = env.(environment.Environment).Scope
 		if value.Type == environment.NULL {
 			if p.Type == "String" {
 				value.Type = environment.STRING
@@ -62,8 +66,9 @@ func (p VarDec) Execute(ast *environment.AST, env interface{}) interface{} {
 			} else {
 				typeStruct := env.(environment.Environment).FindVar(p.Type.(string))
 				if typeStruct.Type == environment.STRUCT_DEF {
-					value = environment.Symbol{Lin: 0, Col: 0, Type: environment.STRUCT_IMP, Value: nil, StructType: p.Type.(string)}
+					value = environment.Symbol{Lin: 0, Col: 0, Type: environment.STRUCT_IMP, Value: nil, StructType: p.Type.(string), Scope: env.(environment.Environment).Scope}
 					env.(environment.Environment).SaveVariable(p.Id, value)
+					ast.SaveSymbol(p.Id, value)
 
 				} else {
 					ast.SetError(p.Lin, p.Col, "Tipo de variable no valida")
@@ -72,21 +77,26 @@ func (p VarDec) Execute(ast *environment.AST, env interface{}) interface{} {
 			}
 
 			env.(environment.Environment).SaveVariable(p.Id, value)
+			ast.SaveSymbol(p.Id, value)
 			return nil
 		}
 
 		if p.Type == "String" && value.Type == environment.STRING {
 			env.(environment.Environment).SaveVariable(p.Id, value)
+			ast.SaveSymbol(p.Id, value)
 			return nil
 		} else if p.Type == "Int" && value.Type == environment.INTEGER {
 			env.(environment.Environment).SaveVariable(p.Id, value)
+			ast.SaveSymbol(p.Id, value)
 			return nil
 		} else if p.Type == "Character" && value.Type == environment.CHAR {
 			env.(environment.Environment).SaveVariable(p.Id, value)
+			ast.SaveSymbol(p.Id, value)
 			return nil
 		} else if p.Type == "Float" {
 			if value.Type == environment.FLOAT {
 				env.(environment.Environment).SaveVariable(p.Id, value)
+				ast.SaveSymbol(p.Id, value)
 				return nil
 
 			} else if value.Type == environment.INTEGER {
@@ -94,6 +104,7 @@ func (p VarDec) Execute(ast *environment.AST, env interface{}) interface{} {
 					value.Value = float64(value.Value.(int))
 					value.Type = environment.FLOAT
 					env.(environment.Environment).SaveVariable(p.Id, value)
+					ast.SaveSymbol(p.Id, value)
 					return nil
 
 				}
@@ -102,11 +113,13 @@ func (p VarDec) Execute(ast *environment.AST, env interface{}) interface{} {
 
 		} else if p.Type == "Bool" && value.Type == environment.BOOLEAN {
 			env.(environment.Environment).SaveVariable(p.Id, value)
+			ast.SaveSymbol(p.Id, value)
 			return nil
 		} else if value.Type == environment.VECTOR_INT || value.Type == environment.VECTOR_FLOAT || value.Type == environment.VECTOR_STRING || value.Type == environment.VECTOR_CHAR || value.Type == environment.VECTOR_BOOLEAN || value.Type == environment.MATRIX_INT || value.Type == environment.MATRIX_FLOAT || value.Type == environment.MATRIX_STRING || value.Type == environment.MATRIX_CHAR || value.Type == environment.MATRIX_BOOLEAN || value.Type == environment.VECTOR || value.Type == environment.VECTOR_STRUCT {
 			val := DeepCopyArray(value.Value)
 			value.Value = val
 			env.(environment.Environment).SaveVariable(p.Id, value)
+			ast.SaveSymbol(p.Id, value)
 			return nil
 		} else {
 			typeStruct := env.(environment.Environment).FindVar(p.Type.(string))
@@ -114,6 +127,7 @@ func (p VarDec) Execute(ast *environment.AST, env interface{}) interface{} {
 				if p.Type.(string) == value.StructType {
 					value = environment.Symbol{Lin: p.Lin, Col: p.Col, Type: environment.STRUCT_IMP, Value: value.Value, StructType: p.Type.(string)}
 					env.(environment.Environment).SaveVariable(p.Id, value)
+					ast.SaveSymbol(p.Id, value)
 					return nil
 				} else {
 					ast.SetError(p.Lin, p.Col, "Tipo de struct distinto al definido")
@@ -132,28 +146,34 @@ func (p VarDec) Execute(ast *environment.AST, env interface{}) interface{} {
 		if p.Type == "String" {
 			value = environment.Symbol{Lin: 0, Col: 0, Type: environment.STRING, Value: nil}
 			env.(environment.Environment).SaveVariable(p.Id, value)
+			ast.SaveSymbol(p.Id, value)
 			return nil
 		} else if p.Type == "Int" {
 			value = environment.Symbol{Lin: 0, Col: 0, Type: environment.INTEGER, Value: nil}
 			env.(environment.Environment).SaveVariable(p.Id, value)
+			ast.SaveSymbol(p.Id, value)
 			return nil
 		} else if p.Type == "Character" {
 			value = environment.Symbol{Lin: 0, Col: 0, Type: environment.CHAR, Value: nil}
 			env.(environment.Environment).SaveVariable(p.Id, value)
+			ast.SaveSymbol(p.Id, value)
 			return nil
 		} else if p.Type == "Float" {
 			value = environment.Symbol{Lin: 0, Col: 0, Type: environment.FLOAT, Value: nil}
 			env.(environment.Environment).SaveVariable(p.Id, value)
+			ast.SaveSymbol(p.Id, value)
 			return nil
 		} else if p.Type == "Bool" {
 			value = environment.Symbol{Lin: 0, Col: 0, Type: environment.BOOLEAN, Value: nil}
 			env.(environment.Environment).SaveVariable(p.Id, value)
+			ast.SaveSymbol(p.Id, value)
 			return nil
 		} else {
 			typeStruct := env.(environment.Environment).FindVar(p.Type.(string))
 			if typeStruct.Type == environment.STRUCT_DEF {
 				value = environment.Symbol{Lin: p.Lin, Col: p.Col, Type: environment.STRUCT_IMP, Value: nil, StructType: p.Type.(string)}
 				env.(environment.Environment).SaveVariable(p.Id, value)
+				ast.SaveSymbol(p.Id, value)
 
 			} else {
 				ast.SetError(p.Lin, p.Col, "Tipo de variable no valida")
@@ -173,6 +193,7 @@ func (p VarDec) GetVarDec(ast *environment.AST, env interface{}) interface{} {
 		if _, ok := p.Expression.(interfaces.Expression); ok {
 			expression := p.Expression.(interfaces.Expression)
 			value := expression.Execute(ast, env)
+			value.Scope = env.(environment.Environment).Scope
 			if value.Type == environment.VECTOR_INT || value.Type == environment.VECTOR_FLOAT || value.Type == environment.VECTOR_STRING || value.Type == environment.VECTOR_CHAR || value.Type == environment.VECTOR_BOOLEAN || value.Type == environment.MATRIX_INT || value.Type == environment.MATRIX_FLOAT || value.Type == environment.MATRIX_STRING || value.Type == environment.MATRIX_CHAR || value.Type == environment.MATRIX_BOOLEAN || value.Type == environment.VECTOR {
 				val := DeepCopyArray(value.Value)
 				value.Value = val
@@ -187,6 +208,7 @@ func (p VarDec) GetVarDec(ast *environment.AST, env interface{}) interface{} {
 
 		expression := p.Expression.(interfaces.Expression)
 		value := expression.Execute(ast, env)
+		value.Scope = env.(environment.Environment).Scope
 		if value.Type == environment.NULL {
 			if p.Type == "String" {
 				value.Type = environment.STRING
@@ -201,7 +223,7 @@ func (p VarDec) GetVarDec(ast *environment.AST, env interface{}) interface{} {
 			} else {
 				typeStruct := env.(environment.Environment).FindVar(p.Type.(string))
 				if typeStruct.Type == environment.STRUCT_DEF {
-					value = environment.Symbol{Lin: 0, Col: 0, Type: environment.STRUCT_IMP, Value: nil, StructType: p.Type.(string)}
+					value = environment.Symbol{Lin: 0, Col: 0, Type: environment.STRUCT_IMP, Value: nil, StructType: p.Type.(string), Scope:  env.(environment.Environment).Scope}
 					return value
 
 				} else {

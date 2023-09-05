@@ -51,9 +51,11 @@ func (p For) Execute(ast *environment.AST, env interface{}) interface{} {
 			var currentIterable = environment.Symbol{
 				Value: element,
 				Type:  iterableType,
+				Scope: env.(environment.Environment).Scope,
 			}
 			var newEnv = environment.NewEnvironment(env, environment.FOR)
 			newEnv.SaveVariable(p.Id, currentIterable)
+			ast.SaveSymbol(p.Id,currentIterable)
 
 			for _, inst := range p.insBlock {
 
@@ -89,9 +91,11 @@ func (p For) Execute(ast *environment.AST, env interface{}) interface{} {
 			var currentIterable = environment.Symbol{
 				Value: element,
 				Type:  iterableType,
+				Scope: env.(environment.Environment).Scope,
 			}
 			var newEnv = environment.NewEnvironment(env, environment.FOR)
 			newEnv.SaveVariable(p.Id, currentIterable)
+			ast.SaveSymbol(p.Id,currentIterable)
 
 			for _, inst := range p.insBlock {
 

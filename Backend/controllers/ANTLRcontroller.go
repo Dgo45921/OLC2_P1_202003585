@@ -36,6 +36,8 @@ func IndexRoute(w http.ResponseWriter, r *http.Request) {
 }
 func Parse(w http.ResponseWriter, r *http.Request) {
 	Ast = environment.AST{}
+	Ast.Symbols = make(map[string]environment.Symbol)
+	Ast.FuncSymbol = make(map[string]environment.FunctionSymbol)
 	// newCode is responsible to save the given input
 	var newCode models.SourceCode
 	// consoleResponse is responsible of returning all of the console logs
@@ -129,6 +131,15 @@ func GetErrors(w http.ResponseWriter, r *http.Request) {
 	var consoleResponse models.DotResponse
 
 	consoleResponse.DotCode = getVizCode(lexerErrors, parserErrors, Ast.GetErrors())
+	json.NewEncoder(w).Encode(consoleResponse)
+
+}
+
+func GetSymbolTable(w http.ResponseWriter, r *http.Request) {
+
+	var consoleResponse models.DotResponse
+
+	consoleResponse.DotCode = Ast.GetSymbolTable()
 	json.NewEncoder(w).Encode(consoleResponse)
 
 }

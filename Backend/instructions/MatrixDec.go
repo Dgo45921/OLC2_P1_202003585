@@ -28,6 +28,7 @@ func (p MatrixDec) Execute(ast *environment.AST, env interface{}) interface{} {
 	}
 
 	value := p.Def.Execute(ast, env)
+	value.Scope =  env.(environment.Environment).Scope
 	deepness := GetDepth(value.Value.([]interface{}))
 	if _, isString := p.Type.(string); isString {
 		if countCharOccurrences(p.Type.(string), ']') == deepness {
@@ -35,6 +36,7 @@ func (p MatrixDec) Execute(ast *environment.AST, env interface{}) interface{} {
 				var matrixType = getMatrixType(value.Type)
 				value.Type = matrixType
 				env.(environment.Environment).SaveVariable(p.Id, value)
+				ast.SaveSymbol(p.Id,value)
 				return nil
 			}
 
@@ -55,6 +57,7 @@ func (p MatrixDec) Execute(ast *environment.AST, env interface{}) interface{} {
 					return nil
 				}
 				env.(environment.Environment).SaveVariable(p.Id, value)
+				ast.SaveSymbol(p.Id,value)
 				return nil
 			} else {
 				ast.SetError(p.Lin, p.Col, "matriz con varios tipos de dato")
@@ -83,6 +86,7 @@ func (p MatrixDec) Execute(ast *environment.AST, env interface{}) interface{} {
 				return nil
 			}
 			env.(environment.Environment).SaveVariable(p.Id, value)
+			ast.SaveSymbol(p.Id,value)
 			return nil
 		} else {
 			ast.SetError(p.Lin, p.Col, "matriz con varios tipos de dato")
@@ -96,6 +100,7 @@ func (p MatrixDec) Execute(ast *environment.AST, env interface{}) interface{} {
 func (p MatrixDec) GetMatrixDec(ast *environment.AST, env interface{}) interface{} {
 
 	value := p.Def.Execute(ast, env)
+	value.Scope = env.(environment.Environment).Scope
 	deepness := GetDepth(value.Value.([]interface{}))
 	if _, isString := p.Type.(string); isString {
 		if countCharOccurrences(p.Type.(string), ']') == deepness {

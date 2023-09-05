@@ -7,7 +7,6 @@ const (
 	IF
 	FOR
 	WHILE
-	METHOD
 	FUNC
 	CASE
 	DEFAULT

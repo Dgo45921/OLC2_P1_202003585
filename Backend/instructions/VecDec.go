@@ -50,6 +50,7 @@ func (p VecDec) Execute(ast *environment.AST, env interface{}) interface{} {
 		}
 
 		var response = p.Exp.(interfaces.Expression).Execute(ast, env)
+		response.Scope = env.(environment.Environment).Scope
 
 		if types == response.Type || response.Type == environment.VECTOR {
 			var symbol = environment.Symbol{
@@ -60,6 +61,7 @@ func (p VecDec) Execute(ast *environment.AST, env interface{}) interface{} {
 				Const: false,
 			}
 			env.(environment.Environment).SaveVariable(p.Id, symbol)
+			ast.SaveSymbol(p.Id,symbol)
 			return nil
 
 		} else {
@@ -100,6 +102,7 @@ func (p VecDec) Execute(ast *environment.AST, env interface{}) interface{} {
 		}
 		if p.DefType.(string) == p.Type {
 			env.(environment.Environment).SaveVariable(p.Id, symbol)
+			ast.SaveSymbol(p.Id,symbol)
 		} else {
 			ast.SetError(p.Lin, p.Col, "El tipo definido al inicio no es igual al definido por el ultimo")
 		}
@@ -127,6 +130,8 @@ func (p VecDec) Execute(ast *environment.AST, env interface{}) interface{} {
 		}
 		if res.StructType == p.Type {
 			env.(environment.Environment).SaveVariable(p.Id, symbol)
+			symbol.Scope = env.(environment.Environment).Scope
+			ast.SaveSymbol(p.Id,symbol)
 		} else {
 			ast.SetError(p.Lin, p.Col, "vector de struct no existente")
 		}
@@ -168,6 +173,7 @@ func (p VecDec) GetVecDec(ast *environment.AST, env interface{}) interface{} {
 		}
 
 		var response = p.Exp.(interfaces.Expression).Execute(ast, env)
+		response.Scope = env.(environment.Environment).Scope
 
 		if types == response.Type || response.Type == environment.VECTOR {
 			var symbol = environment.Symbol{
