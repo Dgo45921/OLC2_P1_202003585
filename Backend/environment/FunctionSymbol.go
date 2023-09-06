@@ -7,6 +7,7 @@ type FunctionSymbol struct {
 	Args       []FuncParam
 	InsBlock   []interface{}
 	StructType string
+	Mutating   bool
 }
 
 func (s FunctionSymbol) GetType() string {

@@ -32,6 +32,11 @@ func (p Print) Execute(ast *environment.AST, env interface{}) interface{} {
 			}
 
 			printedValues = append(printedValues, fmt.Sprintf("%v", valueToPrint))
+		} else if _, ok := val.(environment.Symbol); ok {
+
+			valueToPrint := val.(environment.Symbol).Value
+
+			printedValues = append(printedValues, fmt.Sprintf("%v", valueToPrint))
 		}
 	}
 

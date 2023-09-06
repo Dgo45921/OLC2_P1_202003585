@@ -96,6 +96,24 @@ func (p StructDef) Execute(ast *environment.AST, env interface{}) interface{} {
 
 			}
 
+		}else if _, isFuncDec := inst.(FuncDec); isFuncDec {
+
+			response := inst.(FuncDec).GetFuncDec(ast, env)
+			if response != nil {
+				if !repeatedValue(inst.(FuncDec).Id, structMap) {
+					newKeyValuePair := environment.KeyValue{inst.(FuncDec).Id, response}
+					structMap = append(structMap, newKeyValuePair)
+				} else {
+					ast.SetError(p.Lin, p.Col, "atributo const en struct repetido")
+					return nil
+
+				}
+			} else {
+				ast.SetError(p.Lin, p.Col, "Tipo de asignacion a matriz no fue valida")
+				return nil
+
+			}
+
 		}
 
 	}

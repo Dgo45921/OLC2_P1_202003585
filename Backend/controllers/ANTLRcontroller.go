@@ -35,6 +35,8 @@ func IndexRoute(w http.ResponseWriter, r *http.Request) {
 	}
 }
 func Parse(w http.ResponseWriter, r *http.Request) {
+	lexerErrors = &CustomLexicalErrorListener{}
+	parserErrors = &CustomSyntaxErrorListener{}
 	Ast = environment.AST{}
 	Ast.Symbols = make(map[string]environment.Symbol)
 	Ast.FuncSymbol = make(map[string]environment.FunctionSymbol)

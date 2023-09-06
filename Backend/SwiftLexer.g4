@@ -37,6 +37,8 @@ RGUARD : 'guard';
 RFUNC : 'func';
 RRETURN : 'return';
 RINOUT : 'inout';
+RMUTATING: 'mutating';
+RSELF : 'self' ;
 
 // primitives
 NUMBER : [0-9]+ ('.'[0-9]+)?;

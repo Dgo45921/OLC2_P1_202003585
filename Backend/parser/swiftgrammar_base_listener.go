@@ -56,11 +56,41 @@ func (s *BaseSwiftGrammarListener) EnterInstruction(ctx *InstructionContext) {}
 // ExitInstruction is called when production instruction is exited.
 func (s *BaseSwiftGrammarListener) ExitInstruction(ctx *InstructionContext) {}
 
+// EnterStructfuncall is called when production structfuncall is entered.
+func (s *BaseSwiftGrammarListener) EnterStructfuncall(ctx *StructfuncallContext) {}
+
+// ExitStructfuncall is called when production structfuncall is exited.
+func (s *BaseSwiftGrammarListener) ExitStructfuncall(ctx *StructfuncallContext) {}
+
 // EnterStructinstruction is called when production structinstruction is entered.
 func (s *BaseSwiftGrammarListener) EnterStructinstruction(ctx *StructinstructionContext) {}
 
 // ExitStructinstruction is called when production structinstruction is exited.
 func (s *BaseSwiftGrammarListener) ExitStructinstruction(ctx *StructinstructionContext) {}
+
+// EnterStructfuncdec is called when production structfuncdec is entered.
+func (s *BaseSwiftGrammarListener) EnterStructfuncdec(ctx *StructfuncdecContext) {}
+
+// ExitStructfuncdec is called when production structfuncdec is exited.
+func (s *BaseSwiftGrammarListener) ExitStructfuncdec(ctx *StructfuncdecContext) {}
+
+// EnterFuncblock is called when production funcblock is entered.
+func (s *BaseSwiftGrammarListener) EnterFuncblock(ctx *FuncblockContext) {}
+
+// ExitFuncblock is called when production funcblock is exited.
+func (s *BaseSwiftGrammarListener) ExitFuncblock(ctx *FuncblockContext) {}
+
+// EnterFuncinst is called when production funcinst is entered.
+func (s *BaseSwiftGrammarListener) EnterFuncinst(ctx *FuncinstContext) {}
+
+// ExitFuncinst is called when production funcinst is exited.
+func (s *BaseSwiftGrammarListener) ExitFuncinst(ctx *FuncinstContext) {}
+
+// EnterSelfstructmodification is called when production selfstructmodification is entered.
+func (s *BaseSwiftGrammarListener) EnterSelfstructmodification(ctx *SelfstructmodificationContext) {}
+
+// ExitSelfstructmodification is called when production selfstructmodification is exited.
+func (s *BaseSwiftGrammarListener) ExitSelfstructmodification(ctx *SelfstructmodificationContext) {}
 
 // EnterStructmodification is called when production structmodification is entered.
 func (s *BaseSwiftGrammarListener) EnterStructmodification(ctx *StructmodificationContext) {}
@@ -79,18 +109,6 @@ func (s *BaseSwiftGrammarListener) EnterStructdef(ctx *StructdefContext) {}
 
 // ExitStructdef is called when production structdef is exited.
 func (s *BaseSwiftGrammarListener) ExitStructdef(ctx *StructdefContext) {}
-
-// EnterFuncblock is called when production funcblock is entered.
-func (s *BaseSwiftGrammarListener) EnterFuncblock(ctx *FuncblockContext) {}
-
-// ExitFuncblock is called when production funcblock is exited.
-func (s *BaseSwiftGrammarListener) ExitFuncblock(ctx *FuncblockContext) {}
-
-// EnterFuncinst is called when production funcinst is entered.
-func (s *BaseSwiftGrammarListener) EnterFuncinst(ctx *FuncinstContext) {}
-
-// ExitFuncinst is called when production funcinst is exited.
-func (s *BaseSwiftGrammarListener) ExitFuncinst(ctx *FuncinstContext) {}
 
 // EnterRetturn is called when production retturn is entered.
 func (s *BaseSwiftGrammarListener) EnterRetturn(ctx *RetturnContext) {}
@@ -403,6 +421,12 @@ func (s *BaseSwiftGrammarListener) EnterCast(ctx *CastContext) {}
 
 // ExitCast is called when production cast is exited.
 func (s *BaseSwiftGrammarListener) ExitCast(ctx *CastContext) {}
+
+// EnterSelfattributeaccess is called when production selfattributeaccess is entered.
+func (s *BaseSwiftGrammarListener) EnterSelfattributeaccess(ctx *SelfattributeaccessContext) {}
+
+// ExitSelfattributeaccess is called when production selfattributeaccess is exited.
+func (s *BaseSwiftGrammarListener) ExitSelfattributeaccess(ctx *SelfattributeaccessContext) {}
 
 // EnterExpr is called when production expr is entered.
 func (s *BaseSwiftGrammarListener) EnterExpr(ctx *ExprContext) {}

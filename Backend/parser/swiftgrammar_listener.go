@@ -25,8 +25,23 @@ type SwiftGrammarListener interface {
 	// EnterInstruction is called when entering the instruction production.
 	EnterInstruction(c *InstructionContext)
 
+	// EnterStructfuncall is called when entering the structfuncall production.
+	EnterStructfuncall(c *StructfuncallContext)
+
 	// EnterStructinstruction is called when entering the structinstruction production.
 	EnterStructinstruction(c *StructinstructionContext)
+
+	// EnterStructfuncdec is called when entering the structfuncdec production.
+	EnterStructfuncdec(c *StructfuncdecContext)
+
+	// EnterFuncblock is called when entering the funcblock production.
+	EnterFuncblock(c *FuncblockContext)
+
+	// EnterFuncinst is called when entering the funcinst production.
+	EnterFuncinst(c *FuncinstContext)
+
+	// EnterSelfstructmodification is called when entering the selfstructmodification production.
+	EnterSelfstructmodification(c *SelfstructmodificationContext)
 
 	// EnterStructmodification is called when entering the structmodification production.
 	EnterStructmodification(c *StructmodificationContext)
@@ -36,12 +51,6 @@ type SwiftGrammarListener interface {
 
 	// EnterStructdef is called when entering the structdef production.
 	EnterStructdef(c *StructdefContext)
-
-	// EnterFuncblock is called when entering the funcblock production.
-	EnterFuncblock(c *FuncblockContext)
-
-	// EnterFuncinst is called when entering the funcinst production.
-	EnterFuncinst(c *FuncinstContext)
 
 	// EnterRetturn is called when entering the retturn production.
 	EnterRetturn(c *RetturnContext)
@@ -199,6 +208,9 @@ type SwiftGrammarListener interface {
 	// EnterCast is called when entering the cast production.
 	EnterCast(c *CastContext)
 
+	// EnterSelfattributeaccess is called when entering the selfattributeaccess production.
+	EnterSelfattributeaccess(c *SelfattributeaccessContext)
+
 	// EnterExpr is called when entering the expr production.
 	EnterExpr(c *ExprContext)
 
@@ -220,8 +232,23 @@ type SwiftGrammarListener interface {
 	// ExitInstruction is called when exiting the instruction production.
 	ExitInstruction(c *InstructionContext)
 
+	// ExitStructfuncall is called when exiting the structfuncall production.
+	ExitStructfuncall(c *StructfuncallContext)
+
 	// ExitStructinstruction is called when exiting the structinstruction production.
 	ExitStructinstruction(c *StructinstructionContext)
+
+	// ExitStructfuncdec is called when exiting the structfuncdec production.
+	ExitStructfuncdec(c *StructfuncdecContext)
+
+	// ExitFuncblock is called when exiting the funcblock production.
+	ExitFuncblock(c *FuncblockContext)
+
+	// ExitFuncinst is called when exiting the funcinst production.
+	ExitFuncinst(c *FuncinstContext)
+
+	// ExitSelfstructmodification is called when exiting the selfstructmodification production.
+	ExitSelfstructmodification(c *SelfstructmodificationContext)
 
 	// ExitStructmodification is called when exiting the structmodification production.
 	ExitStructmodification(c *StructmodificationContext)
@@ -231,12 +258,6 @@ type SwiftGrammarListener interface {
 
 	// ExitStructdef is called when exiting the structdef production.
 	ExitStructdef(c *StructdefContext)
-
-	// ExitFuncblock is called when exiting the funcblock production.
-	ExitFuncblock(c *FuncblockContext)
-
-	// ExitFuncinst is called when exiting the funcinst production.
-	ExitFuncinst(c *FuncinstContext)
 
 	// ExitRetturn is called when exiting the retturn production.
 	ExitRetturn(c *RetturnContext)
@@ -393,6 +414,9 @@ type SwiftGrammarListener interface {
 
 	// ExitCast is called when exiting the cast production.
 	ExitCast(c *CastContext)
+
+	// ExitSelfattributeaccess is called when exiting the selfattributeaccess production.
+	ExitSelfattributeaccess(c *SelfattributeaccessContext)
 
 	// ExitExpr is called when exiting the expr production.
 	ExitExpr(c *ExprContext)
