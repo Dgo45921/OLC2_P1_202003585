@@ -42,7 +42,7 @@ func (p CallFuncInst) Execute(ast *environment.AST, env interface{}) interface{}
 	}
 	for index, _ := range p.Parameters {
 		valParameter := p.Parameters[index].Value.(interfaces.Expression).Execute(ast, env)
-		valParameter.Scope =env.(environment.Environment).Scope
+		valParameter.Scope = newEnv.Scope
 		if valParameter.Type == environment.VECTOR_STRING || valParameter.Type == environment.VECTOR_STRUCT || valParameter.Type == environment.VECTOR_CHAR || valParameter.Type == environment.VECTOR_FLOAT || valParameter.Type == environment.VECTOR_BOOLEAN || valParameter.Type == environment.VECTOR_INT || valParameter.Type == environment.VECTOR || valParameter.Type == environment.MATRIX_INT || valParameter.Type == environment.MATRIX_FLOAT || valParameter.Type == environment.MATRIX_BOOLEAN || valParameter.Type == environment.MATRIX_CHAR {
 			valParameter.Value = DeepCopyArray(valParameter.Value)
 		}
@@ -60,6 +60,7 @@ func (p CallFuncInst) Execute(ast *environment.AST, env interface{}) interface{}
 
 					} else {
 						pivote := valParameter
+						pivote.Scope = newEnv.Scope
 						newEnv.SaveVariable(foundFunc.Args[index].SID, pivote)
 						ast.SaveSymbol(foundFunc.Args[index].SID, pivote)
 					}
@@ -91,6 +92,7 @@ func (p CallFuncInst) Execute(ast *environment.AST, env interface{}) interface{}
 
 						} else {
 							pivote := valParameter
+							pivote.Scope = newEnv.Scope
 							newEnv.SaveVariable(foundFunc.Args[index].SID, pivote)
 							ast.SaveSymbol(foundFunc.Args[index].SID,pivote)
 
